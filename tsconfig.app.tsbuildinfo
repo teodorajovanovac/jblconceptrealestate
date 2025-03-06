@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/svgr.d.ts","./src/vite-env.d.ts","./src/components/landing/footer/landingfooter.tsx","./src/pages/errorpage.tsx","./src/pages/landingpage.tsx","./src/services/routes.tsx","./src/services/meta/googleanalitics.ts","./src/services/meta/googletagmanager.ts","./src/services/meta/seo.tsx"],"version":"5.6.3"}

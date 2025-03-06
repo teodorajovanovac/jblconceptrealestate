@@ -1,0 +1,38 @@
+{
+  "agents": [
+    {
+      "id": 1,
+      "name": "Jasna Bajić-Ljubičić",
+      "title": {
+        "sr": "DIREKTOR",
+        "en": "DIRECTOR"
+      },
+      "image": "/assets/images/agent1.jpg",
+      "bio": {
+        "sr": "Jasna je svestrana, komunikativna i otvorena osoba koja se u poslovanju ističe svojim analitičkim znanjem i sposobnostima za pronalaženje rešenja problema koji su usko vezani za imovinsko-pravni status svih vrsza nepokretnosti. Pored višegodišnje prakse na terenu, Jasna ima iskustvo u izradi ugovora o zakupu, sastavlјanju prateće dokumentacije i pružanju podrške u realizaciji prodaje i zakupa visokobudžetnih nekretnina.\n\nPoznavanje tržišnih trendova, stanja ponude i tražnje i svih karika u lancu, od trenutka upoznavanja klijenta i njegovih potreba, do realizacije, učinilo je da ova mlada osoba stigne do ozbilјnih realizacija na tržištu nekretnina. Nјena potreba za stalnim napredovanjem i usavršavanjem dovela ju je spontano od mesta partnera do toga da samostalno zasnuje modernu firmu CONCEPT Real estate. Sa njenim razvojem, razvijaju se i mogućnosti novoosnovane firme, koja pruža usluge u svim oblastima koje su usko vezane za sektor nekretnina i investicija.\n\nOsoba koja svakom klijentu pristupa kao novom izazovu, uspešno i bezbedno rešava najteže probleme koji se javlјaju na putu tokom obavlјanja delatnosti, kao što su: pregovaranje, sastavlјanje dokumentacije, konsultacije sa renomiranim pravnim timovima, katastra i pravosudni sistem. Nјena upornost i razumevanje problema u kojima se klijenti nalaze, izdvajaju je od konkurencije u ovom sektoru i čine je liderom koji se dobro prilagodio savremenom poslovanju.\n\nGodinama je, kao direktor i partner, vodila uspešan tim agenata za nekretnine i kompanije koje je dobro pozicionirana na tržištu nekretnina i iste postoje i danas. Stručnu praksu agenta odradila je u renomiranoj kompaniji za iznajmlјivanje nekretnina i uspostavila odlične odnose sa klijentima, saradnicima i brojnim diplomatskim predstavništvima kako u regionu tako i sa dijasporom.\n\nDiplomirala je na Polјoprivrednom fakultetu u Zemunu 2009. godine i doktorirala na Prirodno-matematičkom fakultetu u Beogradu 2018. godine.\n\nTokom boravka u Španiji (2007), kao stipendista iz EU i Srbije, uz bavlјenje profesijom, uspela je da usavrši španski jezik. Danas ima aktivno znanje španskog i engleskog jezika na visokom nivou, a nemački koristi pasivno.\n\nUdata, majka dvoje dece - Mihajla i Vere.",
+        "en": "Jasna is a versatile, communicative, and open-minded individual who excels in her profession due to her analytical skills and ability to find solutions to complex issues related to the property and legal status of all types of real estate. With years of field experience, Jasna has expertise in drafting lease agreements, compiling supporting documentation, and providing support in the sale and lease of high-value properties.\n\nHer deep understanding of market trends, supply and demand dynamics, and every step of the real estate process, from client onboarding to deal closure, has enabled this young professional to achieve significant results in the property market. Her constant drive for growth and development has naturally led her from a partnership role to founding the modern real estate firm, CONCEPT Real estate. As the company has evolved, so too have the capabilities of this newly established firm, which now offers services in all areas related to the real estate and investment sectors.\n\nBy approaching each client as a new challenge, this individual successfully and safely resolves the most complex issues that arise during business operations, such as negotiation, documentation, consultations with renowned legal teams, and interactions with cadastral and judicial systems. Their persistence and understanding of clients' challenges set them apart from competitors in this sector, making them a leader well-adapted to modern business.\n\nFor years, as a director and partner, she led a successful team of real estate agents and companies that are well-positioned in the real estate market and continue to thrive today. She gained her professional experience as a real estate agent in a renowned rental company, establishing excellent relationships with clients, partners, and numerous diplomatic missions both in the region and with the diaspora.\n\nShe holds a degree from the Faculty of Agriculture in Zemun (2009) and a doctorate from the Faculty of Mathematics and Natural Sciences in Belgrade (2018). During her stay in Spain (2007) as a scholarship holder from the EU and Serbia, alongside her profession, she managed to perfect her Spanish language skills. Today, she has a high level of proficiency in Spanish and English, and passive knowledge of German.\n\nMarried, mother of two children - Mihajlo and Vera."
+      },
+      "contact": {
+        "phone": "+381 11 123 4567",
+        "email": "jasna@concept.rs"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Drugi Agent",
+      "title": {
+        "sr": "AGENT ZA NEKRETNINE",
+        "en": "REAL ESTATE AGENT"
+      },
+      "image": "/assets/images/agent2.jpg",
+      "bio": {
+        "sr": "Bio na srpskom...",
+        "en": "Bio in English..."
+      },
+      "contact": {
+        "phone": "+381 11 123 4568",
+        "email": "agent@concept.rs"
+      }
+    }
+  ]
+} 

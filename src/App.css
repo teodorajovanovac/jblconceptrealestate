@@ -1,0 +1,195 @@
+:root{
+  --primary-white: white;
+  --primary-blue: rgba(15,18,43,1);
+  --secundary-blue: rgba(44,46,114,1);
+  --secundary-light-green:rgba(37,102,69);
+  --secundary-dark-green:rgba(38,51,28);
+  --secundary-black:black;
+
+  --hover-color-1:rgb(184, 186, 197);
+  --hover-color-2:rgb(11, 11, 29);
+
+  --color-primary-back: var(--primary-blue);
+  --color-primary-fore: var(--primary-blue);
+  --color-secundary-fore: var(--primary-blue);
+  --color-alter-fore: rgb(246,229,112);
+
+  --color-primary-back-grad1: var(--primary-blue);
+  --color-primary-back-grad2: var(--secundary-blue);
+  --color-primary-fore-grad1: var(--secundary-blue);
+  --color-primary-fore-grad2: var(--secundary-blue);
+
+  --color-def-a: var(--primary-blue);
+  --color-def-a-hover: var(--secundary-blue);
+  --color-def-fore: var(--primary-blue);
+  
+  --color-landingpage-fore:var(--color-def-fore);
+  --color-landingpage-title:var(--color-def-grayone);
+  --color-landingpage-highlight-e:var(--color-def-green);
+  --color-landingpage-back1: var(--color-primary-back);
+  --color-landingpage-back1: var(--color-primary-back);
+
+  --color-footer-back:var(--color-primary-back);
+
+  --color-footer-fore: #fcfff5;
+  --color-footer-link: var(--color-footer-link);
+  --color-footer-border: var(--color-landingpage-title);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  min-height: 100vh;
+  font-family: 'Century Gothic', sans-serif;
+  color: var(--color-primary-fore);
+}
+
+body {
+  background: var(--primary-white);
+  /* background: linear-gradient(135deg, var(--color-primary-back-grad1) 60%,  var(--color-primary-back-grad2) 100%); */
+  margin: 0;  
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100dvh;
+  padding-top: 8rem;
+  background-attachment: fixed;
+}
+
+.main {
+  flex-grow: 1; /* Main content takes up available space */
+  display: flex; /* Use Flexbox */
+  flex-direction: column;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+a{
+  color: var(--color-def-a);
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: var(--primary-blue);
+}
+
+.hover-underline-animation2 {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline-animation2::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-def-a);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation2:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+  padding-bottom: 0.25rem; 
+}
+
+.hover-underline-animation::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--color-def-a);
+  transition: width 0.25s ease-out;
+}
+
+.hover-underline-animation:hover::before {
+  width: 100%;
+}
+
+.jbllogo{
+  min-width: 300px;
+  width: 50vw;
+  fill:white;
+}
+
+.goldGradient {
+  background: rgb(15,18,43);
+  background: linear-gradient(135deg, rgba(248,241,140,1) 30%, rgba(152,110,42,1) 100%);
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Dodajemo novi gradijent za naslove */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secundary-blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 2rem;
+  line-height: 1.2;
+  padding-bottom: 0.5rem;
+}
+
+h1.gradient-text {
+  font-size: 3.5rem;
+  text-align: left;
+  margin-bottom: 3rem;
+}
+
+h2.gradient-text {
+  font-size: 2.5rem;
+  text-align: left;
+  margin-bottom: 2.5rem;
+}
+
+h3.gradient-text {
+  font-size: 2rem;
+  text-align: left;
+  margin-bottom: 2rem;
+}
