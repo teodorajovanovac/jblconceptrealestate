@@ -7,7 +7,7 @@ Real Estate Web Site
 >Backend API for data
 
 ## Developers
-Ajsa Soft
+Ajsa Soft .
 
 >Aleksandar Jovanovac
 
