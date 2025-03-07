@@ -29,7 +29,7 @@ const AppRoutes = () => {
     {
       path: "/",
     //   element: <StartLayout autoshowLogin={false}/>,
-      element: <Test/>
+      element: <LandingPage/>
     },
     {
       path: "/service",
@@ -67,6 +67,10 @@ const AppRoutes = () => {
       path: "/contact",
       element: <ContactPage />,
     },
+    {
+      path: "/test",
+      element: <Test />,
+    },
   ];
 
 
@@ -96,13 +100,6 @@ const AppRoutes = () => {
         element: <ErrorPage/>
     }
    ]
-
-  // Combine and conditionally include routes based on authentication status
-//   const router = createBrowserRouter([
-//     ...routesForPublic,
-//     ...(!token ? routesForNotAuthenticatedOnly : []),
-//     ...routesForAuthenticatedOnly
-//   ]);
 
 // Combine and conditionally include routes based on authentication status
     const router = createBrowserRouter([
