@@ -1,54 +1,95 @@
-import { useState } from 'react'
-import { Share2, Heart } from 'lucide-react'
+"use client"
+
+import { useState } from "react"
+import { Heart, Share2, ChevronLeft } from "lucide-react"
+import { Link } from "react-router-dom"
+import GalleryModal from "./GalleryModal"
 
 interface PropertyGalleryProps {
   images: string[]
-  language: string
 }
 
-export default function PropertyGallery({ images, language }: PropertyGalleryProps) {
-  const [showAllPhotos, setShowAllPhotos] = useState(false)
+export default function PropertyGallery({ images }: PropertyGalleryProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleThumbnailClick = (index: number) => {
+    setCurrentIndex(index)
+  }
+
+  const handleViewAllPhotos = () => {
+    setIsModalOpen(true)
+  }
 
   return (
-    <div className="relative w-full h-[600px] grid grid-cols-4 grid-rows-2 gap-1">
-      {/* Main large image */}
-      <div className="col-span-2 row-span-2 relative">
-        <img 
-          src={images[0]} 
-          alt=""
-          className="w-full h-full object-cover"
-        />
+    <>
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between p-4">
+        <Link to="/properties" className="flex items-center text-gray-800">
+          <ChevronLeft className="h-6 w-6 mr-2" />
+          <span>Back</span>
+        </Link>
+        <div className="flex items-center space-x-4">
+          <button className="p-2">
+            <Share2 className="h-6 w-6" />
+          </button>
+          <button className="p-2">
+            <Heart className="h-6 w-6" />
+          </button>
+        </div>
       </div>
 
-      {/* Right side images */}
-      <div className="relative">
-        <img src={images[1]} alt="" className="w-full h-full object-cover" />
-      </div>
-      <div className="relative">
-        <img src={images[2]} alt="" className="w-full h-full object-cover" />
-      </div>
-      <div className="relative">
-        <img src={images[3]} alt="" className="w-full h-full object-cover" />
-      </div>
-      <div className="relative">
-        <img src={images[4]} alt="" className="w-full h-full object-cover" />
-        <button 
-          onClick={() => setShowAllPhotos(true)}
-          className="absolute bottom-4 right-4 bg-white px-4 py-2 rounded text-sm hover:bg-gray-100"
+      {/* Gallery Layout */}
+      <div className="w-full h-[300px] md:h-[600px] grid grid-cols-1 md:grid-cols-5 gap-2">
+        {/* Main large image */}
+        <div className="relative md:col-span-3 h-full">
+          <img
+            src={images[currentIndex] || "/placeholder.svg"}
+            alt="Property main view"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Right side thumbnails - hidden on mobile */}
+        <div className="hidden md:grid md:col-span-2 grid-cols-2 grid-rows-2 gap-2 h-full">
+          {images.slice(1, 5).map((image, index) => (
+            <div key={index} className="relative cursor-pointer" onClick={() => handleThumbnailClick(index + 1)}>
+              <img
+                src={image || "/placeholder.svg"}
+                alt={`Property view ${index + 2}`}
+                className="w-full h-full object-cover"
+              />
+
+              {/* "All photos" button on the last thumbnail */}
+              {index === 3 && (
+                <div
+                  className="absolute bottom-4 right-4 bg-white rounded-full px-4 py-2 text-sm font-medium shadow-md cursor-pointer"
+                  onClick={handleViewAllPhotos}
+                >
+                  All photos
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile view all photos button */}
+        <button
+          className="md:hidden absolute bottom-4 right-4 bg-white rounded-full px-4 py-2 text-sm font-medium shadow-md"
+          onClick={handleViewAllPhotos}
         >
-          {language === 'sr' ? 'Sve fotografije' : 'All photos'}
+          All photos
         </button>
       </div>
 
-      {/* Share and Save buttons */}
-      <div className="absolute top-4 right-4 flex gap-2 z-10">
-        <button className="p-2 bg-white rounded-full shadow hover:bg-gray-100">
-          <Share2 className="h-5 w-5" />
-        </button>
-        <button className="p-2 bg-white rounded-full shadow hover:bg-gray-100">
-          <Heart className="h-5 w-5" />
-        </button>
-      </div>
-    </div>
+      {/* Gallery Modal */}
+      <GalleryModal
+        images={images}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialIndex={currentIndex}
+      />
+    </>
   )
-} 
+}
+

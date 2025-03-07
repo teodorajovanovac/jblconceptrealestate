@@ -1,281 +1,294 @@
-import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import { ArrowLeft, Bed, Bath, Home, Calendar, Share2, Heart, Square, Phone, Mail, Building } from "lucide-react"
-import { Link } from "react-router-dom"
-import { motion } from "framer-motion"
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+"use client"
+
+import { useState, useEffect, useRef } from "react"
+import { Calendar } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
+import { propertyData } from "../data/propertyData"
 import PropertyGallery from "../components/property/PropertyGallery"
-import PropertyDetails from "../components/property/PropertyDetails"
-import ContactAgent from "../components/property/ContactAgent"
+import ContactAgentCard from "../components/property/ContactAgentCard"
+import PropertyFeatures from "../components/property/PropertyFeatures"
+import PropertyMap from "../components/property/PropertyMap"
 import Header from "../components/header/Header"
 import FooterTW from "../components/footer/FooterTW"
-import { Property } from "../types/property"
-import AgentContactCard from '../components/property/AgentContactCard'
-
-const GOOGLE_MAPS_API_KEY = 'YOUR_API_KEY' // Zameni sa svojim ključem
-
-const mapContainerStyle = {
-  width: '100%',
-  height: '400px',
-  borderRadius: '0.5rem'
-}
-
-const defaultCenter = {
-  lat: 44.787197, // Belgrade coordinates
-  lng: 20.457273
-}
-
-const propertyData = {
-  title: "1084 Golf Road",
-  location: "MONTECITO CA, 93108",
-  price: "$33,500,000",
-  pricePerSqft: "$3,826.38 per sqft",
-  status: "Active",
-  beds: 8,
-  baths: 10,
-  sqft: "8,755",
-  type: "Residential",
-  yearBuilt: "1923",
-  description: `At Villa Cascina lies an exquisite piece of Montecito's history. Resting on a private lane in a prestigious Montecito neighborhood, this magnificent 1920s estate underwent an extensive renovation in 2016, ensuring the preservation of its timeless charm while embracing contemporary comforts. Nestled in the iconic Lower Village, this gated property boasts breathtaking views of the surrounding mountains and ocean, while sitting in close proximity to Coast Village Road's famed restaurants and boutiques. As you enter through the gated main drive, you'll be greeted by 3 acres of lush gardens and mature landscaping, setting the tone for the grandeur that awaits. The 7,299-square-foot main residence features 6 bedrooms, an office, and 6 full bathrooms (plus an additional two half-bathrooms), all exquisitely appointed with fine finishes. The main level is welcoming with a bright and open floor plan, highlighted by a grand foyer, beamed ceilings, and hardwood floors. Elegant Moroccan-style archways and steel doors and windows lead to a central courtyard adorned with antique tiles and a grand outdoor fireplace. Enjoy a fully equipped gourmet kitchen, formal dining and living rooms, and a dedicated media room. The generously sized primary suite finishes out the ground floor and is equipped with a luxurious bathroom and grand walk-in closet. Upstairs, four spacious and private ensuite bedrooms await. The lower level houses a sizable wine cellar perfect for the wine aficionado.
-
-Amenities abound outside, including a swimmer's pool and cabana, sauna, and a North/South championship tennis court. Multiple additional structures on the 3-acre parcel form intentional spaces for all of life's necessities—a separate two-bedroom, one-bath guest house offers privacy and comfort for visitors, a large gym space provides wellness, and spacious four-car garages provide ample parking.`,
-  images: [
-    "/assets/probne slike za sajt/1.jpg",
-    "/assets/probne slike za sajt/2.jpg",
-    "/assets/probne slike za sajt/3.jpg",
-    "/assets/probne slike za sajt/4.jpg",
-    "/assets/probne slike za sajt/5.jpg"
-  ],
-  details: {
-    interior: {
-      totalStories: "2",
-      bedrooms: "8",
-      totalBathrooms: "10",
-      fullBathrooms: "8",
-      halfBathrooms: "2",
-      appliances: [
-        "Refrigerator", "Dishwasher", "Disposal", "Double Oven",
-        "Dryer", "Gas Stove", "Rev Osmosis", "Washer", "Wtr Softener/Owned"
-      ],
-      laundry: "Gas Hookup, Laundry Room",
-      floor: "Hardwood, Stone",
-      fireplace: "Living Room, Primary Bedroom, Other, Patio",
-      cooling: "Central Air",
-      heating: "Forced Air, Radiant"
-    },
-    exterior: {
-      lotSize: "3.16 Acres",
-      features: [
-        "Tennis Court(s)", "Pool", "Pool House", "Patio Open",
-        "Patio Covered", "SPA-Outside", "Hot Tub", "Sauna",
-        "Lawn", "Fruit Trees", "Fenced: ALL"
-      ],
-      style: "Medit, Spanish",
-      roof: "Tile",
-      security: "Monitored, Gate:Elec, Security Camera, Security System, Smoke Detector(s)"
-    }
-  }
-}
+import Seo from "../services/meta/Seo"
 
 export default function PropertyPage() {
-  const { id } = useParams<{ id: string }>()
-  const [property, setProperty] = useState<Property | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
-  const [isLiked, setIsLiked] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const agentCardRef = useRef<HTMLDivElement>(null);
+  const agentCardWrapperRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
 
+  // Handle scroll for sticky elements
   useEffect(() => {
-    const handleLanguageChange = () => {
-      setLanguage(localStorage.getItem('language') || 'sr');
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+      
+      if (!agentCardRef.current || !agentCardWrapperRef.current || !footerRef.current) return;
+      
+      const agentCard = agentCardRef.current;
+      const wrapper = agentCardWrapperRef.current;
+      const footer = footerRef.current;
+      
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const footerRect = footer.getBoundingClientRect();
+      const cardHeight = agentCard.offsetHeight;
+      
+      // Iznad početne pozicije kartice
+      if (wrapperRect.top > 80) {
+        agentCard.style.position = 'static';
+        agentCard.style.top = 'auto';
+        agentCard.style.width = 'auto';
+      } 
+      // Između početne pozicije i footera
+      else if (footerRect.top > cardHeight + 100) {
+        agentCard.style.position = 'fixed';
+        agentCard.style.top = '100px';
+        agentCard.style.width = `${wrapper.offsetWidth}px`;
+      } 
+      // Blizu footera
+      else {
+        agentCard.style.position = 'absolute';
+        agentCard.style.top = `${footerRect.top - cardHeight - 100}px`;
+        agentCard.style.width = `${wrapper.offsetWidth}px`;
+      }
     };
 
-    window.addEventListener('storage', handleLanguageChange);
-    window.addEventListener('languageChange', handleLanguageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleLanguageChange);
-      window.removeEventListener('languageChange', handleLanguageChange);
-    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Inicijalno pozicioniranje
+    
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const fetchProperty = async () => {
-      setLoading(true)
-      try {
-        // Simulacija API poziva
-        const dummyProperty = {
-          id: parseInt(id!),
-          title: {
-            sr: "Moderna planinska vila",
-            en: "Modern Mountain Villa"
-          },
-          price: 450000,
-          location: {
-            sr: "Zlatibor, Srbija",
-            en: "Zlatibor, Serbia",
-            coordinates: {
-              lat: 44.787197,
-              lng: 20.457273
-            }
-          },
-          bedrooms: 4,
-          bathrooms: 3,
-          area: 220,
-          description: {
-            sr: "Luksuzna vila sa modernim dizajnom, smeštena u srcu planine. Prostrana i svetla, sa velikim prozorima koji pružaju spektakularan pogled na okolnu prirodu. Vila poseduje prostranu dnevnu sobu sa kaminom, potpuno opremljenu kuhinju, trpezariju, 4 spavaće sobe, 3 kupatila, teretanu i veliku terasu. Spoljašnji prostor uključuje uređeno dvorište sa bazenom, prostor za roštilj i parking za više vozila.",
-            en: "Luxury villa with modern design, nestled in the heart of the mountain. Spacious and bright, with large windows offering spectacular views of the surrounding nature. The villa features a spacious living room with fireplace, fully equipped kitchen, dining room, 4 bedrooms, 3 bathrooms, gym, and a large terrace. The exterior includes a landscaped yard with swimming pool, barbecue area, and parking for multiple vehicles."
-          },
-          image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-          images: [
-            "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-            "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-            "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-            "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-            "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-            "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-            "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png"
-          ],
-          features: {
-            sr: ["Parking", "Bazen", "Pogled na planinu"],
-            en: ["Parking", "Pool", "Mountain View"]
-          },
-          type: {
-            sr: "Vila",
-            en: "Villa"
-          },
-          yearBuilt: "1923",
-          // Add more property details as needed
-        }
-        setProperty(dummyProperty)
-      } catch (error) {
-        console.error('Error fetching property:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    if (id) {
-      fetchProperty()
-    }
-  }, [id])
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary-blue"></div>
-      </div>
-    )
-  }
-
-  if (!property) {
-    return <div>Property not found</div>
-  }
-
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+  // Format price with commas
+  const formatPrice = (price: number) => {
+    return price.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    })
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <Seo title={propertyData.address.street} />
       <Header />
-      
-      <PropertyGallery images={property.images} language={language} />
+      <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-16">
+        {/* Property Gallery */}
+        <PropertyGallery images={propertyData.images} />
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main content */}
-          <div className="lg:col-span-2">
-            {/* Basic Info */}
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold mb-2">{property.title[language as 'sr' | 'en']}</h1>
-              <p className="text-gray-600 mb-4">{property.location[language as 'sr' | 'en']}</p>
-              <div className="flex flex-wrap gap-6 mb-4">
-                <div className="flex items-center gap-2">
-                  <Bed className="h-5 w-5 text-gray-400" />
-                  <span>{property.bedrooms} Beds</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Bath className="h-5 w-5 text-gray-400" />
-                  <span>{property.bathrooms} Baths</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Square className="h-5 w-5 text-gray-400" />
-                  <span>{property.area} sqft</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Building className="h-5 w-5 text-gray-400" />
-                  <span>{property.type[language as 'sr' | 'en']}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-gray-400" />
-                  <span>Built in {propertyData.yearBuilt}</span>
-                </div>
+        {/* Mobile Tabs Navigation */}
+        <div className="md:hidden">
+          <Tabs defaultValue="description" className="w-full">
+            <TabsList className="w-full justify-start px-4 h-12">
+              <TabsTrigger value="description" className="flex-1">
+                Property Description
+              </TabsTrigger>
+              <TabsTrigger value="features" className="flex-1">
+                Features & Amenities
+              </TabsTrigger>
+              <TabsTrigger value="details" className="flex-1">
+                Other Property Details
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="description" className="px-4">
+              {/* Property Description Content */}
+              <div className="space-y-4">
+                <h1 className="text-2xl font-bold">{propertyData.address.street}</h1>
+                <p className="text-xl font-bold">{formatPrice(propertyData.price.amount)}</p>
+                <p className="text-gray-600">{propertyData.description}</p>
               </div>
-              <p className="text-2xl font-bold mb-2">{property.price}</p>
-            </div>
+            </TabsContent>
 
-            {/* Description */}
-            <div className="prose max-w-none mb-12">
-              <p>{property.description[language as 'sr' | 'en']}</p>
-            </div>
+            <TabsContent value="features" className="px-4">
+              <PropertyFeatures title="Interior Features" features={propertyData.interiorFeatures} />
+              <PropertyFeatures title="Exterior Features" features={propertyData.exteriorFeatures} />
+            </TabsContent>
 
-            {/* Property Details */}
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Property Details</h2>
-              
-              {/* Interior Features */}
+            <TabsContent value="details" className="px-4">
+              <PropertyFeatures title="Other Property Details" features={propertyData.otherDetails} />
+              <PropertyFeatures title="School Information" features={propertyData.schoolInfo} />
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden md:block max-w-7xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Property Details */}
+            <div className="lg:col-span-2">
+              {/* Property Header */}
               <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4">Interior Features</h3>
-                <div className="grid grid-cols-2 gap-6">
-                  {property.features[language as 'sr' | 'en'].map((feature, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <div className="h-2 w-2 rounded-full bg-primary-blue" />
-                      <span className="text-gray-600">{feature}</span>
-                    </div>
-                  ))}
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
+                  <h1 className="text-3xl font-bold text-primary-blue">{propertyData.address.street}</h1>
+                  <div className="text-right">
+                    <p className="text-3xl font-bold text-primary-blue">{formatPrice(propertyData.price.amount)}</p>
+                    <p className="text-gray-600">${propertyData.price.perSqft.toLocaleString()} per sqft</p>
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  {propertyData.address.city} {propertyData.address.state}, {propertyData.address.zip}
+                </p>
+
+                {/* Property Stats */}
+                <div className="flex flex-wrap gap-4 mb-6">
+                  <div className="flex items-center">
+                    <span className="font-bold text-lg mr-2">{propertyData.features.beds}</span>
+                    <span className="text-gray-600">Beds</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-bold text-lg mr-2">{propertyData.features.baths}</span>
+                    <span className="text-gray-600">Baths</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-bold text-lg mr-2">{propertyData.features.sqft.toLocaleString()}</span>
+                    <span className="text-gray-600">sqft</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="font-bold text-lg mr-2">{propertyData.features.propertyType}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-gray-600">Built in {propertyData.features.yearBuilt}</span>
+                  </div>
+                </div>
+
+                {/* Status and Listing Info */}
+                <div className="flex flex-wrap gap-6 py-4 border-t border-b border-gray-200">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                    <span>{propertyData.status}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-gray-600 mr-2">MLS</span>
+                    <span className="font-medium">{propertyData.listingInfo.mlsId}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Calendar className="h-4 w-4 mr-1 text-gray-500" />
+                    <span className="text-gray-600 mr-2">LISTED</span>
+                    <span className="font-medium">{propertyData.listingInfo.listedDate}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Calendar className="h-4 w-4 mr-1 text-gray-500" />
+                    <span className="text-gray-600 mr-2">UPDATED</span>
+                    <span className="font-medium">{propertyData.listingInfo.updatedDate}</span>
+                  </div>
                 </div>
               </div>
+
+              {/* Property Description */}
+              <div className="mb-8">
+                <p className="whitespace-pre-line text-gray-800 leading-relaxed">{propertyData.description}</p>
+              </div>
+
+              {/* Property Map */}
+              <PropertyMap address={propertyData.address.fullAddress} location={propertyData.mapLocation} />
+
+              {/* Interior Features */}
+              <PropertyFeatures
+                title="Interior Features"
+                features={{
+                  "Total Stories": propertyData.interiorFeatures.totalStories,
+                  Bedrooms: propertyData.interiorFeatures.bedrooms,
+                  "Total Bathrooms": propertyData.interiorFeatures.totalBathrooms,
+                  "Full Bathrooms": propertyData.interiorFeatures.fullBathrooms,
+                  "Half Bathrooms": propertyData.interiorFeatures.halfBathrooms,
+                  Appliances: propertyData.interiorFeatures.appliances,
+                  "Laundry Description": propertyData.interiorFeatures.laundry,
+                  "Floor Description": propertyData.interiorFeatures.flooring,
+                  Fireplace: propertyData.interiorFeatures.fireplace,
+                  "Fireplace Description": propertyData.interiorFeatures.fireplaceDescription,
+                  Cooling: propertyData.interiorFeatures.cooling,
+                  "Cooling Description": propertyData.interiorFeatures.coolingDescription,
+                  Heating: propertyData.interiorFeatures.heating,
+                  "Heating Description": propertyData.interiorFeatures.heatingDescription,
+                }}
+              />
 
               {/* Exterior Features */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-4">Exterior Features</h3>
-                <div className="grid grid-cols-2 gap-6">
-                  {/* ... exterior features mapping */}
+              <PropertyFeatures
+                title="Exterior/Building Features"
+                features={{
+                  "Lot Size": propertyData.exteriorFeatures.lotSize,
+                  "Exterior Features": propertyData.exteriorFeatures.exteriorAmenities,
+                  "Lot Features": propertyData.exteriorFeatures.lotFeatures,
+                  "Architectural Style": propertyData.exteriorFeatures.architecturalStyle,
+                  Roof: propertyData.exteriorFeatures.roof,
+                  Sewer: propertyData.exteriorFeatures.sewer,
+                  "Patio And Porch": propertyData.exteriorFeatures.patioAndPorch,
+                  Security: propertyData.exteriorFeatures.security,
+                }}
+              />
+
+              {/* School Information */}
+              <PropertyFeatures
+                title="School Information"
+                features={{
+                  "High School": propertyData.schoolInfo.highSchool,
+                  "Elementary School": propertyData.schoolInfo.elementarySchool,
+                }}
+              />
+
+              {/* Other Property Details */}
+              <PropertyFeatures
+                title="Other Property Details"
+                features={{
+                  "Area Name": propertyData.otherDetails.areaName,
+                  "Days on Market": propertyData.otherDetails.daysOnMarket,
+                  Garage: propertyData.otherDetails.garage,
+                  Parking: propertyData.otherDetails.parking,
+                  View: propertyData.otherDetails.view,
+                  "View Description": propertyData.otherDetails.viewDescription,
+                  County: propertyData.otherDetails.county,
+                  "Water Source": propertyData.otherDetails.waterSource,
+                  Pool: propertyData.otherDetails.pool,
+                  Utilities: propertyData.otherDetails.utilities,
+                  Zoning: propertyData.otherDetails.zoning,
+                }}
+              />
+
+              {/* Disclaimer */}
+              <div className="mt-8 p-6 bg-gray-100 rounded-lg text-sm text-gray-600">
+                <p className="mb-2">
+                  Listed by <span className="text-primary-blue">The Agency</span>,{" "}
+                  <span className="text-primary-blue">{propertyData.listingInfo.agent.name}</span>,
+                </p>
+                <p className="mb-2">
+                  Listing Contact: <span className="text-primary-blue">{propertyData.listingInfo.agent.email}</span>
+                </p>
+                <p className="mb-4">{propertyData.disclaimer}</p>
+                <p>©2025 Santa Barbara Association of REALTORS. All rights reserved.</p>
+                <p>{propertyData.lastUpdated}</p>
+                <div className="mt-4">
+                  <img src="/placeholder.svg?height=30&width=100" alt="MLS Logo" className="w-[100px] h-[30px]" />
                 </div>
+              </div>
+
+              {/* Powered by */}
+              <div className="mt-4 text-sm text-gray-500">
+                Powered by <span className="text-primary-blue">JBL Concept</span>
               </div>
             </div>
 
-            {/* Map */}
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Location</h2>
-              <LoadScript googleMapsApiKey="YOUR_API_KEY">
-                <GoogleMap
-                  mapContainerClassName="w-full h-[400px] rounded-lg"
-                  center={property.location.coordinates}
-                  zoom={15}
-                >
-                  <Marker position={property.location.coordinates} />
-                </GoogleMap>
-              </LoadScript>
+            {/* Right Column - Contact Agent Card */}
+            <div className="lg:col-span-1 hidden lg:block" ref={agentCardWrapperRef}>
+              <div ref={agentCardRef} style={{ zIndex: 40 }}>
+                <ContactAgentCard agent={propertyData.listingInfo.agent} />
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <AgentContactCard
-              language={language}
-              agentName={property.agent?.name}
-              agentPhone={property.agent?.phone}
-              agentEmail={property.agent?.email}
-              brokerageLogo={property.agent?.logo}
-              brokerageName={property.agent?.company}
-            />
-          </div>
+        {/* Mobile Contact Agent Button */}
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t md:hidden">
+          <button className="w-full bg-primary-blue text-white py-3 rounded-md font-medium">Contact Agent</button>
         </div>
       </div>
-
-      <FooterTW />
-    </div>
+      
+      {/* Referenca za footer */}
+      <div ref={footerRef}>
+        <FooterTW />
+      </div>
+    </>
   )
-} 
+}
+
