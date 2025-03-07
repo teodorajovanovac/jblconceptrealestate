@@ -1,11 +1,12 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from "react";
 
 interface Props {
-  children?: ReactNode;
+  children: ReactNode;
 }
 
 interface State {
   hasError: boolean;
+  error?: Error;
 }
 
 class ErrorBoundary extends Component<Props, State> {
@@ -13,30 +14,32 @@ class ErrorBoundary extends Component<Props, State> {
     hasError: false
   };
 
-  public static getDerivedStateFromError(_: Error): State {
-    return { hasError: true };
+  public static getDerivedStateFromError(error: Error): State {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true, error };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
+    console.error("Uncaught error:", error, errorInfo);
   }
 
   public render() {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-          <div className="text-center p-8">
-            <h1 className="text-2xl font-bold text-primary-blue mb-4">
-              Oops! Nešto nije u redu.
-            </h1>
+          <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">Nešto nije u redu</h2>
             <p className="text-gray-600 mb-4">
-              Došlo je do greške. Molimo vas da osvežite stranicu ili pokušate kasnije.
+              Došlo je do greške pri učitavanju stranice. Molimo vas da osvežite stranicu ili pokušate kasnije.
+            </p>
+            <p className="text-sm text-gray-500 mb-4">
+              Tehnički detalji: {this.state.error?.message}
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="bg-primary-blue text-white px-6 py-2 rounded-lg hover:bg-secondary-blue transition-colors"
+              className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition-colors"
             >
-              Osveži stranicu
+              Osvežite stranicu
             </button>
           </div>
         </div>

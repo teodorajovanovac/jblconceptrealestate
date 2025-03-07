@@ -1,44 +1,85 @@
-export interface Property {
-  id: number
-  title: {
-    sr: string
-    en: string
+export interface PropertyData {
+  id: string
+  address: {
+    street: string
+    city: string
+    state: string
+    zip: string
+    fullAddress: string
   }
-  price: number
-  location: {
-    sr: string
-    en: string
-    coordinates: {
-      lat: number
-      lng: number
+  price: {
+    amount: number
+    perSqft: number
+  }
+  status: string
+  features: {
+    beds: number
+    baths: number
+    sqft: number
+    propertyType: string
+    yearBuilt: number
+  }
+  description: string
+  listingInfo: {
+    mlsId: string
+    listedDate: string
+    updatedDate: string
+    agent: {
+      name: string
+      company: string
+      email: string
+      phone: string
     }
   }
-  bedrooms: number
-  bathrooms: number
-  area: number
-  description: {
-    sr: string
-    en: string
+  interiorFeatures: {
+    totalStories: number
+    bedrooms: number
+    totalBathrooms: number
+    fullBathrooms: number
+    halfBathrooms: number
+    appliances: string
+    laundry: string
+    flooring: string
+    fireplace: boolean
+    fireplaceDescription: string
+    cooling: boolean
+    coolingDescription: string
+    heating: boolean
+    heatingDescription: string
   }
-  image: string
+  exteriorFeatures: {
+    lotSize: string
+    exteriorAmenities: string
+    lotFeatures: string
+    architecturalStyle: string
+    roof: string
+    sewer: string
+    patioAndPorch: string
+    security: string
+  }
+  schoolInfo: {
+    highSchool: string
+    elementarySchool: string
+  }
+  otherDetails: {
+    areaName: string
+    daysOnMarket: number
+    garage: string
+    parking: string
+    view: string
+    viewDescription: string
+    county: string
+    waterSource: string
+    pool: string
+    utilities: string
+    zoning: string
+  }
   images: string[]
-  features: {
-    sr: string[]
-    en: string[]
+  mapLocation: {
+    lat: number
+    lng: number
   }
-  type: {
-    sr: string
-    en: string
-  }
-  yearBuilt: string
-  agent?: {
-    name?: string;
-    phone?: string;
-    email?: string;
-    logo?: string;
-    company?: string;
-  };
+  disclaimer: string
+  lastUpdated: string
 }
 
-// Note: The actual data structure will have translations, but the component
-// will receive the already translated version for simplicity 
