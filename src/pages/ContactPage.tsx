@@ -288,7 +288,7 @@ export default function ContactPage() {
               <div className="relative hidden md:block">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0 z-10" />
                 <img
-                  src="/assets/images/contact-bg.jpg"
+                  src="/assets/images/2.jpg"
                   alt="Modern luxury interior"
                   className="h-full w-full object-cover"
                 />
