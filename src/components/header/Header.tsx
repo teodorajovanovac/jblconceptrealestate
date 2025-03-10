@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import ReactLogo from "../../assets/jblgold.svg"
+import ReactLogo from "../../assets/jbl_log_gold_hr.svg"
 import menuData from "../../assets/data/menu.json"
 
 const Header = () => {
@@ -36,9 +36,9 @@ const Header = () => {
         isScrolled ? "bg-primary-blue text-primary-white" : "bg-transparent text-secondary-blue"
       }`}
     >
-      <div className="w-full px-8 py-2 flex justify-between items-center">
+      <div className="w-fullpx-8 py-2 flex justify-between items-center">
         <a href="/" className="z-30">
-          <ReactLogo className="w-24 h-auto" />
+          <ReactLogo className="w-auto h-12 p-2 pl-6" />
         </a>
 
         {/* Desktop Navigation */}
