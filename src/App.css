@@ -34,6 +34,9 @@
   --color-footer-fore: #fcfff5;
   --color-footer-link: var(--color-footer-link);
   --color-footer-border: var(--color-landingpage-title);
+  
+  /* Dodajemo Century Gothic kao glavni font */
+  font-family: 'Century Gothic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #root {
@@ -55,6 +58,7 @@ body {
   min-height: 100dvh;
   padding-top: 8rem;
   background-attachment: fixed;
+  font-family: 'Century Gothic', sans-serif;
 }
 
 .main {
@@ -192,4 +196,98 @@ h3.gradient-text {
   font-size: 2rem;
   text-align: left;
   margin-bottom: 2rem;
+}
+
+/* Modernizovano CTA dugme - kockasti dizajn */
+.cta-button {
+  min-width: 140px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-blue, #1e3a8a);
+  border: none;
+  color: white;
+  font-weight: 600;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-radius: 2px; /* Kockasti oblik */
+  padding: 0 1.8rem;
+  text-align: center;
+  font-family: 'Century Gothic', sans-serif;
+}
+
+.cta-button .icon {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.cta-button .icon path {
+  fill: white;
+  transition: fill 0.3s ease;
+}
+
+.cta-button span {
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease;
+  display: inline-block;
+  font-family: 'Century Gothic', sans-serif;
+}
+
+.cta-button::before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: "";
+  background-color: white;
+  left: -100%;
+  top: 0;
+  transition: transform 0.4s ease;
+  z-index: 1;
+}
+
+.cta-button:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cta-button:hover span {
+  color: var(--primary-blue, #1e3a8a);
+}
+
+.cta-button:hover .icon {
+  color: var(--primary-blue, #1e3a8a);
+}
+
+.cta-button:hover .icon path {
+  fill: var(--primary-blue, #1e3a8a);
+}
+
+.cta-button:hover::before {
+  transform: translateX(100%);
+}
+
+.cta-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.1s ease;
+}
+
+/* Prilagođavanje za dugmad pune širine */
+button.w-full.cta-button::before,
+a.w-full.cta-button::before {
+  width: 100%;
+  left: -100%;
+}
+
+button.w-full.cta-button:hover::before,
+a.w-full.cta-button:hover::before {
+  transform: translateX(100%);
 }

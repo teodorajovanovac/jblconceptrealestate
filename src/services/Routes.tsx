@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 //List all pages
 import LandingPage from "../pages/LandingPage";
@@ -24,93 +24,35 @@ const AppRoutes = () => {
     //const { token, project } = auth;
     const token = '';
 
-  // Define public routes accessible to public
-  const routesForPublic = [
-    {
-      path: "/",
-    //   element: <StartLayout autoshowLogin={false}/>,
-      element: <LandingPage/>
-    },
-    {
-      path: "/service",
-      element: <ServicesPage />,
-    },
-    {
-      path: "/about-us",
-      element: <AboutUsPage />,
-    },
-    {
-      path: "/landing",
-      element: <LandingPage/>,
-    },
-    {
-      path: "/pricing",
-      element: <PricingPage />,
-    },
-    {
-      path: "/terms",
-      element: <TermsPage />,
-    },
-    {
-      path: "/properties",
-      element: <RealEstatePage />,
-    },
-    {
-      path: "/property/:id",
-      element: <PropertyPage />,
-    },
-    {
-      path: "/about-us/:id",
-      element: <AgentPage />,
-    },
-    {
-      path: "/contact",
-      element: <ContactPage />,
-    },
-    {
-      path: "/test",
-      element: <Test />,
-    },
-  ];
-
-
-  // Define routes accessible only to non-authenticated users - Landing Page, Login page, LogOut page, Error Login...
-  const routesForNotAuthenticatedOnly = [
-   
-    {
-      path: "/login",
-    //   element:  <StartLayout autoshowLogin={true}/>,
-      element: <LandingPage/>
-    },
-  ];
-
-  // Define routes accessible only to authenticated users
-  const routesForAuthenticatedOnly = [
-   
-    {
-      path: "/login",
-      element: <LandingPage/>,
-    },
-  ];
-
-   // Define routes for non existing routes
-   const routesForNonExisting = [
-    {
-        path: "*",
-        element: <ErrorPage/>
-    }
-   ]
-
-// Combine and conditionally include routes based on authentication status
-    const router = createBrowserRouter([
-    ...routesForPublic,
-    ...(!token ? routesForNotAuthenticatedOnly : []),
-    ...routesForAuthenticatedOnly,
-    ...routesForNonExisting
-  ]);
-  
-  // Provide the router configuration using RouterProvider
-  return <RouterProvider router={router} />;
+  return (
+    <Routes>
+      {/* Public routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/service" element={<ServicesPage />} />
+      <Route path="/about-us" element={<AboutUsPage />} />
+      <Route path="/landing" element={<LandingPage />} />
+      <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/terms" element={<TermsPage />} />
+      <Route path="/properties" element={<RealEstatePage />} />
+      <Route path="/property/:id" element={<PropertyPage />} />
+      <Route path="/about-us/:id" element={<AgentPage />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/test" element={<Test />} />
+      
+      {/* Routes for non-authenticated users */}
+      {!token && (
+        <Route path="/login" element={<LandingPage />} />
+      )}
+      
+      {/* Routes for authenticated users */}
+      {token && (
+        <Route path="/login" element={<LandingPage />} />
+      )}
+      
+      {/* Catch-all route for non-existing routes */}
+      <Route path="*" element={<ErrorPage />} />
+    </Routes>
+  );
 }
 
 export default AppRoutes;

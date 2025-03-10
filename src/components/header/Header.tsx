@@ -6,6 +6,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [language, setLanguage] = useState(localStorage.getItem('language') || "sr")
+  const [isHomePage, setIsHomePage] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const toggleLanguage = () => {
@@ -22,6 +23,10 @@ const Header = () => {
     .sort((a, b) => a.order - b.order)
 
   useEffect(() => {
+    // Detektuj da li je trenutna stranica početna
+    const path = window.location.pathname;
+    setIsHomePage(path === "/" || path === "/landing");
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
@@ -30,11 +35,31 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Odredi boju teksta na osnovu stranice i skrola
+  const getTextColorClass = () => {
+    if (isScrolled) {
+      return "bg-primary-blue text-primary-white";
+    } else if (isHomePage) {
+      return "bg-transparent text-white";
+    } else {
+      return "bg-transparent text-primary-blue";
+    }
+  }
+
+  // Odredi hover boju na osnovu stranice i skrola
+  const getHoverColorClass = () => {
+    if (isScrolled) {
+      return "hover:text-menu-hover";
+    } else if (isHomePage) {
+      return "hover:text-gray-300";
+    } else {
+      return "hover:text-secondary-blue";
+    }
+  }
+
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-500 ${
-        isScrolled ? "bg-primary-blue text-primary-white" : "bg-transparent text-secondary-blue"
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-500 ${getTextColorClass()}`}
     >
       <div className="w-fullpx-8 py-2 flex justify-between items-center">
         <a href="/" className="z-30">
@@ -47,11 +72,7 @@ const Header = () => {
             <a
               key={item.link}
               href={item.link}
-              className={`relative transition-colors px-4 group ${
-                isScrolled 
-                  ? "hover:text-menu-hover" 
-                  : "hover:text-menu-hover-dark"
-              }`}
+              className={`relative transition-colors px-4 group ${getHoverColorClass()}`}
             >
               <span className="relative">
                 {item.caption}
@@ -61,11 +82,7 @@ const Header = () => {
           ))}
           <button 
             onClick={toggleLanguage} 
-            className={`relative transition-colors px-4 group ${
-              isScrolled 
-                ? "hover:text-menu-hover" 
-                : "hover:text-menu-hover-dark"
-            }`}
+            className={`relative transition-colors px-4 group ${getHoverColorClass()}`}
           >
             <span className="relative">
               {language === "sr" ? "EN" : "SR"}

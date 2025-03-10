@@ -74,6 +74,13 @@ const Footer = () => {
                 <BsFillTelephoneFill className="text-primary-gold" />
                 <p>+381 61 2299988</p>
               </a>
+              <a
+                className="flex items-center space-x-2 hover:text-menu-hover transition-colors"
+                href="tel:+1234567890"
+              >
+                <BsFillTelephoneFill className="text-primary-gold" />
+                <p>+381 61 2299988</p>
+              </a>
             </div>
           </div>
         </div>

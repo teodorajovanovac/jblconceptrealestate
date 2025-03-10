@@ -6,7 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { createTheme } from '@mui/material/styles'
 import ErrorBoundary from './components/error/ErrorBoundary'
 import { useState, useEffect } from 'react';
-import SplashScreen from './components/splash/SplashScreen';
+import LoadingScreen from './components/splash/LoadingScreen';
+import { BrowserRouter as Router } from 'react-router-dom'
 
 const theme = createTheme({
   palette: {
@@ -20,35 +21,35 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const helmetContext = {};
 
-  // Proveravamo da li smo na početnoj strani i da li treba prikazati splash screen
+  // Proveravamo da li smo na početnoj strani
   const isHomePage = window.location.pathname === '/' || window.location.pathname === '/landing';
-  const shouldShowSplash = isHomePage; // Uvek prikazujemo splash pri refreshu početne strane
 
-  // Ako nismo na početnoj, preskačemo splash screen
+  // Prikazujemo loading screen samo na početnoj strani
   useEffect(() => {
-    if (!shouldShowSplash) {
+    if (!isHomePage) {
+      // Ako nismo na početnoj strani, odmah završavamo loading
       setIsLoading(false);
+    } else {
+      // Ako smo na početnoj strani, prikazujemo loading screen 3 sekunde
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+      
+      return () => clearTimeout(timer);
     }
-  }, [shouldShowSplash]);
-
-  // Prikazujemo glavni sadržaj nakon što se završi loading
-  const handleFinishLoading = () => {
-    setIsLoading(false);
-  };
-
-  //useGoogleAnalytics();
-  //useGoogleTagManager();
+  }, [isHomePage]);
 
   return (
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <HelmetProvider context={helmetContext}>
-          {isLoading && shouldShowSplash ? (
-            <SplashScreen finishLoading={handleFinishLoading} />
-          ) : (
-            <AppRoutes />
-          )}
+          <Router>
+            <div className="App">
+              {isHomePage && <LoadingScreen loading={isLoading} />}
+              <AppRoutes />
+            </div>
+          </Router>
         </HelmetProvider>
       </ThemeProvider>
     </ErrorBoundary>

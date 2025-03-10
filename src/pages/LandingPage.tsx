@@ -124,7 +124,7 @@ const LandingPage: React.FC = () => {
     const translations = {
       sr: {
         tagline: 'EKSKLUZIVNE NEKRETNINE U VAŠEM KRAJU',
-        headline: 'Pronađite svoj dom iz snova',
+        headline: 'PRONAĐITE SVOJ DOM IZ SNOVA',
         subheading: 'Vrhunska usluga i stručni saveti u svakom koraku vašeg putovanja kroz nekretnine',
         searchButton: 'Nekretnine',
         featuredProperties: 'Izdvojene nekretnine',
@@ -144,7 +144,7 @@ const LandingPage: React.FC = () => {
       },
       en: {
         tagline: 'PREMIUM PROPERTIES IN YOUR AREA',
-        headline: 'Find Your Dream Home',
+        headline: 'FIND YOUR DREAM HOME ',
         subheading: 'Unparalleled service and expert advice at every step of your real estate journey',
         searchButton: 'Properties',
         featuredProperties: 'Featured Properties',
@@ -213,12 +213,14 @@ const LandingPage: React.FC = () => {
                 </p>
 
                 {/* Property Search Button */}
-                <Link to="/properties">
-                  <button className="bg-primary-blue hover:bg-secondary-blue text-white px-3 sm:px-4 md:px-5 py-1 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm md:text-base font-medium flex items-center justify-center mx-auto">
-                    <Search className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                    {t.searchButton}
-                  </button>
-                </Link>
+                <div className="flex justify-center">
+                  <Link to="/properties">
+                    <button className="cta-button">
+                      <Search className="icon" />
+                      <span>{t.searchButton}</span>
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -228,8 +230,9 @@ const LandingPage: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4">
               <div className="flex justify-between items-center mb-10">
                 <h2 className="text-3xl md:text-4xl font-bold text-primary-blue">{t.featuredProperties}</h2>
-                <Link to="/properties" className="text-primary-blue hover:text-secondary-blue flex items-center font-medium transition-colors">
-                  {t.viewAllProperties} <ArrowRight className="ml-2 h-4 w-4" />
+                <Link to="/properties" className="cta-button">
+                  <span>{t.viewAllProperties}</span>
+                  <ArrowRight className="icon" />
                 </Link>
               </div>
               
@@ -351,11 +354,14 @@ const LandingPage: React.FC = () => {
                       <span className="text-gray-700">{t.aboutFeature3}</span>
                     </li>
                   </ul>
-                  <Link to="/about-us">
-                    <button className="bg-primary-blue hover:bg-secondary-blue text-white px-8 py-3 rounded-lg transition-colors font-medium">
-                      {t.meetOurTeam}
-                    </button>
-                  </Link>
+                  <div className="flex">
+                    <Link to="/about-us">
+                      <button className="cta-button">
+                        <span>{t.meetOurTeam}</span>
+                        <Users className="icon" />
+                      </button>
+                    </Link>
+                  </div>
                 </div>
                 
                 <div className="md:w-1/2 grid grid-cols-2 gap-4">

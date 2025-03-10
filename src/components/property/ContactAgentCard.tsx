@@ -29,9 +29,37 @@ export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
         </div>
       </div>
 
-      <button className="w-full bg-black text-white py-3 rounded-md font-medium hover:bg-gray-800 transition-colors">
-        Contact agent
-      </button>
+      {/* Contact Form */}
+      <form className="space-y-4">
+        <input
+          type="text"
+          placeholder="Your Name"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue"
+        />
+        <input
+          type="email"
+          placeholder="Your Email"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue"
+        />
+        <input
+          type="tel"
+          placeholder="Your Phone"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue"
+        />
+        <textarea
+          placeholder="Your Message"
+          rows={4}
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-blue"
+        ></textarea>
+        <div className="w-full">
+          <button type="submit" className="w-full cta-button">
+            <span>Send Message</span>
+            <svg className="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" fill="white"/>
+            </svg>
+          </button>
+        </div>
+      </form>
     </div>
   )
 }
