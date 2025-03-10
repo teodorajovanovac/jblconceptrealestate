@@ -1,4 +1,10 @@
 import type { PropertyData } from "../types/property"
+import property1 from "../assets/probne slike za sajt/1.jpg"
+import property2 from "../assets/probne slike za sajt/2.jpg"
+import property3 from "../assets/probne slike za sajt/3.jpg"
+import property4 from "../assets/probne slike za sajt/4.jpg"
+import property5 from "../assets/probne slike za sajt/5.jpg"
+import property6 from "../assets/probne slike za sajt/6.jpg"
 
 export const propertyData: PropertyData = {
   id: "6507311236260808970",
@@ -80,14 +86,14 @@ export const propertyData: PropertyData = {
     zoning: "Other",
   },
   images: [
-    "../assets/probne slike za sajt/1.jpg",
-    "/assets/images/villa2.jpg",
-    "/assets/images/villa3.jpg",
-    "/assets/images/villa4.jpg",
-    "/assets/images/villa5.jpg",
-    "/assets/images/interior1.jpg",
-    "/assets/images/interior2.jpg",
-    "/assets/images/interior3.jpg"
+    property1,
+    property2,
+    property3,
+    property4,
+    property5,
+    property6,
+    property1,
+    property2
   ],
   mapLocation: {
     lat: 34.4208,

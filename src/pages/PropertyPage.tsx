@@ -18,6 +18,11 @@ export default function PropertyPage() {
   const agentCardWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Handle scroll for sticky elements
   useEffect(() => {
     const handleScroll = () => {
@@ -72,22 +77,22 @@ export default function PropertyPage() {
     <>
       <Seo title={propertyData.address.street} />
       <Header />
-      <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-16">
+      <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-0">
         {/* Property Gallery */}
         <PropertyGallery images={propertyData.images} />
 
         {/* Mobile Tabs Navigation */}
         <div className="md:hidden">
           <Tabs defaultValue="description" className="w-full">
-            <TabsList className="w-full justify-start px-4 h-12">
-              <TabsTrigger value="description" className="flex-1">
+            <TabsList className="w-full px-2 h-12 grid grid-cols-3 gap-1">
+              <TabsTrigger value="description" className="px-1 text-xs whitespace-normal">
                 Property Description
               </TabsTrigger>
-              <TabsTrigger value="features" className="flex-1">
+              <TabsTrigger value="features" className="px-1 text-xs whitespace-normal">
                 Features & Amenities
               </TabsTrigger>
-              <TabsTrigger value="details" className="flex-1">
-                Other Property Details
+              <TabsTrigger value="details" className="px-1 text-xs whitespace-normal">
+                Other Details
               </TabsTrigger>
             </TabsList>
 

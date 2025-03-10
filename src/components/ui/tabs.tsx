@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react"
+import { cn } from "../../lib/utils"
 
 type TabsContextType = {
   selectedTab: string
@@ -29,25 +30,26 @@ export function Tabs({
   )
 }
 
-export function TabsList({ children, className = "", ...props }: { children: React.ReactNode; className?: string; [key: string]: any }) {
+export function TabsList({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={`flex overflow-x-auto ${className}`} {...props}>
-      {children}
-    </div>
+    <div
+      className={cn(
+        "inline-flex items-center justify-center rounded-md bg-slate-100 p-1 text-slate-500",
+        className
+      )}
+      {...props}
+    />
   )
 }
 
 export function TabsTrigger({
+  className,
   value,
-  children,
-  className = "",
   ...props
-}: {
-  value: string
-  children: React.ReactNode
-  className?: string
-  [key: string]: any
-}) {
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { value: string }) {
   const context = useContext(TabsContext)
   if (!context) {
     throw new Error("TabsTrigger must be used within a Tabs component")
@@ -57,16 +59,14 @@ export function TabsTrigger({
 
   return (
     <button
-      className={`px-4 py-2 text-sm font-medium transition-colors ${
-        selectedTab === value
-          ? "border-b-2 border-primary-blue text-primary-blue"
-          : "text-gray-500 hover:text-gray-700"
-      } ${className}`}
+      className={cn(
+        "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        selectedTab === value ? "bg-white text-slate-950 shadow-sm" : "",
+        className
+      )}
       onClick={() => setSelectedTab(value)}
       {...props}
-    >
-      {children}
-    </button>
+    />
   )
 }
 

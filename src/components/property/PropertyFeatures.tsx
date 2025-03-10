@@ -10,13 +10,13 @@ export default function PropertyFeatures({ title, features }: PropertyFeaturesPr
       <div className="border-t border-gray-200">
         {Object.entries(features).map(([key, value]) => (
           <div key={key} className="flex py-3 border-b border-gray-200">
-            <div className="w-1/3 text-gray-600">
+            <div className="w-2/5 text-gray-600">
               {key
                 .replace(/([A-Z])/g, " $1")
                 .replace(/^./, (str) => str.toUpperCase())
                 .replace(/([A-Z])\s/g, (str) => str.trim() + " ")}
             </div>
-            <div className="w-2/3 font-medium">
+            <div className="w-3/5 font-medium break-words">
               {typeof value === "boolean" ? (value ? "Yes" : "No") : value.toString()}
             </div>
           </div>

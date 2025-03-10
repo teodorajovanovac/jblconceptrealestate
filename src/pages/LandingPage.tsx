@@ -196,26 +196,26 @@ const LandingPage: React.FC = () => {
         {/* Main Content */}
         <main className="relative z-20 flex-grow flex flex-col items-center justify-center px-4">
           {/* Hero Section */}
-          <div className="relative h-screen flex items-center justify-center">
+          <div className="relative min-h-screen w-full flex items-center justify-center hero-container">
             {/* Hero Content */}
-            <div className="relative z-10 text-center max-w-4xl px-4">
-              <div className="bg-black/30 backdrop-blur-sm p-8 rounded-lg">
-                <h2 className="text-lg md:text-xl text-white font-light mb-2 uppercase tracking-wider flex items-center justify-center">
-                  <MapPin className="h-4 w-4 mr-2" /> {t.tagline}
+            <div className="relative z-10 text-center w-full max-w-3xl px-4 md:px-6 hero-content">
+              <div className="bg-black/30 backdrop-blur-sm p-3 sm:p-4 md:p-5 lg:p-6 rounded-lg mx-auto hero-text">
+                <h2 className="text-xs sm:text-sm md:text-base text-white font-light mb-1 sm:mb-2 uppercase tracking-wider flex items-center justify-center">
+                  <MapPin className="h-3 w-3 mr-1" /> {t.tagline}
                 </h2>
 
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-6">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-serif font-bold text-white mb-1 sm:mb-2 md:mb-3">
                   {t.headline}
                 </h1>
 
-                <p className="text-lg md:text-xl text-white mb-8 max-w-2xl mx-auto">
+                <p className="text-xs sm:text-sm md:text-base text-white mb-2 sm:mb-3 md:mb-4 max-w-xl mx-auto">
                   {t.subheading}
                 </p>
 
                 {/* Property Search Button */}
                 <Link to="/properties">
-                  <button className="bg-primary-blue hover:bg-secondary-blue text-white px-8 py-3 rounded-lg transition-colors text-lg font-medium flex items-center justify-center mx-auto">
-                    <Search className="h-5 w-5 mr-2" />
+                  <button className="bg-primary-blue hover:bg-secondary-blue text-white px-3 sm:px-4 md:px-5 py-1 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm md:text-base font-medium flex items-center justify-center mx-auto">
+                    <Search className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                     {t.searchButton}
                   </button>
                 </Link>
