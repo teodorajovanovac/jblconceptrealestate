@@ -6,19 +6,20 @@ interface ContactAgentCardProps {
 
 export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
+    <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 flex flex-col items-center">
       <div className="flex items-center mb-6">
         <img
-          src="/placeholder.svg?height=50&width=100"
+          src={agent.image || "/placeholder.svg"}
           alt={agent.company}
-          className="w-[100px] h-[50px] mr-3"
+          className="w-[100px] h-[100px] rounded-full mr-3"
         />
         <div>
-          <h3 className="text-sm font-bold">{agent.company}</h3>
+          <h3 className="text-lg font-bold">{agent.company}</h3>
+          <p className="text-sm text-gray-500">{agent.title}</p>
         </div>
       </div>
 
-      <div className="space-y-5 mb-8">
+      <div className="space-y-5 mb-8 w-full">
         <div className="flex justify-between items-center">
           <label className="text-sm text-gray-500">Mobile number</label>
           <p className="text-sm font-medium">{agent.phone}</p>
@@ -30,7 +31,7 @@ export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
       </div>
 
       {/* Contact Form */}
-      <form className="space-y-4">
+      <form className="space-y-4 w-full">
         <input
           type="text"
           placeholder="Your Name"
