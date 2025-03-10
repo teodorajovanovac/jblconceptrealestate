@@ -39,14 +39,18 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
         </div>
       </div>
 
-      {/* Gallery Layout */}
-      <div className="w-full h-[300px] md:h-[600px] grid grid-cols-1 md:grid-cols-5 gap-2">
+      {/* Gallery Layout - smanjena visina za veće ekrane */}
+      <div className="w-full h-[300px] md:h-[400px] lg:h-[450px] xl:h-[500px] grid grid-cols-1 md:grid-cols-5 gap-2">
         {/* Main large image */}
         <div className="relative md:col-span-3 h-full">
           <img
             src={images[currentIndex] || "/placeholder.svg"}
             alt="Property main view"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              console.error(`Failed to load image: ${images[currentIndex]}`);
+              e.currentTarget.src = "/placeholder.svg";
+            }}
           />
         </div>
 
@@ -58,6 +62,10 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
                 src={image || "/placeholder.svg"}
                 alt={`Property view ${index + 2}`}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  console.error(`Failed to load thumbnail: ${image}`);
+                  e.currentTarget.src = "/placeholder.svg";
+                }}
               />
 
               {/* "All photos" button on the last thumbnail */}
