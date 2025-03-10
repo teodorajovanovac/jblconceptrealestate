@@ -1,16 +1,27 @@
-import { useState, useEffect } from "react"
-import { Building2, User, Mail, Phone, Home, FileText, Settings, HelpCircle, X } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { Building2, User, Mail, Phone, Home, FileText, Settings, HelpCircle, X, Key, Calculator, Shield, Search, ClipboardCheck, Users } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Header from '../components/header/Header'
 import FooterTW from '../components/footer/FooterTW'
 import Seo from '../services/meta/Seo'
 
-type ServiceType = 'buying' | 'selling' | 'consulting' | 'property-management' | 'handover' | 'market-research' | 'other';
+type ServiceType = 
+  | 'buying' 
+  | 'selling' 
+  | 'rental' 
+  | 'property-management' 
+  | 'valuation' 
+  | 'consulting' 
+  | 'legal' 
+  | 'handover' 
+  | 'market-research' 
+  | 'other';
 
 export default function ContactPage() {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
   const [formType, setFormType] = useState<ServiceType>('buying')
   const [showServiceModal, setShowServiceModal] = useState(false)
+  const serviceButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const handleLanguageChange = () => {
@@ -32,6 +43,28 @@ export default function ContactPage() {
       setLanguage(currentLanguage);
     }
   }, [localStorage.getItem('language')]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        showServiceModal && 
+        serviceButtonRef.current && 
+        !serviceButtonRef.current.contains(event.target as Node)
+      ) {
+        // Check if the click is on the dropdown itself
+        const dropdown = document.getElementById('service-dropdown');
+        if (dropdown && !dropdown.contains(event.target as Node)) {
+          setShowServiceModal(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showServiceModal]);
 
   const services = {
     buying: {
@@ -56,19 +89,19 @@ export default function ContactPage() {
         en: 'I want to list my property for sale'
       }
     },
-    consulting: {
-      icon: HelpCircle,
+    rental: {
+      icon: Key,
       title: {
-        sr: 'Konsalting usluge',
-        en: 'Consulting services'
+        sr: 'Posredovanje pri zakupu',
+        en: 'Rental Brokerage'
       },
       description: {
-        sr: 'Potreban mi je savet oko nekretnina',
-        en: 'I need real estate consulting'
+        sr: 'Želim da iznajmim ili izdam nekretninu',
+        en: 'I want to rent or lease a property'
       }
     },
     'property-management': {
-      icon: Settings,
+      icon: Shield,
       title: {
         sr: 'Menadžment nekretnina',
         en: 'Property management'
@@ -78,8 +111,41 @@ export default function ContactPage() {
         en: 'I need property management services'
       }
     },
-    handover: {
+    valuation: {
+      icon: Calculator,
+      title: {
+        sr: 'Procena vrednosti nekretnina',
+        en: 'Property Valuation'
+      },
+      description: {
+        sr: 'Potrebna mi je procena vrednosti nekretnine',
+        en: 'I need a property value assessment'
+      }
+    },
+    consulting: {
+      icon: Users,
+      title: {
+        sr: 'Konsalting usluge',
+        en: 'Consulting services'
+      },
+      description: {
+        sr: 'Potreban mi je savet oko nekretnina',
+        en: 'I need real estate consulting'
+      }
+    },
+    legal: {
       icon: FileText,
+      title: {
+        sr: 'Pravne usluge',
+        en: 'Legal Services'
+      },
+      description: {
+        sr: 'Potrebna mi je pravna pomoć oko nekretnine',
+        en: 'I need legal assistance with real estate'
+      }
+    },
+    handover: {
+      icon: ClipboardCheck,
       title: {
         sr: 'Primopredaja nepokretnosti',
         en: 'Property handover'
@@ -90,7 +156,7 @@ export default function ContactPage() {
       }
     },
     'market-research': {
-      icon: User,
+      icon: Search,
       title: {
         sr: 'Istraživanje tržišta',
         en: 'Market research'
@@ -113,73 +179,24 @@ export default function ContactPage() {
     }
   }
 
+  // Order of services to display in dropdown
+  const serviceOrder: ServiceType[] = [
+    'buying',
+    'selling',
+    'rental',
+    'property-management',
+    'valuation',
+    'consulting',
+    'legal',
+    'handover',
+    'market-research',
+    'other'
+  ];
+
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
   }
-
-  const ServiceModal = () => (
-    <AnimatePresence>
-      {showServiceModal && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-          onClick={() => setShowServiceModal(false)}
-        >
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-white rounded-xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold text-primary-blue">
-                {language === 'sr' ? 'Izaberite uslugu' : 'Choose a service'}
-              </h3>
-              <button
-                onClick={() => setShowServiceModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-full"
-              >
-                <X className="h-5 w-5 text-gray-500" />
-              </button>
-            </div>
-            <div className="grid gap-3">
-              {(Object.keys(services) as ServiceType[]).map((serviceKey) => {
-                const service = services[serviceKey]
-                const ServiceIcon = service.icon
-                return (
-                  <motion.div
-                    key={serviceKey}
-                    whileHover={{ scale: 1.02 }}
-                    className={`flex items-center space-x-2 rounded-lg border p-3 cursor-pointer ${
-                      formType === serviceKey ? 'border-primary-blue bg-blue-50' : ''
-                    }`}
-                    onClick={() => {
-                      setFormType(serviceKey)
-                      setShowServiceModal(false)
-                    }}
-                  >
-                    <ServiceIcon className="h-5 w-5 text-primary-blue" />
-                    <div>
-                      <div className="font-medium">
-                        {service.title[language as 'sr' | 'en']}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {service.description[language as 'sr' | 'en']}
-                      </div>
-                    </div>
-                  </motion.div>
-                )
-              })}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
 
   const ServiceIcon = services[formType].icon;
 
@@ -258,21 +275,88 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2 relative">
                     <label className="text-sm font-medium text-gray-700">
                       {language === 'sr' ? 'Zainteresovan/a sam za' : 'I\'m interested in'}
                     </label>
                     <button
+                      ref={serviceButtonRef}
                       type="button"
-                      onClick={() => setShowServiceModal(true)}
+                      onClick={() => setShowServiceModal(!showServiceModal)}
                       className="w-full px-4 py-2 border border-gray-200 rounded-lg text-left flex items-center justify-between hover:border-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue"
                     >
                       <span className="flex items-center gap-2">
                         <ServiceIcon className="h-5 w-5 text-primary-blue" />
                         <span>{services[formType].title[language as 'sr' | 'en']}</span>
                       </span>
-                      <span className="text-gray-400">▼</span>
+                      <span className="text-gray-400">{showServiceModal ? '▲' : '▼'}</span>
                     </button>
+                    
+                    {/* Service dropdown */}
+                    <AnimatePresence>
+                      {showServiceModal && (
+                        <motion.div
+                          id="service-dropdown"
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg py-2"
+                          style={{ maxHeight: '350px', overflowY: 'auto' }}
+                        >
+                          <div className="px-3 py-2 border-b border-gray-100">
+                            <h4 className="text-sm font-medium text-gray-500">
+                              {language === 'sr' ? 'Izaberite uslugu' : 'Choose a service'}
+                            </h4>
+                          </div>
+                          <div className="py-1">
+                            {serviceOrder.map((serviceKey, index) => {
+                              const service = services[serviceKey];
+                              const ServiceIcon = service.icon;
+                              const isOther = serviceKey === 'other';
+                              
+                              return (
+                                <div key={serviceKey}>
+                                  {isOther && (
+                                    <div className="mx-3 my-2 border-t border-gray-100"></div>
+                                  )}
+                                  <div
+                                    className={`px-3 py-2 cursor-pointer hover:bg-gray-50 flex items-center gap-2 ${
+                                      formType === serviceKey ? 'bg-blue-50 text-primary-blue' : ''
+                                    } ${isOther ? 'mt-1' : ''}`}
+                                    onClick={() => {
+                                      setFormType(serviceKey);
+                                      setShowServiceModal(false);
+                                    }}
+                                  >
+                                    <ServiceIcon className={`h-4 w-4 flex-shrink-0 ${isOther ? 'text-gray-500' : 'text-primary-blue'}`} />
+                                    <div>
+                                      <div className={`text-sm font-medium ${isOther ? 'text-gray-700' : ''}`}>
+                                        {service.title[language as 'sr' | 'en']}
+                                      </div>
+                                      <div className="text-xs text-gray-500">
+                                        {service.description[language as 'sr' | 'en']}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      {language === 'sr' ? 'Vaša poruka' : 'Your message'}
+                    </label>
+                    <textarea
+                      rows={4}
+                      placeholder={language === 'sr' ? 'Opišite vaš zahtev...' : 'Describe your request...'}
+                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent"
+                    />
                   </div>
 
                   <motion.button

@@ -13,6 +13,7 @@ import FooterTW from '../components/footer/FooterTW'
 import ContactForm from '../components/contact/ContactForm'
 import Testimonials from '../components/testimonials/Testimonials'
 import FAQ from '../components/faq/FAQ'
+import JBLGoldLogo from '../assets/jblgold.svg';  // Import the gold gradient logo
 
 // Import property images
 import property1Image from '../assets/fotke za home/1.jpg'
@@ -193,37 +194,58 @@ const LandingPage: React.FC = () => {
           <Header />
         </div>
 
-        {/* Main Content */}
-        <main className="relative z-20 flex-grow flex flex-col items-center justify-center px-4">
-          {/* Hero Section */}
-          <div className="relative min-h-screen w-full flex items-center justify-center hero-container">
-            {/* Hero Content */}
-            <div className="relative z-10 text-center w-full max-w-3xl px-4 md:px-6 hero-content">
-              <div className="bg-black/30 backdrop-blur-sm p-3 sm:p-4 md:p-5 lg:p-6 rounded-lg mx-auto hero-text">
-                <h2 className="text-xs sm:text-sm md:text-base text-white font-light mb-1 sm:mb-2 uppercase tracking-wider flex items-center justify-center">
-                  <MapPin className="h-3 w-3 mr-1" /> {t.tagline}
-                </h2>
+        <div className="relative z-10 flex flex-col">
+          {/* Main Content - Updated Hero Section */}
+          <main className="flex flex-col items-center justify-center px-4 pt-32 pb-20 text-center text-white">
+            <div className="max-w-6xl mx-auto">
+              <div className="w-full max-w-[600px] mx-auto mb-12 logo-animation">
+                <JBLGoldLogo className="w-full h-auto" />
+              </div>
+              
+              <div className="w-36 h-1 bg-gold mx-auto mb-3"></div>
+              
+              <p className="mb-6 max-w-3xl mx-auto text-2xl md:text-3xl font-light leading-relaxed">
+                {language === 'sr' 
+                  ? (
+                    <>
 
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-serif font-bold text-white mb-1 sm:mb-2 md:mb-3">
-                  {t.headline}
-                </h1>
+                      Ekskluzivne nekretnine, vrhunska usluga.<br />
+                      Vaša sigurna investicija u luksuz.
 
-                <p className="text-xs sm:text-sm md:text-base text-white mb-2 sm:mb-3 md:mb-4 max-w-xl mx-auto">
-                  {t.subheading}
+                    </>
+                  )
+                  : (
+                    <>
+
+                      Exclusive properties, premium service.<br />
+                      Your secure investment in luxury.
+
+                    </>
+                  )}
+              </p>
+              
+              <div className="mt-12 animate-fade-in-up">
+                <p className="text-xs tracking-[0.2em] font-light" style={{ color: 'rgba(248,241,140,0.9)' }}>
+                  {language === 'sr' ? 'SKROLUJTE ZA VIŠE' : 'SCROLL DOWN TO SEE MORE'}
                 </p>
-
-                {/* Property Search Button */}
-                <div className="flex justify-center">
-                  <Link to="/properties">
-                    <button className="cta-button">
-                      <Search className="icon" />
-                      <span>{t.searchButton}</span>
-                    </button>
-                  </Link>
+                <div className="mt-2 animate-bounce-subtle">
+                  <svg 
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="rgba(248,241,140,0.9)" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className="mx-auto"
+                  >
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                  </svg>
                 </div>
               </div>
             </div>
-          </div>
+          </main>
 
           {/* Featured Properties Section */}
           <div className="w-full bg-white py-16">
@@ -392,7 +414,7 @@ const LandingPage: React.FC = () => {
           
           {/* FAQ Section */}
           <FAQ />
-        </main>
+        </div>
 
         {/* Footer */}
         <div className="relative z-20 w-full mt-auto">

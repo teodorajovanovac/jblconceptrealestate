@@ -78,3 +78,136 @@
     transform: translateY(-10px);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
+
+  /* Gradient animation for the CTA button */
+  @keyframes gradient-x {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 3s ease infinite;
+  }
+
+  /* Pulse animation for the button glow effect */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Gold gradient button styling */
+  .gold-gradient-button {
+    background: linear-gradient(135deg, rgba(248,241,140,1) 30%, rgba(152,110,42,1) 100%);
+    color: var(--primary-blue);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gold-gradient-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(152,110,42,0.3);
+  }
+
+  .gold-gradient-button span,
+  .gold-gradient-button svg {
+    position: relative;
+    z-index: 1;
+  }
+
+  .gold-gradient-button svg {
+    stroke: currentColor;
+  }
+
+  /* Enhanced logo animation */
+  .logo-animation {
+    animation: fadeInScale 1.5s ease-out forwards;
+    filter: drop-shadow(0 0 20px rgba(248,241,140,0.3));
+  }
+
+  @keyframes fadeInScale {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Button hover effect */
+  .hover-gold-gradient:hover {
+    background: linear-gradient(135deg, rgba(248,241,140,1) 30%, rgba(152,110,42,1) 100%);
+  }
+
+  /* Modern button styling */
+  .font-moderne {
+    font-family: 'Century Gothic', 'Segoe UI', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  /* Button hover effect */
+  .group:hover .group-hover\:scale-110 {
+    transform: scale(1.1);
+  }
+
+  /* Smooth shadow transition */
+  .hover\:shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .hover\:shadow-2xl:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Add these new styles */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-bounce-subtle {
+    animation: bounceSoft 2s infinite;
+  }
+
+  @keyframes bounceSoft {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(4px);
+    }
+  }

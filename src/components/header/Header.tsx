@@ -67,7 +67,7 @@ const Header = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center">
+        <nav className="hidden lg:flex items-center justify-end pr-[1%]">
           {menuItems.map((item) => (
             <a
               key={item.link}
