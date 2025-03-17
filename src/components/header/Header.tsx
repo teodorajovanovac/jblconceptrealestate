@@ -57,6 +57,17 @@ const Header = () => {
     }
   }
 
+  // Odredi boju linije ispod linkova
+  const getUnderlineColorClass = () => {
+    if (isScrolled) {
+      return "bg-menu-hover";
+    } else if (isHomePage) {
+      return "bg-gray-300";
+    } else {
+      return "bg-secondary-blue";
+    }
+  }
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-colors duration-500 ${getTextColorClass()}`}
@@ -76,7 +87,7 @@ const Header = () => {
             >
               <span className="relative">
                 {item.caption}
-                <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all"></span>
+                <span className={`absolute bottom-[-2px] left-0 w-0 h-[1px] ${getUnderlineColorClass()} origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all`}></span>
               </span>
             </a>
           ))}
@@ -86,7 +97,7 @@ const Header = () => {
           >
             <span className="relative">
               {language === "sr" ? "EN" : "SR"}
-              <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all"></span>
+              <span className={`absolute bottom-[-2px] left-0 w-0 h-[1px] ${getUnderlineColorClass()} origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all`}></span>
             </span>
           </button>
         </nav>

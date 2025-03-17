@@ -265,6 +265,64 @@ export const properties: PropertyData[] = [
       lng: 20.419649,
     },
   } as PropertyData,
+  // Demo property with only 2 images
+  {
+    ...baseProperty,
+    id: "demo-property-with-few-images",
+    transactionType: "buy",
+    address: {
+      street: "Knez Mihailova 22",
+      city: "Beograd",
+      state: "Srbija",
+      zip: "11000",
+      fullAddress: "Knez Mihailova 22, Beograd",
+    },
+    price: {
+      amount: 250000,
+      perSqft: 2500,
+    },
+    status: "Active",
+    features: {
+      beds: 2,
+      baths: 1,
+      sqft: 85,
+      propertyType: "Stan",
+      yearBuilt: 2020,
+    },
+    description: "Ovaj stan ima samo 2 slike za demonstraciju nove funkcionalnosti galerije.",
+    interiorFeatures: {
+      totalStories: 4,
+      bedrooms: 2,
+      totalBathrooms: 1,
+      fullBathrooms: 1,
+      halfBathrooms: 0,
+      appliances: "Kompletno opremljena kuhinja",
+      laundry: "U kupatilu",
+      flooring: "Parket",
+      fireplace: false,
+      fireplaceDescription: "",
+      cooling: true,
+      coolingDescription: "Klima",
+      heating: true,
+      heatingDescription: "Centralno grejanje",
+    },
+    exteriorFeatures: {
+      lotSize: "N/A",
+      exteriorAmenities: "Lift, Parking",
+      lotFeatures: "Urbano područje",
+      architecturalStyle: "Moderna zgrada",
+      roof: "Ravan krov",
+      sewer: "Gradska kanalizacija",
+      patioAndPorch: "Balkon",
+      security: "Interfon",
+    },
+    // Use only 2 images
+    images: [property1, property2],
+    mapLocation: {
+      lat: 44.8184,
+      lng: 20.4575,
+    },
+  } as PropertyData,
 ]
 
 // Export single property for backward compatibility

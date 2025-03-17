@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Calendar } from "lucide-react"
+import { Calendar, Bed, Bath, Square, Home } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
-import { propertyData } from "../data/propertyData"
+import { properties } from "../data/propertyData"
 import PropertyGallery from "../components/property/PropertyGallery"
 import ContactAgentCard from "../components/property/ContactAgentCard"
 import PropertyFeatures from "../components/property/PropertyFeatures"
@@ -11,12 +11,39 @@ import PropertyMap from "../components/property/PropertyMap"
 import Header from "../components/header/Header"
 import FooterTW from "../components/footer/FooterTW"
 import Seo from "../services/meta/Seo"
+import { useParams, Link } from "react-router-dom"
 
 export default function PropertyPage() {
-  const [isScrolled, setIsScrolled] = useState(false)
+  const { id } = useParams<{ id: string }>();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeTab, setActiveTab] = useState("description");
+  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr');
   const agentCardRef = useRef<HTMLDivElement>(null);
   const agentCardWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
+
+  // Find the property by ID or use the first property as fallback
+  const currentProperty = properties.find(p => p.id === id) || properties[0];
+  
+  // If no property is found, show an error message
+  if (!currentProperty) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Nekretnina nije pronađena</h2>
+          <p className="text-gray-600 mb-6">
+            Tražena nekretnina ne postoji ili je uklonjena.
+          </p>
+          <Link 
+            to="/properties" 
+            className="inline-block bg-primary-blue text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Povratak na listu nekretnina
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -75,12 +102,12 @@ export default function PropertyPage() {
 
   return (
     <>
-      <Seo title={propertyData.address.street} />
+      <Seo title={currentProperty.address?.street || "Nekretnina"} />
       <Header />
-      <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-0">
+      <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-16">
         {/* Property Gallery with z-index */}
         <div className="relative z-0">
-          <PropertyGallery images={propertyData.images} />
+          <PropertyGallery images={currentProperty.images || []} />
         </div>
 
         {/* Main Content with higher z-index */}
@@ -103,20 +130,20 @@ export default function PropertyPage() {
               <TabsContent value="description" className="px-4">
                 {/* Property Description Content */}
                 <div className="space-y-4">
-                  <h1 className="text-2xl font-bold">{propertyData.address.street}</h1>
-                  <p className="text-xl font-bold">{formatPrice(propertyData.price.amount)}</p>
-                  <p className="text-gray-600">{propertyData.description}</p>
+                  <h1 className="text-2xl font-bold">{currentProperty.address?.street || ""}</h1>
+                  <p className="text-xl font-bold">{formatPrice(currentProperty.price?.amount || 0)}</p>
+                  <p className="text-gray-600">{currentProperty.description || ""}</p>
                 </div>
               </TabsContent>
 
               <TabsContent value="features" className="px-4">
-                <PropertyFeatures title="Interior Features" features={propertyData.interiorFeatures} />
-                <PropertyFeatures title="Exterior Features" features={propertyData.exteriorFeatures} />
+                <PropertyFeatures title="Interior Features" features={currentProperty.interiorFeatures || {}} />
+                <PropertyFeatures title="Exterior Features" features={currentProperty.exteriorFeatures || {}} />
               </TabsContent>
 
               <TabsContent value="details" className="px-4">
-                <PropertyFeatures title="Other Property Details" features={propertyData.otherDetails} />
-                <PropertyFeatures title="School Information" features={propertyData.schoolInfo} />
+                <PropertyFeatures title="Other Property Details" features={currentProperty.otherDetails || {}} />
+                <PropertyFeatures title="School Information" features={currentProperty.schoolInfo || {}} />
               </TabsContent>
             </Tabs>
           </div>
@@ -125,160 +152,116 @@ export default function PropertyPage() {
           <div className="hidden md:block max-w-7xl mx-auto px-4 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column - Property Details */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 space-y-8">
                 {/* Property Header */}
-                <div className="mb-8">
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
-                    <h1 className="text-3xl font-bold text-primary-blue">{propertyData.address.street}</h1>
+                <div>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h1 className="text-2xl md:text-3xl font-bold text-primary-blue">
+                        {currentProperty.address?.street || ""}
+                      </h1>
+                      <p className="text-gray-600 mt-1">
+                        {currentProperty.address?.fullAddress || ""}
+                      </p>
+                    </div>
                     <div className="text-right">
-                      <p className="text-3xl font-bold text-primary-blue">{formatPrice(propertyData.price.amount)}</p>
-                      <p className="text-gray-600">${propertyData.price.perSqft.toLocaleString()} per sqft</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    {propertyData.address.city} {propertyData.address.state}, {propertyData.address.zip}
-                  </p>
-
-                  {/* Property Stats */}
-                  <div className="flex flex-wrap gap-4 mb-6">
-                    <div className="flex items-center">
-                      <span className="font-bold text-lg mr-2">{propertyData.features.beds}</span>
-                      <span className="text-gray-600">Beds</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-bold text-lg mr-2">{propertyData.features.baths}</span>
-                      <span className="text-gray-600">Baths</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-bold text-lg mr-2">{propertyData.features.sqft.toLocaleString()}</span>
-                      <span className="text-gray-600">sqft</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-bold text-lg mr-2">{propertyData.features.propertyType}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="text-gray-600">Built in {propertyData.features.yearBuilt}</span>
+                      <div className="text-2xl md:text-3xl font-bold text-primary-blue">
+                        {formatPrice(currentProperty.price?.amount || 0)}
+                      </div>
+                      {currentProperty.transactionType === "rent" && (
+                        <span className="text-gray-600 text-sm">/mesečno</span>
+                      )}
                     </div>
                   </div>
 
-                  {/* Status and Listing Info */}
-                  <div className="flex flex-wrap gap-6 py-4 border-t border-b border-gray-200">
+                  {/* Property Features */}
+                  <div className="flex flex-wrap gap-6 mt-4">
                     <div className="flex items-center">
-                      <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                      <span>{propertyData.status}</span>
+                      <span className="text-gray-600 mr-2">
+                        <Bed className="h-5 w-5" />
+                      </span>
+                      <span>
+                        <span className="font-medium">{currentProperty.features?.beds || 0}</span>{" "}
+                        <span className="text-gray-600">sobe</span>
+                      </span>
                     </div>
                     <div className="flex items-center">
-                      <span className="text-gray-600 mr-2">MLS</span>
-                      <span className="font-medium">{propertyData.listingInfo.mlsId}</span>
+                      <span className="text-gray-600 mr-2">
+                        <Bath className="h-5 w-5" />
+                      </span>
+                      <span>
+                        <span className="font-medium">{currentProperty.features?.baths || 0}</span>{" "}
+                        <span className="text-gray-600">kupatila</span>
+                      </span>
                     </div>
                     <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1 text-gray-500" />
-                      <span className="text-gray-600 mr-2">LISTED</span>
-                      <span className="font-medium">{propertyData.listingInfo.listedDate}</span>
+                      <span className="text-gray-600 mr-2">
+                        <Square className="h-5 w-5" />
+                      </span>
+                      <span>
+                        <span className="font-medium">{currentProperty.features?.sqft || 0}</span>{" "}
+                        <span className="text-gray-600">m²</span>
+                      </span>
                     </div>
                     <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1 text-gray-500" />
-                      <span className="text-gray-600 mr-2">UPDATED</span>
-                      <span className="font-medium">{propertyData.listingInfo.updatedDate}</span>
+                      <span className="text-gray-600 mr-2">
+                        <Home className="h-5 w-5" />
+                      </span>
+                      <span className="text-gray-600">{currentProperty.features?.propertyType || ""}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Property Description */}
-                <div className="mb-8">
-                  <p className="whitespace-pre-line text-gray-800 leading-relaxed">{propertyData.description}</p>
+                <div>
+                  <h2 className="text-2xl font-bold text-primary-blue mb-4">Opis</h2>
+                  <div className="prose max-w-none text-gray-700">
+                    <p>{currentProperty.description || ""}</p>
+                  </div>
                 </div>
 
+                {/* Property Features */}
+                <PropertyFeatures
+                  title="Enterijer"
+                  features={currentProperty.interiorFeatures || {}}
+                />
+
+                <PropertyFeatures
+                  title="Eksterijer"
+                  features={currentProperty.exteriorFeatures || {}}
+                />
+
+                <PropertyFeatures
+                  title="Ostali detalji"
+                  features={currentProperty.otherDetails || {}}
+                />
+
                 {/* Property Map */}
-                <PropertyMap address={propertyData.address.fullAddress} location={propertyData.mapLocation} />
-
-                {/* Interior Features */}
-                <PropertyFeatures
-                  title="Interior Features"
-                  features={{
-                    "Total Stories": propertyData.interiorFeatures.totalStories,
-                    Bedrooms: propertyData.interiorFeatures.bedrooms,
-                    "Total Bathrooms": propertyData.interiorFeatures.totalBathrooms,
-                    "Full Bathrooms": propertyData.interiorFeatures.fullBathrooms,
-                    "Half Bathrooms": propertyData.interiorFeatures.halfBathrooms,
-                    Appliances: propertyData.interiorFeatures.appliances,
-                    "Laundry Description": propertyData.interiorFeatures.laundry,
-                    "Floor Description": propertyData.interiorFeatures.flooring,
-                    Fireplace: propertyData.interiorFeatures.fireplace,
-                    "Fireplace Description": propertyData.interiorFeatures.fireplaceDescription,
-                    Cooling: propertyData.interiorFeatures.cooling,
-                    "Cooling Description": propertyData.interiorFeatures.coolingDescription,
-                    Heating: propertyData.interiorFeatures.heating,
-                    "Heating Description": propertyData.interiorFeatures.heatingDescription,
-                  }}
-                />
-
-                {/* Exterior Features */}
-                <PropertyFeatures
-                  title="Exterior/Building Features"
-                  features={{
-                    "Lot Size": propertyData.exteriorFeatures.lotSize,
-                    "Exterior Features": propertyData.exteriorFeatures.exteriorAmenities,
-                    "Lot Features": propertyData.exteriorFeatures.lotFeatures,
-                    "Architectural Style": propertyData.exteriorFeatures.architecturalStyle,
-                    Roof: propertyData.exteriorFeatures.roof,
-                    Sewer: propertyData.exteriorFeatures.sewer,
-                    "Patio And Porch": propertyData.exteriorFeatures.patioAndPorch,
-                    Security: propertyData.exteriorFeatures.security,
-                  }}
-                />
-
-                {/* School Information */}
-                <PropertyFeatures
-                  title="School Information"
-                  features={{
-                    "High School": propertyData.schoolInfo.highSchool,
-                    "Elementary School": propertyData.schoolInfo.elementarySchool,
-                  }}
-                />
-
-                {/* Other Property Details */}
-                <PropertyFeatures
-                  title="Other Property Details"
-                  features={{
-                    "Area Name": propertyData.otherDetails.areaName,
-                    "Days on Market": propertyData.otherDetails.daysOnMarket,
-                    Garage: propertyData.otherDetails.garage,
-                    Parking: propertyData.otherDetails.parking,
-                    View: propertyData.otherDetails.view,
-                    "View Description": propertyData.otherDetails.viewDescription,
-                    County: propertyData.otherDetails.county,
-                    "Water Source": propertyData.otherDetails.waterSource,
-                    Pool: propertyData.otherDetails.pool,
-                    Utilities: propertyData.otherDetails.utilities,
-                    Zoning: propertyData.otherDetails.zoning,
-                  }}
+                <PropertyMap
+                  address={currentProperty.address?.fullAddress || ""}
+                  location={currentProperty.mapLocation || { lat: 44.786568, lng: 20.419649 }}
                 />
 
                 {/* Disclaimer */}
-                <div className="mt-8 p-6 bg-gray-100 rounded-lg text-sm text-gray-600">
-                  <p className="mb-2">
-                    Predstavlja <span className="text-primary-blue">JBL Real Estate Concept</span>,{" "}
-                    <span className="text-primary-blue">{propertyData.listingInfo.agent.name}</span>
-                  </p>
-                  <p className="mb-2">
-                    Kontakt: <span className="text-primary-blue">{propertyData.listingInfo.agent.email}</span>
-                  </p>
-                  <p className="mb-4">{propertyData.disclaimer}</p>
-                  <p>©2025 JBL Real Estate Concept. Sva prava zadržana.</p>
-                  <p>{propertyData.lastUpdated}</p>
-                </div>
-
-                {/* Powered by */}
-                <div className="mt-4 text-sm text-gray-500">
-                  Powered by <span className="text-primary-blue">JBL Real Estate Concept</span>
+                <div className="text-xs text-gray-500 mt-8">
+                  <p>{currentProperty.disclaimer || ""}</p>
+                  <p className="mt-2">{currentProperty.lastUpdated || ""}</p>
                 </div>
               </div>
 
-              {/* Right Column - Contact Agent Card */}
-              <div ref={agentCardWrapperRef} className="relative">
-                <div ref={agentCardRef} className="w-full z-20">
-                  <ContactAgentCard agent={propertyData.listingInfo.agent} />
+              {/* Right Column - Contact Agent */}
+              <div className="lg:col-span-1">
+                <div ref={agentCardWrapperRef} className="relative">
+                  <div ref={agentCardRef} className="w-full z-20">
+                    <ContactAgentCard agent={currentProperty.listingInfo?.agent || {
+                      name: "Agent",
+                      company: "JBL Real Estate Concept",
+                      title: "Agent",
+                      email: "contact@jblconcept.rs",
+                      phone: "+381 00 0000000",
+                      image: "/placeholder-agent.jpg"
+                    }} />
+                  </div>
                 </div>
               </div>
             </div>
