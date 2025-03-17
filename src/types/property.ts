@@ -1,5 +1,6 @@
 export interface PropertyData {
   id: string
+  transactionType: 'buy' | 'rent'
   address: {
     street: string
     city: string
@@ -21,15 +22,17 @@ export interface PropertyData {
   }
   description: string
   listingInfo: {
-    mlsId: string
-    listedDate: string
-    updatedDate: string
     agent: {
       name: string
       company: string
+      title: string
       email: string
       phone: string
+      image: string
     }
+    mlsId: string
+    listedDate: string
+    updatedDate: string
   }
   interiorFeatures: {
     totalStories: number

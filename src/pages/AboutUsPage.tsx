@@ -27,7 +27,7 @@ export default function AboutUsPage() {
       id: 1,
       name: "Jasna Bajić-Ljubičić",
       title: language === 'sr' ? "DIREKTOR" : "DIRECTOR",
-      image: "/assets/images/agent1.jpg",
+      image: "/Jasna.jpg",
       license: "01499736",
       shortBio: language === 'sr' 
         ? "Stručnost u analizi i rešavanju imovinsko-pravnih pitanja." 

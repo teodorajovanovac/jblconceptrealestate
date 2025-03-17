@@ -7,6 +7,9 @@ import ReactLogo from '../assets/jblgold.svg';
 import Seo from '../services/meta/Seo';
 import TagManager from 'react-gtm-module'
 import LandingFooter from '../components/landingFooter/LandingFooter';
+// Zakomentarisaću stari import za video koji nedostaje
+// import videoBackground from '../assets/video za home/video.mp4'
+// Otkomentarišem import za video fajl
 import videoBackground from '../assets/video za home/video.mp4'
 import Header from '../components/header/Header'
 import FooterTW from '../components/footer/FooterTW'
@@ -137,8 +140,8 @@ const LandingPage: React.FC = () => {
         experience: 'Godina iskustva',
         team: 'Zaposlenih',
         locations: 'Lokacija',
-        aboutTitle: 'Stotine klijenata. Devet zemalja. Jedan partner.',
-        aboutDescription: 'Kao internacionalna kompanija poslujemo širom regiona, nudeći luksuzne nekretnine i personalizovanu uslugu. Naš tim stručnjaka se posvećuje pronalaženju savršenih nekretnina za naše klijente, bilo da kupuju ili prodaju.',
+        aboutTitle: 'Ekskluzivnost, Elegancija, Pouzdanost',
+        aboutDescription: 'JBL Concept Real Estate predstavlja jedinstveni spoj inovativnosti, visokog profesionalizma i savremenog dizajna u sektoru nekretnina. Kao renomirana agencija sa sedištem u Beogradu, pružamo premium usluge u kupovini, prodaji i investiranju u nekretnine. Naš tim stručnjaka se posvećuje pronalaženju savršenih nekretnina za naše klijente, bilo da kupuju ili prodaju.',
         aboutFeature1: 'Personalizovana usluga',
         aboutFeature2: 'Stručni saveti',
         aboutFeature3: 'Dugoročna partnerstva'
@@ -157,8 +160,8 @@ const LandingPage: React.FC = () => {
         experience: 'Years Experience',
         team: 'Team Members',
         locations: 'Locations',
-        aboutTitle: 'Hundreds of clients. Nine countries. One partner.',
-        aboutDescription: 'As an international company, we operate across the region, offering luxury properties and personalized service. Our team of experts is dedicated to finding the perfect properties for our clients, whether buying or selling.',
+        aboutTitle: 'Exclusivity, Elegance, Reliability',
+        aboutDescription: 'JBL Concept Real Estate represents a unique blend of innovation, high professionalism, and modern design in the real estate sector. As a renowned agency based in Belgrade, we provide premium services in buying, selling, and investing in real estate. Our team of experts is dedicated to finding the perfect properties for our clients, whether buying or selling.',
         aboutFeature1: 'Personalized service',
         aboutFeature2: 'Expert advice',
         aboutFeature3: 'Long-term partnerships'
@@ -175,15 +178,13 @@ const LandingPage: React.FC = () => {
         <div className="absolute inset-0 z-0">
           <div className="relative w-full h-full">
             <video
+              src={videoBackground}
               autoPlay
-              muted
               loop
+              muted
               playsInline
               className="absolute inset-0 w-full h-full object-cover"
-              poster="/assets/images/landing-bg-poster.jpg"
-            >
-              <source src={videoBackground} type="video/mp4" />
-            </video>
+            />
             {/* Overlay */}
             <div className="absolute inset-0 bg-black/40 z-0"></div>
           </div>
@@ -327,7 +328,7 @@ const LandingPage: React.FC = () => {
                   <div className="mb-4 text-primary-blue">
                     <Globe className="h-12 w-12" />
                   </div>
-                  <h3 className="text-5xl font-bold text-primary-blue mb-2">9</h3>
+                  <h3 className="text-5xl font-bold text-primary-blue mb-2">3</h3>
                   <p className="text-gray-600 font-medium">{t.locations}</p>
                 </div>
                 
@@ -335,7 +336,7 @@ const LandingPage: React.FC = () => {
                   <div className="mb-4 text-primary-blue">
                     <Clock className="h-12 w-12" />
                   </div>
-                  <h3 className="text-5xl font-bold text-primary-blue mb-2">40+</h3>
+                  <h3 className="text-5xl font-bold text-primary-blue mb-2">5+</h3>
                   <p className="text-gray-600 font-medium">{t.experience}</p>
                 </div>
                 
@@ -343,7 +344,7 @@ const LandingPage: React.FC = () => {
                   <div className="mb-4 text-primary-blue">
                     <Briefcase className="h-12 w-12" />
                   </div>
-                  <h3 className="text-5xl font-bold text-primary-blue mb-2">700+</h3>
+                  <h3 className="text-5xl font-bold text-primary-blue mb-2">100+</h3>
                   <p className="text-gray-600 font-medium">{t.clients}</p>
                 </div>
                 
@@ -351,7 +352,7 @@ const LandingPage: React.FC = () => {
                   <div className="mb-4 text-primary-blue">
                     <UsersIcon className="h-12 w-12" />
                   </div>
-                  <h3 className="text-5xl font-bold text-primary-blue mb-2">400+</h3>
+                  <h3 className="text-5xl font-bold text-primary-blue mb-2">10+</h3>
                   <p className="text-gray-600 font-medium">{t.team}</p>
                 </div>
               </div>

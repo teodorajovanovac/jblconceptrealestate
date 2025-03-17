@@ -1,86 +1,114 @@
 [
     {
-        "caption":"O nama", 
-        "link":"/about-us", 
-        "order":5,
-        "lang":"sr",
-        "category":"nav"
-    },
-    {
-        "caption":"Usluge",
-        "link":"/service",
-        "order":2,
-        "lang":"sr",
-        "category":"nav"
-    },
-    {
-        "caption":"Kontakt",
-        "link":"/contact",
-        "order":3,
-        "lang":"sr",
-        "category":"nav"
-    },
-    {
-        "caption":"About", 
-        "link":"/about-us", 
-        "order":5,
-        "lang":"en",
-        "category":"nav"
-    },
-    {
-        "caption":"Services",
-        "link":"/service",
-        "order":2,
-        "lang":"en",
-        "category":"nav"
-    },
-    {
-        "caption":"Contact",
-        "link":"/contact",
-        "order":3,
-        "lang":"en",
-        "category":"nav"
-    },
-    {
+        "id": 1,
+        "caption": "Početna",
+        "link": "/",
         "lang": "sr",
         "category": "nav",
-        "caption": "Cenovnik",
-        "link": "/pricing",
-        "order": 4
+        "order": 1
     },
     {
-        "lang": "en",
-        "category": "nav",
-        "caption": "Pricing",
-        "link": "/pricing",
-        "order": 4
-    },
-    {
-        "caption": "Opšti uslovi poslovanja",
-        "link": "/terms",
-        "order": 1,
-        "lang": "sr",
-        "category": "footer"
-    },
-    {
-        "caption": "Terms & Conditions",
-        "link": "/terms",
-        "order": 1,
-        "lang": "en",
-        "category": "footer"
-    },
-    {
+        "id": 2,
         "caption": "Nekretnine",
         "link": "/properties",
-        "order": 1,
         "lang": "sr",
-        "category": "nav"
+        "category": "nav",
+        "order": 2
     },
     {
+        "id": 3,
+        "caption": "O nama",
+        "link": "/about-us",
+        "lang": "sr",
+        "category": "nav",
+        "order": 3
+    },
+    {
+        "id": 4,
+        "caption": "Kontakt",
+        "link": "/contact",
+        "lang": "sr",
+        "category": "nav",
+        "order": 4
+    },
+    {
+        "id": 5,
+        "caption": "Usluge",
+        "link": "/service",
+        "lang": "sr",
+        "category": "footer",
+        "order": 1
+    },
+    {
+        "id": 6,
+        "caption": "Cenovnik",
+        "link": "/pricing",
+        "lang": "sr",
+        "category": "footer",
+        "order": 2
+    },
+    {
+        "id": 7,
+        "caption": "Opšti uslovi poslovanja",
+        "link": "/terms",
+        "lang": "sr",
+        "category": "footer",
+        "order": 3
+    },
+    {
+        "id": 8,
+        "caption": "Home",
+        "link": "/",
+        "lang": "en",
+        "category": "nav",
+        "order": 1
+    },
+    {
+        "id": 9,
         "caption": "Properties",
         "link": "/properties",
-        "order": 1,
         "lang": "en",
-        "category": "nav"
+        "category": "nav",
+        "order": 2
+    },
+    {
+        "id": 10,
+        "caption": "About Us",
+        "link": "/about-us",
+        "lang": "en",
+        "category": "nav",
+        "order": 3
+    },
+    {
+        "id": 11,
+        "caption": "Contact",
+        "link": "/contact",
+        "lang": "en",
+        "category": "nav",
+        "order": 4
+    },
+    {
+        "id": 12,
+        "caption": "Services",
+        "link": "/service",
+        "lang": "en",
+        "category": "footer",
+        "order": 1
+    },
+    {
+        "id": 13,
+        "caption": "Pricing",
+        "link": "/pricing",
+        "lang": "en",
+        "category": "footer",
+        "order": 2
+    },
+    {
+        "id": 14,
+        "caption": "Terms & Conditions",
+        "link": "/terms",
+        "lang": "en",
+        "category": "footer",
+        "order": 3
     }
 ]

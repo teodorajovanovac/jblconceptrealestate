@@ -76,7 +76,7 @@ const Header = () => {
             >
               <span className="relative">
                 {item.caption}
-                <span className="absolute bottom-[-4px] left-0 w-0 h-[1px] bg-current origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all"></span>
+                <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all"></span>
               </span>
             </a>
           ))}
@@ -86,7 +86,7 @@ const Header = () => {
           >
             <span className="relative">
               {language === "sr" ? "EN" : "SR"}
-              <span className="absolute bottom-[-4px] left-0 w-0 h-[1px] bg-current origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all"></span>
+              <span className="absolute bottom-[-2px] left-0 w-0 h-[2px] bg-white origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all"></span>
             </span>
           </button>
         </nav>

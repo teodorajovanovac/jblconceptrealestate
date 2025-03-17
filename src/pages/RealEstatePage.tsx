@@ -1,122 +1,33 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import RECard from "../components/realestate/RECard"
-import type { Property } from "../types/property"
+import type { PropertyData } from "../types/property"
 import Header from '../components/header/Header';
 import FooterTW from '../components/footer/FooterTW';
 import Seo from '../services/meta/Seo';
 import SearchBar from '../components/search/SearchBar'
+import { properties } from '../data/propertyData';
+import { Link } from 'react-router-dom';
+import { MapPin, Bed, Bath, Square } from 'lucide-react';
 
-const dummyProperties: Property[] = [
-  {
-    id: 1,
-    title: {
-      sr: "Moderna planinska vila",
-      en: "Modern Mountain Villa"
-    },
-    price: 450000,
-    location: {
-      sr: "Zlatibor, Srbija",
-      en: "Zlatibor, Serbia"
-    },
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 220,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-    features: {
-      sr: ["Parking", "Bazen", "Pogled na planinu"],
-      en: ["Parking", "Pool", "Mountain View"]
-    },
-    type: {
-      sr: "Vila",
-      en: "Villa"
-    },
-    description: {
-      sr: "Luksuzna vila sa modernim dizajnom...",
-      en: "Luxury villa with modern design..."
-    },
-    images: [
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-      // Add more image URLs
-    ],
-  },
-  {
-    id: 2,
-    title: {
-      sr: "Luksuzni penthouse",
-      en: "Luxury Penthouse"
-    },
-    price: 850000,
-    location: {
-      sr: "Novi Beograd, Srbija",
-      en: "New Belgrade, Serbia"
-    },
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 280,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-    features: {
-      sr: ["Garaža", "Terasa", "Pogled na reku"],
-      en: ["Garage", "Terrace", "River View"]
-    },
-    type: {
-      sr: "Stan",
-      en: "Apartment"
-    },
-    description: {
-      sr: "Luksuzni penthouse sa modernim dizajnom...",
-      en: "Luxury penthouse with modern design..."
-    },
-    images: [
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-      // Add more image URLs
-    ],
-  },
-  {
-    id: 3,
-    title: {
-      sr: "Elegantna vila sa bazenom",
-      en: "Elegant Villa with Pool"
-    },
-    price: 750000,
-    location: {
-      sr: "Dedinje, Beograd",
-      en: "Dedinje, Belgrade"
-    },
-    bedrooms: 6,
-    bathrooms: 4,
-    area: 450,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-    features: {
-      sr: ["Bazen", "Vrt", "Obezbeđenje"],
-      en: ["Pool", "Garden", "Security"]
-    },
-    type: {
-      sr: "Vila",
-      en: "Villa"
-    },
-    description: {
-      sr: "Elegantna vila sa bazenom i modernim dizajnom...",
-      en: "Elegant villa with pool and modern design..."
-    },
-    images: [
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jeqr4Kb14sEljgx7TsA4eA1OXekHNu.png",
-      // Add more image URLs
-    ],
-  }
-]
+interface SearchFilters {
+  transactionType: 'buy' | 'rent';
+  searchTerm: string;
+  propertyTypes: string[];
+  rooms: string[];
+  locations: string[];
+  priceRange: number[];
+  areaRange: number[];
+  features: string[];
+  state: string[];
+  floor: string[];
+  heating: string[];
+  parking: string[];
+}
 
 export default function RealEstatePage() {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
-  const [filteredProperties, setFilteredProperties] = useState(dummyProperties)
-
-  // Izračunaj min i max cene iz postojećih nekretnina
-  const minPrice = Math.min(...dummyProperties.map(p => p.price)) / 1000000 // konvertuj u milione
-  const maxPrice = Math.max(...dummyProperties.map(p => p.price)) / 1000000
-
-  // Izračunaj min i max površine
-  const minArea = Math.min(...dummyProperties.map(p => p.area))
-  const maxArea = Math.max(...dummyProperties.map(p => p.area))
+  const [filteredProperties, setFilteredProperties] = useState(properties)
 
   useEffect(() => {
     const handleLanguageChange = () => {
@@ -132,9 +43,67 @@ export default function RealEstatePage() {
     };
   }, []);
 
-  const handleSearch = (searchParams: any) => {
-    // implementacija pretrage
-    setFilteredProperties(dummyProperties)
+  const handleSearch = (filters: SearchFilters) => {
+    let filtered = properties.filter(property => {
+      // Filter by transaction type
+      if (property.transactionType !== filters.transactionType) return false;
+
+      // Filter by search term
+      if (filters.searchTerm && !property.address.fullAddress.toLowerCase().includes(filters.searchTerm.toLowerCase())) {
+        return false;
+      }
+
+      // Filter by property type
+      if (filters.propertyTypes.length > 0 && !filters.propertyTypes.includes(property.features.propertyType)) {
+        return false;
+      }
+
+      // Filter by number of rooms
+      if (filters.rooms.length > 0) {
+        const propertyRooms = property.features.beds.toString() + ' sobe';
+        if (!filters.rooms.some(room => {
+          if (room === 'Garsonjera') return property.features.beds === 0;
+          const numRooms = parseFloat(room.split(' ')[0]);
+          return property.features.beds === numRooms;
+        })) {
+          return false;
+        }
+      }
+
+      // Filter by location
+      if (filters.locations.length > 0 && !filters.locations.some(loc => 
+        property.address.fullAddress.includes(loc)
+      )) {
+        return false;
+      }
+
+      // Filter by price range
+      if (property.price.amount < filters.priceRange[0] || property.price.amount > filters.priceRange[1]) {
+        return false;
+      }
+
+      // Filter by area range
+      if (property.features.sqft < filters.areaRange[0] || property.features.sqft > filters.areaRange[1]) {
+        return false;
+      }
+
+      // Filter by features
+      if (filters.features.length > 0) {
+        const propertyFeatures = property.exteriorFeatures.exteriorAmenities.split(', ');
+        if (!filters.features.some(feature => propertyFeatures.includes(feature))) {
+          return false;
+        }
+      }
+
+      // Filter by heating
+      if (filters.heating.length > 0 && !filters.heating.includes(property.interiorFeatures.heatingDescription)) {
+        return false;
+      }
+
+      return true;
+    });
+
+    setFilteredProperties(filtered);
   }
 
   const containerVariants = {
@@ -188,12 +157,7 @@ export default function RealEstatePage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mb-16"
           >
-            <SearchBar 
-              minPrice={minPrice}
-              maxPrice={maxPrice}
-              minArea={minArea}
-              maxArea={maxArea}
-            />
+            <SearchBar onSearch={handleSearch} />
           </motion.div>
 
           {/* Properties Grid */}
@@ -212,15 +176,55 @@ export default function RealEstatePage() {
                   transition: { duration: 0.2 }
                 }}
               >
-                <RECard 
-                  property={{
-                    ...property,
-                    title: property.title[language as 'sr' | 'en'],
-                    location: property.location[language as 'sr' | 'en'],
-                    features: property.features[language as 'sr' | 'en'],
-                    type: property.type[language as 'sr' | 'en']
-                  }} 
-                />
+                <Link to={`/property/${property.id}`}>
+                  <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div className="relative h-[280px]">
+                      <img 
+                        src={property.images[0]}
+                        alt={property.address.street}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-4 right-4">
+                        <span className="bg-primary-blue text-white px-3 py-1 rounded-full text-sm font-medium">
+                          {property.transactionType === 'rent' 
+                            ? `${property.price.amount} €/mesečno`
+                            : `${property.price.amount.toLocaleString()} €`
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold text-primary-blue mb-2">
+                        {property.address.street}
+                      </h3>
+                      <div className="flex items-center text-gray-600 mb-4">
+                        <MapPin className="w-4 h-4 mr-1" />
+                        <span className="text-sm">{property.address.fullAddress}</span>
+                      </div>
+                      <div className="flex items-center gap-4 text-gray-600 mb-4">
+                        <div className="flex items-center">
+                          <Bed className="w-4 h-4 mr-1" />
+                          <span className="text-sm">{property.features.beds}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Bath className="w-4 h-4 mr-1" />
+                          <span className="text-sm">{property.features.baths}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Square className="w-4 h-4 mr-1" />
+                          <span className="text-sm">{property.features.sqft} m²</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {property.exteriorFeatures.exteriorAmenities.split(', ').slice(0, 3).map((feature, index) => (
+                          <span key={index} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-600">
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </motion.div>
