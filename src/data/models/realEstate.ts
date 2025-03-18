@@ -3,6 +3,16 @@ export interface PhotoDto {
     title: string;
     priority: number;
 }
+
+export interface AgentDto {
+    name: string;
+    company: string;
+    title: string;
+    email: string;
+    phone: string;
+    image: string;
+}
+
 export interface RealEstateDto {
     id: number;
     price: number;
@@ -38,6 +48,7 @@ export interface RealEstateDto {
     subTypeName: string | null;
     subTypeShortName: string | null;
     photos: PhotoDto[];
+    agent?: AgentDto;
 }
 
 export interface LocationDto {
@@ -59,7 +70,6 @@ export interface AreaDto {
     areaName: string;
     count: number;
 }
-
 
 export interface ShortListDto {
     name: string;

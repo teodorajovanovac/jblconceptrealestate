@@ -153,21 +153,25 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     }
   }
 
-  const handleSearch = () => {
-    onSearch({
-      transactionType,
-      searchTerm,
+  const handleSubmit = () => {
+    // Pretvaramo vrednosti iz klizača u objekt za filtriranje
+    const filters: SearchFilters = {
+      transactionType: transactionType,
+      searchTerm: searchTerm,
       propertyTypes: selectedPropertyTypes,
       rooms: selectedRooms,
       locations: selectedLocations,
-      priceRange,
-      areaRange,
+      priceRange: [priceRange[0], priceRange[1]], // Min i max cena
+      areaRange: [areaRange[0], areaRange[1]],   // Min i max površina
       features: selectedFeatures,
       state: selectedState,
       floor: selectedFloor,
       heating: selectedHeating,
       parking: selectedParking
-    })
+    };
+    
+    // Pozivamo funkciju za pretragu
+    onSearch(filters);
   }
 
   const toggleDropdown = (name: string) => {
@@ -336,7 +340,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           <ChevronDown className={`ml-1 w-5 h-5 transform transition-transform ${showMoreFilters ? 'rotate-180' : ''}`} />
         </button>
         <button 
-          onClick={handleSearch}
+          onClick={handleSubmit}
           className="bg-primary-blue text-white px-10 py-3 rounded-lg hover:bg-secondary-blue transition-colors text-lg"
         >
           Pretraži
