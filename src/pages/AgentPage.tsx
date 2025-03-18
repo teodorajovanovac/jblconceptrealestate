@@ -42,7 +42,7 @@ export default function AgentPage() {
 
   return (
     <>
-      <Seo title={`${agent.name} - ${agent.title[language]}`} />
+      <Seo title={`${agent.name} - ${agent.title[language as keyof typeof agent.title]}`} />
       <Header />
       <main className="pt-24 pb-16">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

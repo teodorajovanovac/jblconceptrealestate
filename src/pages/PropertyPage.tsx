@@ -54,9 +54,8 @@ export default function PropertyPage() {
         
         const result = await realEstate.getData(propertyId);
         console.log('API Response:', result);
-        
-        if (result) {
-          setProperty(result);
+        if (result?.data) {
+          setProperty(result.data);
           setError(null);
         } else {
           setError("Nekretnina nije pronađena");

@@ -72,6 +72,7 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
 
   return (
     <>
+  
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4">
         <Link to="/properties" className="flex items-center text-gray-800">
