@@ -12,7 +12,17 @@ import FooterTW from "../components/footer/FooterTW"
 import Seo from "../services/meta/Seo"
 import { useParams, Link } from "react-router-dom"
 import realEstate from "../data/realEstate"
-import { RealEstateDto } from "../data/models/realEstate"
+import { RealEstateDto, AgentDto } from "../data/models/realEstate"
+import Spinner from '../components/ui/Spinner'
+
+const defaultAgent: AgentDto = {
+  name: "Agent",
+  company: "JBL Real Estate Concept",
+  title: "Agent",
+  email: "contact@jblconcept.rs",
+  phone: "+381 00 0000000",
+  image: "/placeholder-agent.jpg"
+};
 
 export default function PropertyPage() {
   const { id } = useParams<{ id: string }>();
