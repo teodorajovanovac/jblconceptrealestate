@@ -12,6 +12,8 @@ import Header from "../components/header/Header"
 import FooterTW from "../components/footer/FooterTW"
 import Seo from "../services/meta/Seo"
 import { useParams, Link } from "react-router-dom"
+import realEstate from "../data/realEstate"
+import { RealEstateDto } from "../data/models/realEstate"
 
 export default function PropertyPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +23,9 @@ export default function PropertyPage() {
   const agentCardRef = useRef<HTMLDivElement>(null);
   const agentCardWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
+  const [property, setProperty] = useState<RealEstateDto | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Find the property by ID or use the first property as fallback
   const currentProperty = properties.find(p => p.id === id) || properties[0];
@@ -91,6 +96,76 @@ export default function PropertyPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      setLanguage(localStorage.getItem('language') || 'sr');
+    };
+
+    window.addEventListener('storage', handleLanguageChange);
+    window.addEventListener('languageChange', handleLanguageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleLanguageChange);
+      window.removeEventListener('languageChange', handleLanguageChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchPropertyDetails = async () => {
+      if (!id) return;
+      
+      try {
+        setIsLoading(true);
+        const propertyId = parseInt(id);
+        const result = await realEstate.getData(propertyId);
+        
+        if (result.isSuccess && result.data) {
+          setProperty(result.data);
+        } else {
+          setError("Failed to fetch property details");
+        }
+      } catch (err) {
+        console.error("Error fetching property details:", err);
+        setError("An error occurred while fetching property details");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPropertyDetails();
+  }, [id]);
+
+  // Process property features from API data
+  const processFeatures = () => {
+    if (!property) return {};
+    
+    const features: Record<string, string | number | boolean> = {
+      propertyType: property.typeName || 'N/A',
+      area: `${property.area || 0} m²`,
+      rooms: property.roomsNo || 0,
+      bathrooms: property.bathroomNO || 0,
+      floor: property.floorNoString || 'N/A',
+    };
+    
+    // Add other features from spaces if available
+    if (property.spaces) {
+      property.spaces.split(',').forEach((space, index) => {
+        features[`feature${index + 1}`] = space.trim();
+      });
+    }
+    
+    return features;
+  };
+
+  // Format photos for the gallery
+  const formatGalleryImages = () => {
+    if (!property || !property.photos || property.photos.length === 0) {
+      return ['/placeholder.svg'];
+    }
+    
+    return property.photos.map(photo => photo.name);
+  };
+
   // Format price with commas
   const formatPrice = (price: number) => {
     return price.toLocaleString("en-US", {
@@ -102,12 +177,15 @@ export default function PropertyPage() {
 
   return (
     <>
-      <Seo title={currentProperty.address?.street || "Nekretnina"} />
+      <Seo 
+        title={property?.typeName || "Property"} 
+        description={property?.description || "Property details"}
+      />
       <Header />
       <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-16">
         {/* Property Gallery with z-index */}
         <div className="relative z-0">
-          <PropertyGallery images={currentProperty.images || []} />
+          <PropertyGallery images={formatGalleryImages()} />
         </div>
 
         {/* Main Content with higher z-index */}
@@ -253,7 +331,7 @@ export default function PropertyPage() {
               <div className="lg:col-span-1">
                 <div ref={agentCardWrapperRef} className="relative">
                   <div ref={agentCardRef} className="w-full z-20">
-                    <ContactAgentCard agent={currentProperty.listingInfo?.agent || {
+                    <ContactAgentCard agent={property?.listingInfo?.agent || {
                       name: "Agent",
                       company: "JBL Real Estate Concept",
                       title: "Agent",

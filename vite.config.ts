@@ -10,4 +10,14 @@ export default defineConfig({
       svgrOptions: { exportType: "default", ref: true, svgo: false, titleProp: true },
        include: "**/*.svg",
       })],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://core.ajsasoft.rs',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  }
 })

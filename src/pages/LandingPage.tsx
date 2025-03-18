@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, MapPin, ChevronDown, Building, Home, Users, TrendingUp, Bed, Bath, Square, ArrowRight, Globe, Clock, Users as UsersIcon, Briefcase } from 'lucide-react'
 import './LandingPage.css'
 import ReactLogo from '../assets/jblgold.svg';
@@ -32,83 +32,86 @@ const tagManagerArgs = {
 }
 
 // Sample featured properties data
-// const featuredProperties = [
-//   {
-//     id: 1,
-//     title: 'Moderna planinska vila',
-//     price: '450.000 €',
-//     location: 'Zlatibor, Srbija',
-//     bedrooms: 4,
-//     bathrooms: 3,
-//     area: 220,
-//     image: property1Image,
-//     features: ['Parking', 'Bazen', 'Pogled na planinu']
-//   },
-//   {
-//     id: 2,
-//     title: 'Luksuzni penthouse',
-//     price: '850.000 €',
-//     location: 'Novi Beograd, Srbija',
-//     bedrooms: 5,
-//     bathrooms: 4,
-//     area: 280,
-//     image: property2Image,
-//     features: ['Garaža', 'Terasa', 'Pogled na reku']
-//   },
-//   {
-//     id: 3,
-//     title: 'Elegantna vila sa bazenom',
-//     price: '750.000 €',
-//     location: 'Dedinje, Beograd',
-//     bedrooms: 6,
-//     bathrooms: 4,
-//     area: 450,
-//     image: property3Image,
-//     features: ['Bazen', 'Vrt', 'Obezbeđenje']
-//   },
-//   {
-//     id: 4,
-//     title: 'Prostran porodični dom',
-//     price: '380.000 €',
-//     location: 'Voždovac, Beograd',
-//     bedrooms: 5,
-//     bathrooms: 3,
-//     area: 220,
-//     image: property4Image,
-//     features: ['Garaža', 'Dvorište', 'Renovirano']
-//   },
-//   {
-//     id: 5,
-//     title: 'Premium stan u centru',
-//     price: '320.000 €',
-//     location: 'Stari Grad, Beograd',
-//     bedrooms: 3,
-//     bathrooms: 2,
-//     area: 120,
-//     image: property5Image,
-//     features: ['Lift', 'Parking', 'Renovirano']
-//   },
-//   {
-//     id: 6,
-//     title: 'Moderna kuća sa vrtom',
-//     price: '420.000 €',
-//     location: 'Zemun, Beograd',
-//     bedrooms: 4,
-//     bathrooms: 3,
-//     area: 200,
-//     image: property6Image,
-//     features: ['Bazen', 'Garaža', 'Smart home']
-//   }
-// ];
+const sampleFeaturedProperties = [
+  {
+    id: 1,
+    title: 'Moderna planinska vila',
+    price: '450.000 €',
+    location: 'Zlatibor, Srbija',
+    bedrooms: 4,
+    bathrooms: 3,
+    area: 220,
+    image: property1Image,
+    features: ['Parking', 'Bazen', 'Pogled na planinu']
+  },
+  {
+    id: 2,
+    title: 'Luksuzni penthouse',
+    price: '850.000 €',
+    location: 'Novi Beograd, Srbija',
+    bedrooms: 5,
+    bathrooms: 4,
+    area: 280,
+    image: property2Image,
+    features: ['Garaža', 'Terasa', 'Pogled na reku']
+  },
+  {
+    id: 3,
+    title: 'Elegantna vila sa bazenom',
+    price: '750.000 €',
+    location: 'Dedinje, Beograd',
+    bedrooms: 6,
+    bathrooms: 4,
+    area: 450,
+    image: property3Image,
+    features: ['Bazen', 'Vrt', 'Obezbeđenje']
+  },
+  {
+    id: 4,
+    title: 'Prostran porodični dom',
+    price: '380.000 €',
+    location: 'Voždovac, Beograd',
+    bedrooms: 5,
+    bathrooms: 3,
+    area: 220,
+    image: property4Image,
+    features: ['Garaža', 'Dvorište', 'Renovirano']
+  },
+  {
+    id: 5,
+    title: 'Premium stan u centru',
+    price: '320.000 €',
+    location: 'Stari Grad, Beograd',
+    bedrooms: 3,
+    bathrooms: 2,
+    area: 120,
+    image: property5Image,
+    features: ['Lift', 'Parking', 'Renovirano']
+  },
+  {
+    id: 6,
+    title: 'Moderna kuća sa vrtom',
+    price: '420.000 €',
+    location: 'Zemun, Beograd',
+    bedrooms: 4,
+    bathrooms: 3,
+    area: 200,
+    image: property6Image,
+    features: ['Bazen', 'Garaža', 'Smart home']
+  }
+];
 
 const LandingPage: React.FC = () => {
     TagManager.dataLayer(tagManagerArgs)
-    const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
+    const [language, setLanguage] = useState<'sr' | 'en'>(localStorage.getItem('language') as 'sr' | 'en' || 'sr')
     const [scrollPosition, setScrollPosition] = useState(0);
+    const [featuredProperties, setFeaturedProperties] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
       const handleLanguageChange = () => {
-        setLanguage(localStorage.getItem('language') || 'sr');
+        setLanguage(localStorage.getItem('language') as 'sr' | 'en' || 'sr');
       };
       
       const handleScroll = () => {
@@ -126,17 +129,32 @@ const LandingPage: React.FC = () => {
       };
     }, []);
 
-    const fetchData = () =>{
-      //const result = await getAllData(searchParams);
-      //const resultPropertyType = await getAllData(searchParams);
-      const result = await realEstate.getRealEstateFeatured();
-      if (result.isSuccess)
-        {
-          const featuredProperties = result;
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const result = await realEstate.getRealEstateFeatured();
+        if (result.isSuccess && result.data) {
+          // Sort properties by price in descending order and take only the top 6
+          const sortedProperties = [...result.data]
+            .sort((a, b) => (b.price || 0) - (a.price || 0))
+            .slice(0, 6);
+          setFeaturedProperties(sortedProperties);
+        } else {
+          setError("Failed to fetch property data");
+          setFeaturedProperties(sampleFeaturedProperties); // Use sample data as fallback
         }
-    }
+      } catch (err) {
+        console.error("Error fetching featured properties:", err);
+        setError("An error occurred while fetching property data");
+        setFeaturedProperties(sampleFeaturedProperties); // Use sample data as fallback
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     useEffect(() => {
-      fetchData();},[])
+      fetchData();
+    }, []);
 
     const translations = {
       sr: {
@@ -183,6 +201,24 @@ const LandingPage: React.FC = () => {
 
     const t = translations[language as 'sr' | 'en']
 
+    // Helper function to format property data
+    const formatPropertyForDisplay = (property: any) => {
+      return {
+        id: property.id,
+        title: property.locationArea || "Beautiful Property",
+        price: property.price || 0,
+        location: property.locationCityName || "Unknown Location",
+        bedrooms: property.roomsNo || 0,
+        bathrooms: property.bathroomNO || 0,
+        area: property.area || 0,
+        image: property.photos && property.photos.length > 0 
+          ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
+          : "/placeholder.svg",
+        features: property.spaces ? property.spaces.split(',').map((s: string) => s.trim()) : [],
+        type: property.typeName || "Property"
+      };
+    };
+
     return( 
       <div className="landing-page flex flex-col min-h-screen w-full overflow-hidden">
         <Seo title={language === 'sr' ? "JBL Concept Nekretnine" : "JBL Concept Real Estate"}/>
@@ -222,42 +258,17 @@ const LandingPage: React.FC = () => {
                 {language === 'sr' 
                   ? (
                     <>
-
                       Ekskluzivne nekretnine, vrhunska usluga.<br />
                       Vaša sigurna investicija u luksuz.
-
                     </>
                   )
                   : (
                     <>
-
                       Exclusive properties, premium service.<br />
                       Your secure investment in luxury.
-
                     </>
                   )}
               </p>
-              
-              <div className="mt-12 animate-fade-in-up">
-                <p className="text-xs tracking-[0.2em] font-light" style={{ color: 'rgba(248,241,140,0.9)' }}>
-                  {language === 'sr' ? 'SKROLUJTE ZA VIŠE' : 'SCROLL DOWN TO SEE MORE'}
-                </p>
-                <div className="mt-2 animate-bounce-subtle">
-                  <svg 
-                    width="16" 
-                    height="16" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="rgba(248,241,140,0.9)" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    className="mx-auto"
-                  >
-                    <path d="M12 5v14M19 12l-7 7-7-7"/>
-                  </svg>
-                </div>
-              </div>
             </div>
           </main>
 
@@ -272,56 +283,92 @@ const LandingPage: React.FC = () => {
                 </Link>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featuredProperties.map((property) => (
-                  <Link to={`/property/${property.id}`} key={property.id} className="group">
-                    <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full">
-                      <div className="relative h-[280px]">
-                        <img 
-                          src={property.image}
-                          alt={property.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute top-4 right-4">
-                          <span className="bg-primary-blue text-white px-3 py-1 rounded-full text-sm font-medium">
-                            {property.price}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <h3 className="text-xl font-semibold text-primary-blue mb-2 group-hover:text-secondary-blue transition-colors">
-                          {property.title}
-                        </h3>
-                        <div className="flex items-center text-gray-600 mb-4">
-                          <MapPin className="w-4 h-4 mr-1" />
-                          <span className="text-sm">{property.location}</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-gray-600 mb-4">
-                          <div className="flex items-center">
-                            <Bed className="w-4 h-4 mr-1" />
-                            <span className="text-sm">{property.bedrooms}</span>
+              {isLoading && (
+                <div className="flex justify-center items-center py-20">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-blue"></div>
+                </div>
+              )}
+              
+              {error && (
+                <div className="text-center text-red-500 py-10">
+                  {error}
+                </div>
+              )}
+              
+              {!isLoading && !error && featuredProperties.length === 0 && (
+                <div className="text-center text-gray-500 py-10">
+                  {language === 'sr' ? 'Trenutno nema dostupnih nekretnina.' : 'No properties available at the moment.'}
+                </div>
+              )}
+              
+              {!isLoading && !error && featuredProperties.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {featuredProperties.map((property) => {
+                    const formattedProperty = formatPropertyForDisplay(property);
+                    return (
+                      <Link to={`/property/${property.id}`} key={property.id} className="group">
+                        <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full">
+                          <div className="relative h-[280px]">
+                            <img 
+                              src={formattedProperty.image} 
+                              alt={formattedProperty.title} 
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = "/placeholder.svg";
+                              }}
+                            />
+                            <div className="absolute top-4 left-4">
+                              <span className="bg-white px-3 py-1 rounded-full text-sm font-medium">
+                                {formattedProperty.type}
+                              </span>
+                            </div>
+                            <div className="absolute top-4 right-4">
+                              <span className="bg-primary-gold text-white px-3 py-1 rounded-full text-sm font-medium">
+                                {property.actionName || "For Sale"}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center">
-                            <Bath className="w-4 h-4 mr-1" />
-                            <span className="text-sm">{property.bathrooms}</span>
-                          </div>
-                          <div className="flex items-center">
-                            <Square className="w-4 h-4 mr-1" />
-                            <span className="text-sm">{property.area} m²</span>
+                          <div className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div>
+                                <h3 className="text-xl font-semibold mb-2 text-primary-blue">{formattedProperty.title}</h3>
+                                <div className="flex items-center text-gray-600">
+                                  <MapPin className="w-4 h-4 mr-1" />
+                                  <span className="text-sm">{formattedProperty.location}</span>
+                                </div>
+                              </div>
+                              <span className="text-xl font-bold text-primary-blue">{formattedProperty.price} €</span>
+                            </div>
+
+                            <div className="flex items-center gap-4 text-gray-600 mb-4">
+                              <div className="flex items-center">
+                                <Bed className="w-4 h-4 mr-1" />
+                                <span className="text-sm">{formattedProperty.bedrooms}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <Bath className="w-4 h-4 mr-1" />
+                                <span className="text-sm">{formattedProperty.bathrooms}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <Square className="w-4 h-4 mr-1" />
+                                <span className="text-sm">{formattedProperty.area} m²</span>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2">
+                              {Array.isArray(formattedProperty.features) && formattedProperty.features.slice(0, 3).map((feature, index) => (
+                                <span key={index} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-600">
+                                  {feature}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                          {property.features.map((feature, index) => (
-                            <span key={index} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-600">
-                              {feature}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
 
