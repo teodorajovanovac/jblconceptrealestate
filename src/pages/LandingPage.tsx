@@ -25,80 +25,81 @@ import property3Image from '../assets/fotke za home/3.jpg'
 import property4Image from '../assets/fotke za home/4.jpg'
 import property5Image from '../assets/fotke za home/5.jpg'
 import property6Image from '../assets/fotke za home/6.jpg'
+import realEstate from '../data/realEstate';
 
 const tagManagerArgs = {
   dataLayer: {page: 'home'}, dataLayerName: 'PageDataLayer'
 }
 
 // Sample featured properties data
-const featuredProperties = [
-  {
-    id: 1,
-    title: 'Moderna planinska vila',
-    price: '450.000 €',
-    location: 'Zlatibor, Srbija',
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 220,
-    image: property1Image,
-    features: ['Parking', 'Bazen', 'Pogled na planinu']
-  },
-  {
-    id: 2,
-    title: 'Luksuzni penthouse',
-    price: '850.000 €',
-    location: 'Novi Beograd, Srbija',
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 280,
-    image: property2Image,
-    features: ['Garaža', 'Terasa', 'Pogled na reku']
-  },
-  {
-    id: 3,
-    title: 'Elegantna vila sa bazenom',
-    price: '750.000 €',
-    location: 'Dedinje, Beograd',
-    bedrooms: 6,
-    bathrooms: 4,
-    area: 450,
-    image: property3Image,
-    features: ['Bazen', 'Vrt', 'Obezbeđenje']
-  },
-  {
-    id: 4,
-    title: 'Prostran porodični dom',
-    price: '380.000 €',
-    location: 'Voždovac, Beograd',
-    bedrooms: 5,
-    bathrooms: 3,
-    area: 220,
-    image: property4Image,
-    features: ['Garaža', 'Dvorište', 'Renovirano']
-  },
-  {
-    id: 5,
-    title: 'Premium stan u centru',
-    price: '320.000 €',
-    location: 'Stari Grad, Beograd',
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 120,
-    image: property5Image,
-    features: ['Lift', 'Parking', 'Renovirano']
-  },
-  {
-    id: 6,
-    title: 'Moderna kuća sa vrtom',
-    price: '420.000 €',
-    location: 'Zemun, Beograd',
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 200,
-    image: property6Image,
-    features: ['Bazen', 'Garaža', 'Smart home']
-  }
-];
+// const featuredProperties = [
+//   {
+//     id: 1,
+//     title: 'Moderna planinska vila',
+//     price: '450.000 €',
+//     location: 'Zlatibor, Srbija',
+//     bedrooms: 4,
+//     bathrooms: 3,
+//     area: 220,
+//     image: property1Image,
+//     features: ['Parking', 'Bazen', 'Pogled na planinu']
+//   },
+//   {
+//     id: 2,
+//     title: 'Luksuzni penthouse',
+//     price: '850.000 €',
+//     location: 'Novi Beograd, Srbija',
+//     bedrooms: 5,
+//     bathrooms: 4,
+//     area: 280,
+//     image: property2Image,
+//     features: ['Garaža', 'Terasa', 'Pogled na reku']
+//   },
+//   {
+//     id: 3,
+//     title: 'Elegantna vila sa bazenom',
+//     price: '750.000 €',
+//     location: 'Dedinje, Beograd',
+//     bedrooms: 6,
+//     bathrooms: 4,
+//     area: 450,
+//     image: property3Image,
+//     features: ['Bazen', 'Vrt', 'Obezbeđenje']
+//   },
+//   {
+//     id: 4,
+//     title: 'Prostran porodični dom',
+//     price: '380.000 €',
+//     location: 'Voždovac, Beograd',
+//     bedrooms: 5,
+//     bathrooms: 3,
+//     area: 220,
+//     image: property4Image,
+//     features: ['Garaža', 'Dvorište', 'Renovirano']
+//   },
+//   {
+//     id: 5,
+//     title: 'Premium stan u centru',
+//     price: '320.000 €',
+//     location: 'Stari Grad, Beograd',
+//     bedrooms: 3,
+//     bathrooms: 2,
+//     area: 120,
+//     image: property5Image,
+//     features: ['Lift', 'Parking', 'Renovirano']
+//   },
+//   {
+//     id: 6,
+//     title: 'Moderna kuća sa vrtom',
+//     price: '420.000 €',
+//     location: 'Zemun, Beograd',
+//     bedrooms: 4,
+//     bathrooms: 3,
+//     area: 200,
+//     image: property6Image,
+//     features: ['Bazen', 'Garaža', 'Smart home']
+//   }
+// ];
 
 const LandingPage: React.FC = () => {
     TagManager.dataLayer(tagManagerArgs)
@@ -124,6 +125,18 @@ const LandingPage: React.FC = () => {
         window.removeEventListener('scroll', handleScroll);
       };
     }, []);
+
+    const fetchData = () =>{
+      //const result = await getAllData(searchParams);
+      //const resultPropertyType = await getAllData(searchParams);
+      const result = await realEstate.getRealEstateFeatured();
+      if (result.isSuccess)
+        {
+          const featuredProperties = result;
+        }
+    }
+    useEffect(() => {
+      fetchData();},[])
 
     const translations = {
       sr: {
