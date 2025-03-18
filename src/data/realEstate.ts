@@ -108,13 +108,31 @@ const realEstate = {
     }
   },
 
-  async getData(id: number): Promise<ApiResponse<RealEstateDto>> {
+  async getData(id?: number): Promise<ApiResponse<RealEstateDto[]>> {
     try {
-      const response = await axios.get(`${ApiRealEstate}/${id}`);
-      return response.data;
-    } catch (err) {
-      console.error("Error fetching data by id:", err);
-      throw err;
+      const page = 1;
+      const pageSize = 87;
+      console.log(`Fetching page ${page} from ${ApiRealEstate}?page=${page}&pageSize=${pageSize}`);
+      
+      const response = await fetch(`${ApiRealEstate}?page=${page}&pageSize=${pageSize}`);
+      const data = await response.json();
+      
+      console.log(`Received ${data.data?.length} properties for page ${page}`);
+      
+      return {
+        isSuccess: true,
+        data: data.data || [],
+        totalRecords: data.totalRecords || 0,
+        totalPages: data.totalPages || 0
+      };
+    } catch (error) {
+      console.error('Error fetching real estate data:', error);
+      return {
+        isSuccess: false,
+        data: [],
+        totalRecords: 0,
+        totalPages: 0
+      };
     }
   },
 

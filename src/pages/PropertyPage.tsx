@@ -54,9 +54,21 @@ export default function PropertyPage() {
         
         const result = await realEstate.getData(propertyId);
         console.log('API Response:', result);
-        if (result?.data) {
-          setProperty(result.data);
-          setError(null);
+
+        // Check if result exists and has data
+        if (result.isSuccess && result.data && result.data.length > 0) {
+          // Find the specific property by ID
+          const foundProperty = result.data.find(
+            (prop: RealEstateDto) => prop.id === propertyId
+          );
+          
+          if (foundProperty) {
+            setProperty(foundProperty);
+            setError(null);
+          } else {
+            setError("Nekretnina nije pronađena");
+            setProperty(null);
+          }
         } else {
           setError("Nekretnina nije pronađena");
           setProperty(null);
