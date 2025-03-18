@@ -80,7 +80,7 @@ const Footer = () => {
               <li>
                 <Link to="/terms" className="flex items-center text-sm hover:text-menu-hover transition-colors">
                   <MdOutlineInfo className="mr-2 text-primary-gold" />
-                  {language === 'sr' ? 'INFO' : 'INFO'}
+                  {language === 'sr' ? 'Info' : 'Info'}
                 </Link>
               </li>
               <li>

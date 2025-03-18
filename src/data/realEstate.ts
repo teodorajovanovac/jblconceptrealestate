@@ -23,9 +23,9 @@ const getAllData = async (): Promise<ApiResponse<RealEstateDto[]>> => {
     }
   };
 
-const getData = async (id: number): Promise<ApiResponse<RealEstateDto>> => {
+const getData = async (id: number): Promise<RealEstateDto> => {
     try {
-      const response = await axios.get<ApiResponse<RealEstateDto>>(ApiRealEstate+'/'+id);
+      const response = await axios.get<RealEstateDto>(ApiRealEstate+'/'+id);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);

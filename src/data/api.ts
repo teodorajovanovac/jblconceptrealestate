@@ -1,4 +1,4 @@
-export const ApiEndPointBase ="/api/api/RealEstate"
+export const ApiEndPointBase = "/api/api/RealEstate"
 
 
 export const ApiRealEstate = ApiEndPointBase 
