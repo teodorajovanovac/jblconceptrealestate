@@ -170,7 +170,7 @@ const realEstate = {
   async search(queryString: string): Promise<ApiResponse<RealEstateDto[]>> {
     try {
       console.log(`Searching with query: ${queryString}`);
-      const url = `${ApiRealEstate}/search?${queryString}`;
+      const url = `${ApiRealEstate}?searchQuery=${queryString}`;
       
       const response = await axios.get(url);
       
