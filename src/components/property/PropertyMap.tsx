@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import 'leaflet/dist/leaflet.css';
 
 interface PropertyMapProps {
@@ -10,87 +11,85 @@ interface PropertyMapProps {
   };
 }
 
-export default function PropertyMap({ address, location }: PropertyMapProps) {
+export default function PropertyMap({ address }: PropertyMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const [mapLocation, setMapLocation] = useState<[number, number] | null>(null);
 
   useEffect(() => {
-    if (!mapContainerRef.current) return;
+    const initializeMap = async () => {
+      if (!mapContainerRef.current) return;
 
-    // Custom map style
-    const mapStyle = {
-      color: '#2563eb',
-      weight: 2,
-      fillColor: '#2563eb',
-      fillOpacity: 0.2
+      // Inicijalizacija geocoding providera
+      const provider = new OpenStreetMapProvider();
+
+      try {
+        // Tražimo lokaciju po adresi
+        const results = await provider.search({ query: address });
+        
+        if (results.length > 0) {
+          const { x: lng, y: lat } = results[0];
+          setMapLocation([lat, lng]);
+
+          // Inicijalizacija mape
+          if (!mapRef.current) {
+            mapRef.current = L.map(mapContainerRef.current).setView([lat, lng], 15);
+
+            // Dodajemo tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '© OpenStreetMap contributors',
+              maxZoom: 19,
+              className: 'map-tiles'
+            }).addTo(mapRef.current);
+
+            // Custom marker icon
+            const customIcon = L.divIcon({
+              className: 'custom-marker',
+              html: `
+                <div class="w-16 h-16 bg-primary-blue opacity-50 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+                   
+                </div>
+              `,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            });
+//<div class="w-2 h-2 bg-white opacity-100 rounded-full"></div>
+            // Dodajemo marker
+            L.marker([lat, lng], { icon: customIcon })
+              .bindPopup(`
+                <div class="p-2">
+                  <div class="font-medium text-primary-blue">${address}</div>
+                  <div class="text-sm text-gray-600">JBL Concept Real Estate</div>
+                </div>
+              `)
+              .addTo(mapRef.current);
+          } else {
+            // Ako mapa već postoji, samo ažuriramo view
+            mapRef.current.setView([lat, lng], 15);
+          }
+        }
+      } catch (error) {
+        console.error('Error geocoding address:', error);
+      }
     };
 
-    // Initialize map
-    mapRef.current = L.map(mapContainerRef.current).setView([location.lat, location.lng], 15);
-
-    // Add custom tile layer with JBL branding
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 19,
-      className: 'map-tiles'
-    }).addTo(mapRef.current);
-
-    // Add marker with custom icon
-    const customIcon = L.divIcon({
-      className: 'custom-marker',
-      html: `
-        <div class="w-6 h-6 bg-primary-blue rounded-full border-4 border-white shadow-lg flex items-center justify-center">
-          <div class="w-2 h-2 bg-white rounded-full"></div>
-        </div>
-      `,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
-    });
-
-    L.marker([location.lat, location.lng], { icon: customIcon })
-      .bindPopup(`
-        <div class="p-2">
-          <div class="font-medium text-primary-blue">${address}</div>
-          <div class="text-sm text-gray-600">JBL Concept Real Estate</div>
-        </div>
-      `)
-      .addTo(mapRef.current);
-
-    // Add custom styling
-    const style = document.createElement('style');
-    style.textContent = `
-      .map-tiles {
-        filter: grayscale(1) brightness(1.1);
-      }
-      .custom-marker {
-        background: none;
-        border: none;
-      }
-      .leaflet-popup-content-wrapper {
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      }
-      .leaflet-popup-content {
-        margin: 8px;
-      }
-    `;
-    document.head.appendChild(style);
+    initializeMap();
 
     // Cleanup
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
+        mapRef.current = null;
       }
-      document.head.removeChild(style);
     };
-  }, [location, address]);
+  }, [address]);
 
   return (
     <div className="mb-8">
-      <h2 className="text-2xl font-bold text-primary-blue mb-4">Location</h2>
+      <h2 className="text-2xl font-bold text-primary-blue mb-4">Lokacija</h2>
       <div 
         ref={mapContainerRef} 
-        className="w-full h-[400px] rounded-lg overflow-hidden shadow-lg"
+        className="w-full h-[400px] rounded-lg overflow-hidden"
       />
     </div>
   );

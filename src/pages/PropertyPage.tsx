@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Calendar, Bed, Bath, Square, Home } from "lucide-react"
+import { Calendar, Bed, Bath, Square, Home, Euro, Tag } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import PropertyGallery from "../components/property/PropertyGallery"
 import ContactAgentCard from "../components/property/ContactAgentCard"
@@ -14,6 +14,7 @@ import { useParams, Link } from "react-router-dom"
 import realEstate from "../data/realEstate"
 import { RealEstateDto, AgentDto } from "../data/models/realEstate"
 import Spinner from '../components/ui/Spinner'
+import { OpenStreetMapProvider } from 'leaflet-geosearch'
 
 const defaultAgent: AgentDto = {
   name: "Agent",
@@ -143,7 +144,9 @@ export default function PropertyPage() {
     if (!property) return {};
     
     const features: Record<string, any> = {
-      "Tip nekretnine": property.typeName || 'N/A',
+      "Tip nekretnine": property.subTypeName 
+        ? `${property.typeName} + ${property.subTypeName}`
+        : property.typeName || 'N/A',
       "Površina": property.area ? `${property.area} m²` : 'N/A',
       "Broj soba": property.roomsNo || 'N/A',
       "Broj kupatila": property.bathroomNO || 'N/A',
@@ -203,7 +206,7 @@ export default function PropertyPage() {
               <TabsList className="w-full px-2 h-12 grid grid-cols-3 gap-1">
                 <TabsTrigger value="description">Opis</TabsTrigger>
                 <TabsTrigger value="features">Karakteristike</TabsTrigger>
-                <TabsTrigger value="details">Detalji</TabsTrigger>
+                <TabsTrigger value="location">Lokacija</TabsTrigger>
               </TabsList>
 
               <TabsContent value="description" className="px-4">
@@ -223,10 +226,17 @@ export default function PropertyPage() {
                 />
               </TabsContent>
 
-              <TabsContent value="details" className="px-4">
-                <PropertyFeatures 
-                  title="Dodatni detalji" 
-                  features={processFeatures()} 
+              <TabsContent value="location" className="px-4">
+                <PropertyMap
+                  address={[
+                    property.locationArea,
+                    property.locationCityName,
+                    "Srbija"
+                  ].filter(Boolean).join(", ")}
+                  location={{ 
+                    lat: property.gmapSync === 1 ? 44.786568 : 44.786568,
+                    lng: property.gmapSync === 1 ? 20.419649 : 20.419649
+                  }}
                 />
               </TabsContent>
             </Tabs>
@@ -247,10 +257,28 @@ export default function PropertyPage() {
                       <p className="text-gray-600 mt-1">
                         {[property.locationArea, property.locationCityName].filter(Boolean).join(", ")}
                       </p>
+                      <div className="mt-2">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                          property.actionName?.toLowerCase().includes('izdavanje') 
+                            ? 'bg-primary-gold text-white' 
+                            : 'bg-primary-blue text-white'
+                        }`}>
+                          <Tag className="w-4 h-4 mr-1" />
+                          {property.actionName || "Prodaja"}
+                        </span>
+                      </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl md:text-3xl font-bold text-primary-blue">
-                        {formatPrice(property.price)}
+                      <div className="bg-primary-blue rounded-lg p-4 inline-block">
+                        <div className="text-2xl md:text-3xl font-bold text-white">
+                          {formatPrice(property.price)}
+                        </div>
+                        {property.priceM2 && (
+                          <div className="text-sm text-white/80 mt-1 flex items-center justify-end">
+                            <Euro className="w-4 h-4 mr-1" />
+                            {property.priceM2.toLocaleString()} / m²
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -17,7 +17,6 @@ export default defineConfig({
         target: 'https://test.jblconcept.rs',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   }

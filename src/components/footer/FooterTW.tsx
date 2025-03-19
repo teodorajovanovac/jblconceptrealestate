@@ -7,6 +7,18 @@ import { MdOutlineInfo } from "react-icons/md"
 import ReactLogo from "../../assets/jblgold.svg"
 import menuData from "../../assets/data/menu.json"
 import { Link } from "react-router-dom"
+import { Instagram, Facebook, Twitter, Linkedin } from "lucide-react"
+import { 
+  FileText, 
+  Briefcase, 
+  ScrollText, 
+  Info, 
+  Shield, 
+  HelpCircle, 
+  MapPin, 
+  Mail, 
+  Phone 
+} from "lucide-react"
 
 const Footer = () => {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr');
@@ -25,172 +37,151 @@ const Footer = () => {
     .sort((a, b) => a.order - b.order);
 
   return (
-    <footer className="bg-primary-blue text-primary-white">
-      {/* Glavni deo footera */}
-      <div className="px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo i tekst */}
-          <div className="md:col-span-1">
-            <ReactLogo className="w-40 mb-4" />
-            <p className="text-sm">
+    <footer className="bg-[#0A0F1C] text-white">
+      <div className="container mx-auto">
+        <div className="flex flex-col md:flex-row">
+          {/* Logo Section - 1/3 width */}
+          <div className="w-full md:w-1/3 p-8 flex flex-col items-center justify-center">
+            <div className="w-full flex justify-center mb-4 ">
+              <ReactLogo className="w-full max-w-[220px]" />
+            </div>
+            <p className="text-sm text-center text-gray-400">
               {language === 'sr' 
                 ? 'Ekskluzivni agent za prodaju i iznajmljivanje luksuznih nekretnina u Beogradu i Srbiji' 
                 : 'Exclusive agent for sale and rent of luxury properties in Belgrade and Serbia'}
             </p>
           </div>
 
-          {/* Brzi linkovi */}
-          <div className="md:col-span-1">
-            <h3 className="text-base font-bold mb-4">
-              {language === 'sr' ? 'Brzi linkovi' : 'Quick links'}
-            </h3>
-            <ul className="space-y-2">
-              {footerLinks.map((item) => (
-                <li key={item.link}>
-                  <Link 
-                    to={item.link} 
-                    className="text-sm hover:text-menu-hover transition-colors"
-                    onClick={() => window.scrollTo(0, 0)}
-                  >
-                    • {item.caption}
+          {/* Content Section - 2/3 width split into 3 equal columns */}
+          <div className="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-3 gap-4 p-8">
+            {/* Quick Links Column */}
+            <div>
+              <h3 className="text-base font-semibold mb-2">Brzi linkovi</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/pricing" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <FileText size={16} />
+                    Cenovnik
                   </Link>
                 </li>
-              ))}
-            </ul>
-          </div>
+                <li>
+                  <Link to="/service" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <Briefcase size={16} />
+                    Usluge
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/terms" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <ScrollText size={16} />
+                    Opšti uslovi poslovanja
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-          {/* Dokumenti */}
-          <div className="md:col-span-1">
-            <h3 className="text-base font-bold mb-4">
-              {language === 'sr' ? 'Dokumenti' : 'Documents'}
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/terms" className="flex items-center text-sm hover:text-menu-hover transition-colors">
-                  <IoDocumentTextOutline className="mr-2 text-primary-gold" />
-                  {language === 'sr' ? 'Politika privatnosti' : 'Privacy Policy'}
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="flex items-center text-sm hover:text-menu-hover transition-colors">
-                  <IoDocumentTextOutline className="mr-2 text-primary-gold" />
-                  {language === 'sr' ? 'Uslovi korišćenja' : 'Terms of Use'}
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="flex items-center text-sm hover:text-menu-hover transition-colors">
-                  <MdOutlineInfo className="mr-2 text-primary-gold" />
-                  {language === 'sr' ? 'Info' : 'Info'}
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="flex items-center text-sm hover:text-menu-hover transition-colors">
-                  <FaRegQuestionCircle className="mr-2 text-primary-gold" />
-                  {language === 'sr' ? 'FAQ' : 'FAQ'}
-                </Link>
-              </li>
-            </ul>
+            {/* Documents Column */}
+            <div>
+              <h3 className="text-base font-semibold mb-2">Dokumenti</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/privacy-policy" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <Shield size={16} />
+                    Politika privatnosti
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/terms-of-use" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <ScrollText size={16} />
+                    Uslovi korišćenja
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/info" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <Info size={16} />
+                    Info
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/faq" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <HelpCircle size={16} />
+                    FAQ
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-            {/* Pratite nas */}
-            <div className="mt-6">
-              <h3 className="text-base font-bold mb-3">
-                {language === 'sr' ? 'Pratite nas' : 'Follow us'}
-              </h3>
-              <div className="flex space-x-4">
-                <a
-                  className="text-xl hover:text-menu-hover transition-colors"
-                  href="https://www.instagram.com/realestateconcept.jbl/?api=1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaInstagram />
-                </a>
-                <a
-                  className="text-xl hover:text-menu-hover transition-colors"
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaFacebookSquare />
-                </a>
-                <a
-                  className="text-xl hover:text-menu-hover transition-colors"
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaTwitter />
-                </a>
-                <a
-                  className="text-xl hover:text-menu-hover transition-colors"
-                  href="https://rs.linkedin.com/in/jasna-baji%C4%87-ljubi%C4%8Di%C4%87-5176b534"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaLinkedin />
-                </a>
+            {/* Contact Column */}
+            <div>
+              <h3 className="text-base font-semibold mb-2">Kontakt</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a 
+                    href="https://www.google.com/maps/place/Мајке+Јевросиме+47,+Београд/@44.8146524,20.4641472,20.02z/data=!4m6!3m5!1s0x475a7ab1c9677c5f:0xea099311df32f4ce!8m2!3d44.8145671!4d20.4644988!16s%2Fg%2F11dzpqhx8p?hl=sr&entry=ttu&g_ep=EgoyMDI1MDMxNi4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary-gold group"
+                  >
+                    <div className="flex items-start gap-3">
+                      <MapPin size={20} className="flex-shrink-0 mt-1" />
+                      <div>
+                        <div className="font-semibold text-xs">CONCEPT REAL ESTATE doo Beograd</div>
+                        <div className="text-gray-400 text-xs">Majke Jevrosime 47, Beograd, Srbija</div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="mailto:office@jblconcept.rs" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <Mail size={16} />
+                    office@jblconcept.rs
+                  </a>
+                </li>
+                <li>
+                  <a href="tel:+381612299988" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <Phone size={16} />
+                    +381 61 2299988
+                  </a>
+                </li>
+              </ul>
+
+              {/* Social Media Links */}
+              <div className="mt-3">
+                <h4 className="text-sm font-semibold mb-2">Pratite nas</h4>
+                <div className="flex space-x-3">
+                  <a href="#" className="hover:text-primary-gold">
+                    <Instagram size={20} />
+                  </a>
+                  <a href="#" className="hover:text-primary-gold">
+                    <Facebook size={20} />
+                  </a>
+                  <a href="#" className="hover:text-primary-gold">
+                    <Twitter size={20} />
+                  </a>
+                  <a href="#" className="hover:text-primary-gold">
+                    <Linkedin size={20} />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Kontakt */}
-          <div className="md:col-span-1">
-            <h3 className="text-base font-bold mb-4">
-              {language === 'sr' ? 'Kontakt' : 'Contact'}
-            </h3>
-            <div className="space-y-4">
-              <a
-                className="flex items-start space-x-2 hover:text-menu-hover transition-colors"
-                href="https://maps.app.goo.gl/1U59uo5KpuqW3RMk7"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <BsFillGeoAltFill className="text-primary-gold mt-1" />
-                <div>
-                  <p className="font-semibold text-sm">CONCEPT REAL ESTATE doo Beograd</p>
-                  <p className="text-sm">{language === 'sr' ? 'Majke Jevrosime 47, 11000 Beograd' : 'Majke Jevrosime 47, 11000 Belgrade'}</p>
-                </div>
-              </a>
-              <a
-                className="flex items-center space-x-2 hover:text-menu-hover transition-colors"
-                href="mailto:jasnabajiclg@gmail.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <BsEnvelopeFill className="text-primary-gold" />
-                <p className="text-sm">jasnabajiclg@gmail.com</p>
-              </a>
-              <a
-                className="flex items-center space-x-2 hover:text-menu-hover transition-colors"
-                href="tel:+38161229998"
-              >
-                <BsFillTelephoneFill className="text-primary-gold" />
-                <p className="text-sm">+381 61 2299988</p>
-              </a>
-            </div>
-          </div>
         </div>
-      </div>
 
-      {/* Footer donji deo */}
-      <div className="border-t border-secondary-blue">
-        <div className="px-6 py-3">
-          <div className="flex flex-col md:flex-row items-center justify-between text-xs gap-2">
-            <div className="text-sm">
-              {language === 'sr' ? '© 2025 JBL Concept. Sva prava zadržana.' : '© 2025 JBL Concept. All rights reserved.'}
-            </div>
-            
-            <div className="text-xs opacity-60 transition-opacity flex items-center">
-              {language === 'sr' ? 'Dizajn i izrada' : 'Web design & coding by'}
-              <a
-                className="ml-1 text-primary-gold hover:text-menu-hover"
-                href="http://ajsasoft.rs"
-                target="_blank"
-                rel="noopener noreferrer"
+        {/* Copyright Section */}
+        <div className="border-t border-gray-800 mt-0">
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <p className="text-sm text-gray-400">
+              © 2025 JBL Concept. Sva prava zadržana.
+            </p>
+            <p className="text-xs text-gray-500 opacity-60">
+              Dizajn i izrada <a 
+                href="https://ajsasoft.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-white transition-colors"
               >
                 AjsaSoft
               </a>
-            </div>
+            </p>
           </div>
         </div>
       </div>
