@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import ReactLogo from "../../assets/jbl_log_gold_hr.svg"
 import menuData from "../../assets/data/menu.json"
 
 const Header = () => {
@@ -68,43 +67,64 @@ const Header = () => {
     }
   }
 
+  // Логика за приказ логоа
+  const renderLogo = () => {
+    // На почетној страни када није скроловано, не приказујемо лого
+    if (isHomePage && !isScrolled) {
+      return null;
+    }
+    
+    // Када је навбар плав (скроловано), користимо златни лого
+    if (isScrolled) {
+      return <img src="/assets/jbl_log_gold_hr.svg" alt="JBL Logo" className="h-8 md:h-10" />;
+    }
+    
+    // На осталим страницама са транспарентним навбаром, користимо тамни лого
+    return <img src="/assets/jbl_log_dark_hr.svg" alt="JBL Logo" className="h-8 md:h-10" />;
+  }
+
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-500 ${getTextColorClass()}`}
+      className={`${getTextColorClass()} fixed top-0 left-0 w-full z-50 transition-colors duration-300`}
     >
-      <div className="w-fullpx-8 py-2 flex justify-between items-center">
-        <a href="/" className="z-30">
-          <ReactLogo className="w-auto h-12 p-2 pl-6" />
-        </a>
+      <div className="w-full flex items-center justify-between py-3 md:py-4">
+        {/* Лого уз леву ивицу */}
+        <div className="ml-4 md:ml-8">
+          <a href="/" className="flex items-center">
+            {renderLogo()}
+          </a>
+        </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center justify-end pr-[1%]">
-          {menuItems.map((item) => (
-            <a
-              key={item.link}
-              href={item.link}
-              className={`relative transition-colors px-4 group ${getHoverColorClass()}`}
+        {/* Десктоп навигација скроз десно */}
+        <div className="hidden md:block mr-4 md:mr-8">
+          <div className="flex items-center">
+            {menuItems.map((item) => (
+              <a
+                key={item.link}
+                href={item.link}
+                className={`relative mx-3 group transition-colors ${getHoverColorClass()}`}
+              >
+                <span className="relative">
+                  {item.caption}
+                  <span className={`absolute bottom-[-2px] left-0 w-0 h-[1px] ${getUnderlineColorClass()} origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all`}></span>
+                </span>
+              </a>
+            ))}
+            <button 
+              onClick={toggleLanguage} 
+              className={`relative transition-colors mx-3 group ${getHoverColorClass()}`}
             >
               <span className="relative">
-                {item.caption}
+                {language === "sr" ? "EN" : "SR"}
                 <span className={`absolute bottom-[-2px] left-0 w-0 h-[1px] ${getUnderlineColorClass()} origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all`}></span>
               </span>
-            </a>
-          ))}
-          <button 
-            onClick={toggleLanguage} 
-            className={`relative transition-colors px-4 group ${getHoverColorClass()}`}
-          >
-            <span className="relative">
-              {language === "sr" ? "EN" : "SR"}
-              <span className={`absolute bottom-[-2px] left-0 w-0 h-[1px] ${getUnderlineColorClass()} origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all`}></span>
-            </span>
-          </button>
-        </nav>
+            </button>
+          </div>
+        </div>
 
-        {/* Burger Menu Button */}
+        {/* Бургер мени дугме на мобилним уређајима */}
         <button
-          className="md:hidden w-10 h-10 relative focus:outline-none z-30"
+          className="md:hidden mr-4 w-10 h-10 relative focus:outline-none z-30"
           onClick={toggleMenu}
           aria-label="Toggle Menu"
         >

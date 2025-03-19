@@ -1,19 +1,28 @@
 import { useState, useEffect, useRef } from 'react'
-import { Search, ChevronDown } from 'lucide-react'
+import { Search, ChevronDown, X } from 'lucide-react'
 import Slider from '@mui/material/Slider'
 import { styled } from '@mui/material/styles'
+import { PRICE_RANGES, AREA_RANGE, TransactionType } from '../../utils/constants'
 
 // Custom styled slider
 const CustomSlider = styled(Slider)(({ theme }) => ({
-  color: '#2563eb', // primary-blue
+  color: '#2563eb',
+  height: 3,
   '& .MuiSlider-thumb': {
+    height: 20,
+    width: 20,
     backgroundColor: '#fff',
-    border: '2px solid #2563eb',
+    border: '2px solid currentColor',
     '&:hover, &.Mui-focusVisible': {
       boxShadow: '0 0 0 8px rgba(37, 99, 235, 0.16)',
     },
   },
+  '& .MuiSlider-track': {
+    height: 3,
+    backgroundColor: '#2563eb',
+  },
   '& .MuiSlider-rail': {
+    height: 3,
     backgroundColor: '#e5e7eb',
   },
 }))
@@ -46,13 +55,6 @@ interface DropdownProps {
   onToggle: () => void;
 }
 
-const PRICE_RANGES = {
-  buy: { min: 0, max: 1000000 },
-  rent: { min: 0, max: 3000 }
-}
-
-const AREA_RANGE = { min: 0, max: 500 }
-
 // Dropdown komponenta sa checkboxovima
 const Dropdown = ({ title, options, selected, onChange, isOpen, onToggle }: DropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -68,6 +70,11 @@ const Dropdown = ({ title, options, selected, onChange, isOpen, onToggle }: Drop
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onToggle]);
+
+  const handleChange = (option: string) => {
+    console.log(`Dropdown selected: ${option} in ${title}`);
+    onChange(option);
+  };
 
   return (
     <div ref={dropdownRef} className="relative">
@@ -86,16 +93,19 @@ const Dropdown = ({ title, options, selected, onChange, isOpen, onToggle }: Drop
       {isOpen && (
         <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
           <div className="p-2 space-y-1">
-            {options.map((option) => (
-              <label key={option} className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+            {options.map((option, index) => (
+              <div 
+                key={`${option}-${index}`}
+                className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   checked={selected.includes(option)}
-                  onChange={() => onChange(option)}
+                  onChange={() => handleChange(option)}
                   className="rounded border-gray-300 text-primary-blue focus:ring-primary-blue mr-2"
                 />
-                <span className="text-sm text-gray-700">{option}</span>
-              </label>
+                <label className="text-sm text-gray-700">{option}</label>
+              </div>
             ))}
           </div>
         </div>
@@ -141,28 +151,117 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   
   const formatArea = (value: number) => `${value} m²`
 
+  // Define more accurate options based on the API data
+  const propertyTypeOptions = [
+    { label: 'Stan', value: 'stan' },
+    { label: 'Kuća', value: 'kuca' },
+    { label: 'Poslovni prostor', value: 'poslovni' },
+    { label: 'Zemljište', value: 'zemljiste' },
+    { label: 'Garaža', value: 'garaza' }
+  ];
+  
+  const roomOptions = [
+    { label: 'Garsonjera', value: '0' },
+    { label: '1 soba', value: '1' },
+    { label: '1.5 soba', value: '1.5' },
+    { label: '2 sobe', value: '2' },
+    { label: '2.5 sobe', value: '2.5' },
+    { label: '3 sobe', value: '3' },
+    { label: '3.5 sobe', value: '3.5' },
+    { label: '4 sobe', value: '4' },
+    { label: '4+ sobe', value: '5' }
+  ];
+  
+  const locationOptions = [
+    'Stari Grad', 'Vračar', 'Savski Venac', 'Novi Beograd', 
+    'Zemun', 'Dedinje', 'Voždovac', 'Zvezdara', 'Čukarica', 
+    'Rakovica', 'Palilula', 'Banovo brdo'
+  ];
+  
+  const featureOptions = [
+    'Terasa', 'Lift', 'Ostava', 'Namešten', 'Obezbeđenje', 
+    'Parking', 'Garaža', 'Klima', 'Internet', 'Interfon'
+  ];
+
+  // Update handleCheckboxChange function
   const handleCheckboxChange = (
     value: string,
     selected: string[],
     setSelected: (value: string[]) => void
   ) => {
+    // Create new array based on current selection
+    let newSelected: string[];
+    
     if (selected.includes(value)) {
-      setSelected(selected.filter(item => item !== value))
+      newSelected = selected.filter(item => item !== value);
     } else {
-      setSelected([...selected, value])
+      newSelected = [...selected, value];
     }
+    
+    // Update state
+    setSelected(newSelected);
+    
+    // Immediately trigger a search with the updated filters
+    // This is the key change - we need to trigger a search right after changing the selection
+    setTimeout(() => {
+      const filters: SearchFilters = {
+        transactionType,
+        searchTerm,
+        propertyTypes: value.startsWith('Kuća') || value.startsWith('Stan') || 
+                       value.startsWith('Zemljište') || value.startsWith('Poslovni') || 
+                       value.startsWith('Garaža') 
+                       ? (selected === selectedPropertyTypes ? newSelected : selectedPropertyTypes)
+                       : selectedPropertyTypes,
+        rooms: value.includes('soba') || value === 'Garsonjera'
+               ? (selected === selectedRooms ? newSelected : selectedRooms)
+               : selectedRooms,
+        locations: ['Stari Grad', 'Vračar', 'Savski Venac', 'Novi Beograd', 'Zemun', 'Dedinje',
+                     'Voždovac', 'Zvezdara', 'Čukarica', 'Rakovica', 'Palilula', 'Banovo brdo'].includes(value)
+                    ? (selected === selectedLocations ? newSelected : selectedLocations)
+                    : selectedLocations,
+        priceRange,
+        areaRange,
+        features: ['Terasa', 'Lift', 'Ostava', 'Namešten', 'Obezbeđenje', 'Parking', 
+                  'Garaža', 'Klima', 'Internet', 'Interfon'].includes(value)
+                  ? (selected === selectedFeatures ? newSelected : selectedFeatures)
+                  : selectedFeatures,
+        state: ['Novo', 'Dobro', 'Za renoviranje'].includes(value)
+               ? (selected === selectedState ? newSelected : selectedState)
+               : selectedState,
+        floor: ['Suteren', 'Prizemlje', '1. sprat', '2. sprat', '3. sprat', '4. sprat', '5+ sprat', 'Penthaus'].includes(value)
+               ? (selected === selectedFloor ? newSelected : selectedFloor)
+               : selectedFloor,
+        heating: ['Centralno', 'Električno', 'Gas', 'Podno', 'TA peć'].includes(value)
+                   ? (selected === selectedHeating ? newSelected : selectedHeating) 
+                   : selectedHeating,
+        parking: []
+      };
+      
+      // Call onSearch with the updated filters
+      onSearch(filters);
+    }, 100); // Small delay to ensure state is updated
   }
 
-  const handleSubmit = () => {
-    // Pretvaramo vrednosti iz klizača u objekt za filtriranje
+  // Handle transaction type change
+  const handleTransactionTypeChange = (type: 'buy' | 'rent') => {
+    setTransactionType(type);
+    
+    // Update price range based on transaction type
+    const newPriceRange = [
+      PRICE_RANGES[type].min,
+      PRICE_RANGES[type].max
+    ];
+    setPriceRange(newPriceRange);
+    
+    // Create filters object with the new transaction type
     const filters: SearchFilters = {
-      transactionType: transactionType,
-      searchTerm: searchTerm,
+      transactionType: type,
+      searchTerm,
       propertyTypes: selectedPropertyTypes,
       rooms: selectedRooms,
       locations: selectedLocations,
-      priceRange: [priceRange[0], priceRange[1]], // Min i max cena
-      areaRange: [areaRange[0], areaRange[1]],   // Min i max površina
+      priceRange: newPriceRange,
+      areaRange: areaRange,
       features: selectedFeatures,
       state: selectedState,
       floor: selectedFloor,
@@ -170,8 +269,40 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       parking: selectedParking
     };
     
-    // Pozivamo funkciju za pretragu
+    // Immediately trigger search with the new filters
     onSearch(filters);
+  };
+
+  // Update the clear filters function
+  const clearFilters = () => {
+    // Reset all filter states
+    setSearchTerm('');
+    setPriceRange([PRICE_RANGES[transactionType].min, PRICE_RANGES[transactionType].max]);
+    setAreaRange([AREA_RANGE.min, AREA_RANGE.max]);
+    setSelectedPropertyTypes([]);
+    setSelectedRooms([]);
+    setSelectedLocations([]);
+    setSelectedFeatures([]);
+    setSelectedState([]);
+    setSelectedFloor([]);
+    setSelectedHeating([]);
+    setSelectedParking([]);
+    
+    // Trigger a search with cleared filters
+    onSearch({
+      transactionType,
+      searchTerm: '',
+      propertyTypes: [],
+      rooms: [],
+      locations: [],
+      priceRange: [PRICE_RANGES[transactionType].min, PRICE_RANGES[transactionType].max],
+      areaRange: [AREA_RANGE.min, AREA_RANGE.max],
+      features: [],
+      state: [],
+      floor: [],
+      heating: [],
+      parking: []
+    });
   }
 
   const toggleDropdown = (name: string) => {
@@ -179,31 +310,29 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-8">
-      {/* Transaction Type Toggle */}
-      <div className="flex justify-center mb-8">
-        <div className="bg-gray-100 p-1 rounded-lg inline-flex">
-          <button
-            className={`px-6 py-2 rounded-md transition-all ${
-              transactionType === 'buy'
-                ? 'bg-primary-blue text-white'
-                : 'text-gray-600 hover:text-primary-blue'
-            }`}
-            onClick={() => setTransactionType('buy')}
-          >
-            Kupi
-          </button>
-          <button
-            className={`px-6 py-2 rounded-md transition-all ${
-              transactionType === 'rent'
-                ? 'bg-primary-blue text-white'
-                : 'text-gray-600 hover:text-primary-blue'
-            }`}
-            onClick={() => setTransactionType('rent')}
-          >
-            Iznajmi
-          </button>
-        </div>
+    <div className="w-full max-w-7xl mx-auto px-4">
+      {/* Transaction Type Toggle - Larger buttons */}
+      <div className="flex justify-center gap-3 mb-6">
+        <button
+          onClick={() => handleTransactionTypeChange('buy')}
+          className={`px-10 py-3 rounded-lg text-lg font-semibold transition-all duration-200 shadow ${
+            transactionType === 'buy'
+              ? 'bg-primary-blue text-white'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          Kupi
+        </button>
+        <button
+          onClick={() => handleTransactionTypeChange('rent')}
+          className={`px-10 py-3 rounded-lg text-lg font-semibold transition-all duration-200 shadow ${
+            transactionType === 'rent'
+              ? 'bg-primary-blue text-white'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          Iznajmi
+        </button>
       </div>
 
       {/* Search Input */}
@@ -222,16 +351,23 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Dropdown
           title="Tip nekretnine"
-          options={['Kuća', 'Stan', 'Zemljište', 'Poslovni prostor', 'Garaža']}
-          selected={selectedPropertyTypes}
-          onChange={(value) => handleCheckboxChange(value, selectedPropertyTypes, setSelectedPropertyTypes)}
+          options={propertyTypeOptions.map(option => option.label)}
+          selected={selectedPropertyTypes.map(value => 
+            propertyTypeOptions.find(opt => opt.value === value)?.label || value
+          )}
+          onChange={(label) => {
+            const option = propertyTypeOptions.find(opt => opt.label === label);
+            if (option) {
+              handleCheckboxChange(option.value, selectedPropertyTypes, setSelectedPropertyTypes);
+            }
+          }}
           isOpen={openDropdown === 'propertyType'}
           onToggle={() => toggleDropdown('propertyType')}
         />
 
         <Dropdown
           title="Broj soba"
-          options={['Garsonjera', '1 soba', '1.5 soba', '2 sobe', '2.5 sobe', '3 sobe', '3.5 sobe', '4 sobe', '4+ sobe']}
+          options={roomOptions.map(option => option.label)}
           selected={selectedRooms}
           onChange={(value) => handleCheckboxChange(value, selectedRooms, setSelectedRooms)}
           isOpen={openDropdown === 'rooms'}
@@ -240,7 +376,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
         <Dropdown
           title="Lokacija"
-          options={['Stari Grad', 'Vračar', 'Savski Venac', 'Novi Beograd', 'Zemun', 'Dedinje']}
+          options={locationOptions}
           selected={selectedLocations}
           onChange={(value) => handleCheckboxChange(value, selectedLocations, setSelectedLocations)}
           isOpen={openDropdown === 'location'}
@@ -321,7 +457,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
           <Dropdown
             title="Dodatne karakteristike"
-            options={['Terasa', 'Lift', 'Ostava', 'Namešten', 'Obezbeđenje', 'Parking', 'Garaža']}
+            options={featureOptions}
             selected={selectedFeatures}
             onChange={(value) => handleCheckboxChange(value, selectedFeatures, setSelectedFeatures)}
             isOpen={openDropdown === 'features'}
@@ -330,18 +466,116 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         </div>
       )}
 
-      {/* Action Buttons */}
+      {/* Active Filter Pills */}
+      {(selectedPropertyTypes.length > 0 || selectedRooms.length > 0 || 
+        selectedLocations.length > 0 || selectedFeatures.length > 0) && (
+        <div className="flex flex-wrap gap-2 mt-3 mb-6">
+          {selectedPropertyTypes.map(value => {
+            const option = propertyTypeOptions.find(opt => opt.value === value);
+            return (
+              <div key={`type-${value}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
+                {option?.label || value}
+                <button 
+                  onClick={() => handleCheckboxChange(value, selectedPropertyTypes, setSelectedPropertyTypes)}
+                  className="ml-1 text-blue-500 hover:text-blue-700"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            );
+          })}
+          
+          {selectedRooms.map(room => (
+            <div key={`room-${room}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
+              {room}
+              <button 
+                onClick={() => handleCheckboxChange(room, selectedRooms, setSelectedRooms)}
+                className="ml-1 text-blue-500 hover:text-blue-700"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ))}
+          
+          {selectedLocations.map(location => (
+            <div key={`location-${location}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
+              {location}
+              <button 
+                onClick={() => handleCheckboxChange(location, selectedLocations, setSelectedLocations)}
+                className="ml-1 text-blue-500 hover:text-blue-700"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ))}
+          
+          {selectedFeatures.map(feature => (
+            <div key={`feature-${feature}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
+              {feature}
+              <button 
+                onClick={() => handleCheckboxChange(feature, selectedFeatures, setSelectedFeatures)}
+                className="ml-1 text-blue-500 hover:text-blue-700"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Action Buttons - Updated with Clear Filters option */}
       <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setShowMoreFilters(!showMoreFilters)}
+            className="text-primary-blue hover:text-secondary-blue text-lg flex items-center"
+          >
+            {showMoreFilters ? 'Manje' : 'Više'} filtera
+            <ChevronDown className={`ml-1 w-5 h-5 transform transition-transform ${showMoreFilters ? 'rotate-180' : ''}`} />
+          </button>
+          {(selectedPropertyTypes.length > 0 || selectedRooms.length > 0 || selectedLocations.length > 0 || 
+            selectedFeatures.length > 0 || selectedState.length > 0 || selectedFloor.length > 0 || 
+            selectedHeating.length > 0 || searchTerm !== '') && (
+            <button 
+              onClick={clearFilters}
+              className="text-gray-500 hover:text-red-500 text-sm flex items-center ml-4"
+            >
+              <X className="w-4 h-4 mr-1" />
+              Očisti filtere
+            </button>
+          )}
+        </div>
         <button 
-          onClick={() => setShowMoreFilters(!showMoreFilters)}
-          className="text-primary-blue hover:text-secondary-blue text-lg flex items-center"
-        >
-          {showMoreFilters ? 'Manje' : 'Više'} filtera
-          <ChevronDown className={`ml-1 w-5 h-5 transform transition-transform ${showMoreFilters ? 'rotate-180' : ''}`} />
-        </button>
-        <button 
-          onClick={handleSubmit}
-          className="bg-primary-blue text-white px-10 py-3 rounded-lg hover:bg-secondary-blue transition-colors text-lg"
+          id="search-button"
+          onClick={() => {
+            // Show loading state
+            document.getElementById('search-button')?.classList.add('opacity-75');
+            
+            // Prepare filters object
+            const filters: SearchFilters = {
+              transactionType,
+              searchTerm,
+              propertyTypes: selectedPropertyTypes,
+              rooms: selectedRooms,
+              locations: selectedLocations,
+              priceRange: [priceRange[0], priceRange[1]],
+              areaRange: [areaRange[0], areaRange[1]],
+              features: selectedFeatures,
+              state: selectedState,
+              floor: selectedFloor,
+              heating: selectedHeating,
+              parking: selectedParking
+            };
+            
+            // Call onSearch with all filters
+            onSearch(filters);
+            
+            // Reset button after a short delay
+            setTimeout(() => {
+              document.getElementById('search-button')?.classList.remove('opacity-75');
+            }, 300);
+          }}
+          className="bg-primary-blue text-white px-10 py-3 rounded-lg hover:bg-secondary-blue transition-colors text-lg font-medium"
         >
           Pretraži
         </button>

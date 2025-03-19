@@ -166,27 +166,74 @@ const realEstate = {
     }
   },
 
-  // Improved search function with better error handling
+  async getValueRanges(): Promise<ApiResponse<string[]>> {
+    try {
+      const response = await axios.get(ApiLocation);
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching locations:", err);
+      throw err;
+    }
+  },
+  /**
+   * Searches for properties based on query parameters
+   */
   async search(queryString: string): Promise<ApiResponse<RealEstateDto[]>> {
     try {
-      console.log(`Searching with query: ${queryString}`);
-      const url = `${ApiRealEstate}?searchQuery=${queryString}`;
+      console.log(`Searching with query parameters: ${queryString}`);
+      
+      // Build the API URL
+      const url = queryString ? `${ApiRealEstate}?${queryString}` : ApiRealEstate;
       
       const response = await axios.get(url);
       
-      if (response.data && response.data.data) {
-        console.log(`Search returned ${response.data.data.length} properties`);
-      }
+      // Log raw response for debugging
+      console.log('Raw API response:', response.data);
       
-      return response.data;
+      // Handle different response formats
+      if (response.data && response.data.data) {
+        // Standard API response format with .data property
+        console.log(`Search returned ${response.data.data.length} properties`);
+        return {
+          isSuccess: true,
+          data: response.data.data,
+          totalRecords: response.data.totalRecords || response.data.data.length,
+          totalPages: response.data.totalPages || 1
+        };
+      } else if (Array.isArray(response.data)) {
+        // Direct array response
+        console.log(`Search returned ${response.data.length} properties (array format)`);
+        return {
+          isSuccess: true,
+          data: response.data,
+          totalRecords: response.data.length,
+          totalPages: 1
+        };
+      } else if (response.data) {
+        // Single object response
+        console.log('Search returned single property object');
+        return {
+          isSuccess: true,
+          data: [response.data],
+          totalRecords: 1,
+          totalPages: 1
+        };
+      } else {
+        console.error('Invalid or empty response from API');
+        return {
+          isSuccess: false,
+          data: [],
+          totalRecords: 0,
+          totalPages: 0
+        };
+      }
     } catch (err) {
       console.error("Error during search:", err);
-      // Return empty successful response instead of throwing
       return {
-        isSuccess: true,
+        isSuccess: false,
         data: [],
         totalRecords: 0,
-        totalPages: 0
+        totalPages: 0,
       };
     }
   }

@@ -10,6 +10,7 @@ import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { IoOptions } from 'react-icons/io5';
 import Spinner from '../components/ui/Spinner';
+import { PRICE_RANGES, AREA_RANGE, TransactionType } from '../utils/constants';
 
 interface SearchFilters {
   transactionType: 'buy' | 'rent';
@@ -312,6 +313,14 @@ export default function RealEstatePage() {
         const response = await realEstate.getAllData();
         
         if (response.isSuccess && response.data && response.data.length > 0) {
+          // Log unique property types for debugging
+          const uniqueTypes = new Set<string>();
+          response.data.forEach(prop => {
+            if (prop.typeName) uniqueTypes.add(prop.typeName);
+            if (prop.subTypeName) uniqueTypes.add(prop.subTypeName);
+          });
+          console.log('Unique property types from API:', Array.from(uniqueTypes));
+          
           setProperties(response.data);
           setFilteredProperties(response.data);
           setDisplayedProperties(response.data.slice(0, propertiesPerLoad));
@@ -357,33 +366,105 @@ export default function RealEstatePage() {
     };
   }, [hasMore, isLoading, loadMoreProperties]);
 
-  // Ažurirana funkcija handleSearch koja sada koristi API za filtriranje
+  // Updated handleSearch function to properly use the API parameters
   const handleSearch = async (filters: SearchFilters) => {
+    setIsLoading(true);
+    setError('');
+
     try {
-      setIsLoading(true);
-      setError(null);
+      console.log('Starting search with filters:', filters);
+      console.log('Total properties before filtering:', properties.length);
       
-      const queryString = buildSearchQuery(filters);
-      
-      // Pozivamo API sa filterima
-      const response = await realEstate.search(queryString);
-      
-      if (response.isSuccess && response.data) {
-        setProperties(response.data);
-        setFilteredProperties(response.data);
-        setDisplayedProperties(response.data.slice(0, propertiesPerLoad));
-        setHasMore(response.data.length > propertiesPerLoad);
-      } else {
-        setFilteredProperties([]);
-        setDisplayedProperties([]);
-        setHasMore(false);
+      // Filter properties based on all criteria
+      const filteredProperties = properties.filter(property => {
+        // Check transaction type match
+        const transactionMatches = property.actionShortName === (filters.transactionType === 'buy' ? 'P' : 'I');
+        
+        // Check property type match
+        let typeMatches = true;
+        if (filters.propertyTypes.length > 0) {
+          typeMatches = filters.propertyTypes.some(selectedType => {
+            // Convert property type names to lowercase for comparison
+            const propertyType = (property.typeName || '').toLowerCase();
+            const subType = (property.subTypeName || '').toLowerCase();
+            
+            console.log('Checking property:', {
+              id: property.id,
+              typeName: property.typeName,
+              subTypeName: property.subTypeName,
+              selectedType,
+              propertyType,
+              subType
+            });
+            
+            let matches = false;
+            switch(selectedType) {
+              case 'stan':
+                return propertyType.includes('stan') || 
+                       propertyType.includes('s.') ||
+                       subType.includes('stan') ||
+                       subType.includes('s.');
+              case 'kuca':
+                return propertyType.includes('kuća') || 
+                       propertyType.includes('kuca') ||
+                       subType.includes('kuća') ||
+                       subType.includes('kuca');
+              case 'zemljiste':
+                return propertyType.includes('zemljište') || 
+                       propertyType.includes('zemljiste') ||
+                       propertyType.includes('plac') ||
+                       subType.includes('zemljište') ||
+                       subType.includes('zemljiste') ||
+                       subType.includes('plac');
+              case 'poslovni':
+                return propertyType.includes('poslovni') || 
+                       propertyType.includes('lokal') ||
+                       propertyType.includes('kanc') ||
+                       subType.includes('poslovni') ||
+                       subType.includes('lokal') ||
+                       subType.includes('kanc');
+              case 'garaza':
+                return propertyType.includes('garaža') || 
+                       propertyType.includes('garaza') ||
+                       subType.includes('garaža') ||
+                       subType.includes('garaza');
+              default:
+                return false;
+            }
+          });
+        }
+
+        // Log the matching results for debugging
+        console.log(`Property ${property.id} matching:`, {
+          type: property.typeName,
+          subType: property.subTypeName,
+          transactionMatches,
+          typeMatches,
+          selectedTypes: filters.propertyTypes
+        });
+          
+          // Return true only if all conditions match
+        return transactionMatches && typeMatches;
+      });
+
+      console.log('Filtered properties count:', filteredProperties.length);
+
+      // Update state with filtered results
+      setFilteredProperties(filteredProperties);
+      setDisplayedProperties(filteredProperties.slice(0, propertiesPerLoad));
+      setHasMore(filteredProperties.length > propertiesPerLoad);
+
+      // Set error message if no properties found
+      if (filteredProperties.length === 0) {
+        setError(language === 'sr' 
+          ? 'Nema pronađenih nekretnina koje odgovaraju vašim kriterijumima' 
+          : 'No properties found matching your criteria');
       }
     } catch (err) {
-      console.error("Error during search:", err);
-      setError(language === 'sr' ? 'Greška prilikom pretrage' : 'Error during search');
-      setFilteredProperties([]);
-      setDisplayedProperties([]);
-      setHasMore(false);
+      console.error('Error during search:', err);
+      setError(language === 'sr' 
+        ? 'Došlo je do greške prilikom pretrage'
+        : 'An error occurred during search');
     } finally {
       setIsLoading(false);
     }
@@ -409,7 +490,7 @@ export default function RealEstatePage() {
       
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -424,9 +505,9 @@ export default function RealEstatePage() {
                 : "Explore our exclusive collection of premium properties and find the perfect home or investment."}
             </p>
           </motion.div>
-          
+
           {/* Search Bar Component */}
-          <SearchBar onSearch={handleSearch} />
+            <SearchBar onSearch={handleSearch} />
           
           {/* Results Section */}
           <div className="mt-8">
@@ -451,11 +532,11 @@ export default function RealEstatePage() {
             
             {!isLoading && !error && filteredProperties.length > 0 && (
               <>
-                <motion.div 
+          <motion.div
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
                 >
                   {displayedProperties.map((property, index) => (
                     <PropertyCard 
