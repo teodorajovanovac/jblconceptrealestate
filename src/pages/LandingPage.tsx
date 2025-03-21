@@ -291,9 +291,10 @@ const LandingPage: React.FC = () => {
       <div className="landing-page flex flex-col min-h-screen w-full overflow-hidden">
         <Seo title={language === 'sr' ? "JBL Concept Nekretnine" : "JBL Concept Real Estate"}/>
         
-        {/* Video Background */}
-        <div className="absolute inset-0 z-0">
-          <div className="relative w-full h-full">
+        {/* Video Background i Hero Section - 100vh */}
+        <div className="h-screen w-full relative flex flex-col">
+          {/* Video Background */}
+          <div className="absolute inset-0 z-0">
             <video
               src={videoBackground}
               autoPlay
@@ -305,18 +306,16 @@ const LandingPage: React.FC = () => {
             {/* Overlay */}
             <div className="absolute inset-0 bg-black/40 z-0"></div>
           </div>
-        </div>
 
-        {/* Header with transparent background and white text */}
-        <div className="relative z-30">
-          <Header />
-        </div>
+          {/* Header with transparent background and white text */}
+          <div className="relative z-30">
+            <Header />
+          </div>
 
-        <div className="relative z-10 flex flex-col">
-          {/* Main Content - Updated Hero Section */}
-          <main className="flex flex-col items-center justify-center px-4 pt-32 pb-20 text-center text-white">
-            <div className="max-w-6xl mx-auto">
-              <div className="w-full max-w-[600px] mx-auto mb-12 logo-animation">
+          {/* Hero content */}
+          <div className="relative z-10 flex-1 flex items-center justify-center">
+            <div className="max-w-6xl mx-auto px-4 text-center text-white">
+              <div className="w-full max-w-[470px] mx-auto mb-12 logo-animation">
                 <JBLGoldLogo className="w-full h-auto" />
               </div>
               
@@ -326,8 +325,8 @@ const LandingPage: React.FC = () => {
                 {language === 'sr' 
                   ? (
                     <>
-                      Ekskluzivne nekretnine, vrhunska usluga.<br />
-                      Vaša sigurna investicija u luksuz.
+                      Ekskluzivne nekretnine, izuzetna usluga.<br />
+                      Vaša investicija u siguran životni koncept.
                     </>
                   )
                   : (
@@ -338,10 +337,43 @@ const LandingPage: React.FC = () => {
                   )}
               </p>
             </div>
-          </main>
+          </div>
+          
+          {/* Scroll indicator at bottom of hero */}
+          <div className="relative z-10 w-full flex justify-center items-center pb-8">
+            <button 
+              onClick={() => {
+                document.getElementById('featured-properties')?.scrollIntoView({ 
+                  behavior: 'smooth' 
+                });
+              }}
+              className="flex flex-col items-center text-white hover:text-gold transition-colors duration-300 animate-pulse"
+            >
+              <span className="mb-2 text-sm font-light">
+                {language === 'sr' ? 'Skroluj za više' : 'Scroll for more'}
+              </span>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-6 w-6 animate-bounce" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
 
+        {/* Ostatak sadržaja */}
+        <div className="relative z-10 flex flex-col">
           {/* Featured Properties Section */}
-          <section className="py-16 bg-gray-50">
+          <section id="featured-properties" className="py-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-start mb-12">
                 <div className="max-w-2xl">

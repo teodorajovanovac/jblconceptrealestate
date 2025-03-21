@@ -13,23 +13,19 @@ export default function LoadingScreen({ loading }: LoadingScreenProps) {
 
   useEffect(() => {
     if (!loading) {
-      // Add a small delay before starting the exit animation
-      const timer = setTimeout(() => {
-        setShow(false)
-      }, 500)
-
-      return () => clearTimeout(timer)
+      // Odmah počinjemo exit animaciju kada se loading završi
+      setShow(false)
     }
   }, [loading])
 
-  // Animacija za logo
+  // Animacija za logo - usporena i povećana
   const logoVariants = {
-    initial: { scale: 0.9, opacity: 0.8 },
+    initial: { scale: 0.85, opacity: 0.8 },
     animate: { 
       scale: 1, 
       opacity: 1,
       transition: { 
-        duration: 1.2,
+        duration: 0.9, // Povećano sa 0.6s na 0.9s za sporiju animaciju
         ease: "easeOut"
       }
     }
@@ -42,12 +38,12 @@ export default function LoadingScreen({ loading }: LoadingScreenProps) {
           className="fixed inset-0 z-50 flex items-center justify-center"
           initial={{ y: 0 }}
           exit={{ y: "-100%" }}
-          transition={{ duration: 1, ease: "easeInOut" }}
+          transition={{ duration: 0.4, ease: "easeInOut" }} // Povećano sa 0.25s na 0.4s za sporiju animaciju
         >
           <div className="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-700" />
           <div className="relative z-10 flex flex-col items-center justify-center">
             <motion.div 
-              className="w-64 h-64 relative"
+              className="w-[32rem] h-[32rem] relative" // Dodatno povećano sa w-96 h-96 na 38rem (608px)
               variants={logoVariants}
               initial="initial"
               animate="animate"

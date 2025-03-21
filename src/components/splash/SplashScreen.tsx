@@ -10,15 +10,16 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ finishLoading }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Show splash screen for 2.2 seconds before starting fade out
+    // Pričekaćemo da animacija loga završi, pa onda zatvoriti splash screen
+    // 900ms je tačno koliko traje animacija loga u CSS-u
     const fadeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 2200);
+    }, 900); // Povećano sa 200ms na 900ms - čeka se da logo završi svoju animaciju
 
-    // Wait for fade out animation to complete before finishing loading
+    // Povećavamo i ukupno vreme za završetak učitavanja
     const loadTimer = setTimeout(() => {
       finishLoading();
-    }, 3000);
+    }, 1100); // Povećano sa 400ms na 1100ms
 
     // Clean up timers
     return () => {
@@ -37,7 +38,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ finishLoading }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.4, ease: "easeInOut" }} // Povećano sa 0.2s na 0.4s za sporiju izlaznu animaciju
         >
           <div className="logo-container">
             <img

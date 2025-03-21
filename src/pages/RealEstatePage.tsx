@@ -545,8 +545,8 @@ export default function RealEstatePage() {
                       index={index} 
                       language={language} 
                     />
-                  ))}
-                </motion.div>
+            ))}
+          </motion.div>
 
                 {/* Loader for infinite scroll */}
                 {hasMore && (

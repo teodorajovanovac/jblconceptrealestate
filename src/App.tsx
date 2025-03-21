@@ -30,10 +30,10 @@ function App() {
       // Ako nismo na početnoj strani, odmah završavamo loading
       setIsLoading(false);
     } else {
-      // Ako smo na početnoj strani, prikazujemo loading screen 3 sekunde
+      // Povećano vreme za prikaz animacije loga
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 1000); // Povećano sa 600ms na 1000ms
       
       return () => clearTimeout(timer);
     }

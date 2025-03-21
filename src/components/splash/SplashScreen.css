@@ -19,25 +19,25 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 300px;
-  animation: logoAnimation 2.2s ease-in-out forwards;
+  max-width: 650px;
+  animation: logoAnimation 0.9s ease-in-out forwards;
 }
 
 .logo-image {
   width: 100%;
   height: auto;
-  max-width: 300px;
+  max-width: 650px;
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
 }
 
 @keyframes logoAnimation {
   0% {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.85);
   }
   40% {
     opacity: 1;
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
   60% {
     transform: scale(1);
