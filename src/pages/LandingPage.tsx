@@ -20,12 +20,12 @@ import JBLGoldLogo from '../assets/jblgold.svg';  // Import the gold gradient lo
 import Spinner from '../components/ui/Spinner';
 
 // Import property images
-import property1Image from '../assets/fotke za home/1.jpg'
-import property2Image from '../assets/fotke za home/2.jpg'
-import property3Image from '../assets/fotke za home/3.jpg'
-import property4Image from '../assets/fotke za home/4.jpg'
-import property5Image from '../assets/fotke za home/5.jpg'
-import property6Image from '../assets/fotke za home/6.jpg'
+// import property1Image from '../assets/fotke za home/1.jpg'
+// import property2Image from '../assets/fotke za home/2.jpg'
+// import property3Image from '../assets/fotke za home/3.jpg'
+// import property4Image from '../assets/fotke za home/4.jpg'
+// import property5Image from '../assets/fotke za home/5.jpg'
+// import property6Image from '../assets/fotke za home/6.jpg'
 import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { motion } from 'framer-motion';
@@ -33,76 +33,6 @@ import { motion } from 'framer-motion';
 const tagManagerArgs = {
   dataLayer: {page: 'home'}, dataLayerName: 'PageDataLayer'
 }
-
-// Sample featured properties data
-const sampleFeaturedProperties = [
-  {
-    id: 1,
-    title: 'Moderna planinska vila',
-    price: '450.000 €',
-    location: 'Zlatibor, Srbija',
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 220,
-    image: property1Image,
-    features: ['Parking', 'Bazen', 'Pogled na planinu']
-  },
-  {
-    id: 2,
-    title: 'Luksuzni penthouse',
-    price: '850.000 €',
-    location: 'Novi Beograd, Srbija',
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 280,
-    image: property2Image,
-    features: ['Garaža', 'Terasa', 'Pogled na reku']
-  },
-  {
-    id: 3,
-    title: 'Elegantna vila sa bazenom',
-    price: '750.000 €',
-    location: 'Dedinje, Beograd',
-    bedrooms: 6,
-    bathrooms: 4,
-    area: 450,
-    image: property3Image,
-    features: ['Bazen', 'Vrt', 'Obezbeđenje']
-  },
-  {
-    id: 4,
-    title: 'Prostran porodični dom',
-    price: '380.000 €',
-    location: 'Voždovac, Beograd',
-    bedrooms: 5,
-    bathrooms: 3,
-    area: 220,
-    image: property4Image,
-    features: ['Garaža', 'Dvorište', 'Renovirano']
-  },
-  {
-    id: 5,
-    title: 'Premium stan u centru',
-    price: '320.000 €',
-    location: 'Stari Grad, Beograd',
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 120,
-    image: property5Image,
-    features: ['Lift', 'Parking', 'Renovirano']
-  },
-  {
-    id: 6,
-    title: 'Moderna kuća sa vrtom',
-    price: '420.000 €',
-    location: 'Zemun, Beograd',
-    bedrooms: 4,
-    bathrooms: 3,
-    area: 200,
-    image: property6Image,
-    features: ['Bazen', 'Garaža', 'Smart home']
-  }
-];
 
 // Add PropertyCard component definition before the main LandingPage component
 const PropertyCard = ({ property, index, language }: { property: RealEstateDto; index: number; language: string; }) => {
@@ -273,19 +203,18 @@ const LandingPage: React.FC = () => {
         setIsLoading(true);
         const result = await realEstate.getRealEstateFeatured();
         if (result.isSuccess && result.data) {
-          // Sort properties by price in descending order and take only the top 6
           const sortedProperties = [...result.data]
             .sort((a, b) => (b.price || 0) - (a.price || 0))
             .slice(0, 6);
           setFeaturedProperties(sortedProperties);
         } else {
           setError("Failed to fetch property data");
-          setFeaturedProperties(sampleFeaturedProperties); // Use sample data as fallback
+          setFeaturedProperties([]);
         }
       } catch (err) {
         console.error("Error fetching featured properties:", err);
         setError("An error occurred while fetching property data");
-        setFeaturedProperties(sampleFeaturedProperties); // Use sample data as fallback
+        setFeaturedProperties([]);
       } finally {
         setIsLoading(false);
       }
@@ -532,21 +461,8 @@ const LandingPage: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="md:w-1/2 grid grid-cols-2 gap-4">
-                  <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
-                    <img 
-                      src={property1Image} 
-                      alt="Office" 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden mt-8">
-                    <img 
-                      src={property2Image} 
-                      alt="Team" 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+                <div className="md:w-1/2">
+                  {/* Ovde možete dodati neki drugi sadržaj ili ostaviti prazno */}
                 </div>
               </div>
             </div>
