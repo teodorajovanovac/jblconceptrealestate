@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react"
 import { BsEnvelopeFill, BsFillGeoAltFill, BsFillTelephoneFill } from "react-icons/bs"
-import { FaFacebookSquare, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa"
+import { FaFacebookSquare, FaInstagram, FaTwitter, FaLinkedin, FaTiktok } from "react-icons/fa"
 import { IoDocumentTextOutline } from "react-icons/io5"
 import { FaRegQuestionCircle } from "react-icons/fa"
 import { MdOutlineInfo } from "react-icons/md"
 import ReactLogo from "../../assets/jblgold.svg"
 import menuData from "../../assets/data/menu.json"
 import { Link } from "react-router-dom"
-import { Instagram, Facebook, Twitter, Linkedin } from "lucide-react"
+import { Instagram, Facebook, Twitter, Linkedin, Phone } from "lucide-react"
 import { 
   FileText, 
   Briefcase, 
@@ -16,8 +16,7 @@ import {
   Shield, 
   HelpCircle, 
   MapPin, 
-  Mail, 
-  Phone 
+  Mail 
 } from "lucide-react"
 
 const Footer = () => {
@@ -142,23 +141,35 @@ const Footer = () => {
                     +381 61 2299988
                   </a>
                 </li>
+                <li>
+                  <a href="tel:+381612299988" className="hover:text-primary-gold flex items-center gap-2 text-xs">
+                    <Phone size={16} />
+                    +381 61 2299988
+                  </a>
+                </li>
               </ul>
 
               {/* Social Media Links */}
               <div className="mt-3">
                 <h4 className="text-sm font-semibold mb-2">Pratite nas</h4>
-                <div className="flex space-x-3">
-                  <a href="#" className="hover:text-primary-gold">
-                    <Instagram size={20} />
+                <div className="flex space-x-4">
+                  <a href="https://www.instagram.com/realestateconcept.jbl/" 
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="hover:text-primary-gold hover:scale-110 transition-all">
+                    <Instagram size={22} />
                   </a>
-                  <a href="#" className="hover:text-primary-gold">
-                    <Facebook size={20} />
+                  <a href="#" className="hover:text-primary-gold hover:scale-110 transition-all">
+                    <Facebook size={22} />
                   </a>
-                  <a href="#" className="hover:text-primary-gold">
-                    <Twitter size={20} />
+                  <a href="#" className="hover:text-primary-gold hover:scale-110 transition-all">
+                    <FaTiktok size={20} />
                   </a>
-                  <a href="#" className="hover:text-primary-gold">
-                    <Linkedin size={20} />
+                  <a href="#" className="hover:text-primary-gold hover:scale-110 transition-all">
+                    <Twitter size={22} />
+                  </a>
+                  <a href="#" className="hover:text-primary-gold hover:scale-110 transition-all">
+                    <Linkedin size={22} />
                   </a>
                 </div>
               </div>

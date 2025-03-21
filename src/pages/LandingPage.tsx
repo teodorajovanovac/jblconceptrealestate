@@ -239,7 +239,7 @@ const LandingPage: React.FC = () => {
         experience: 'Godina iskustva',
         team: 'Zaposlenih',
         locations: 'Lokacija',
-        aboutTitle: 'Ekskluzivnost, Elegancija, Pouzdanost',
+        aboutTitle: 'Sigurnost, Elegancija, Ekskluzivnost',
         aboutDescription: 'JBL Concept Real Estate predstavlja jedinstveni spoj inovativnosti, visokog profesionalizma i savremenog dizajna u sektoru nekretnina. Kao renomirana agencija sa sedištem u Beogradu, pružamo premium usluge u kupovini, prodaji i investiranju u nekretnine. Naš tim stručnjaka se posvećuje pronalaženju savršenih nekretnina za naše klijente, bilo da kupuju ili prodaju.',
         aboutFeature1: 'Personalizovana usluga',
         aboutFeature2: 'Stručni saveti',
@@ -402,7 +402,7 @@ const LandingPage: React.FC = () => {
                   <div className="mb-4 text-primary-blue">
                     <Globe className="h-12 w-12" />
                   </div>
-                  <h3 className="text-5xl font-bold text-primary-blue mb-2">3</h3>
+                  <h3 className="text-5xl font-bold text-primary-blue mb-2">1</h3>
                   <p className="text-gray-600 font-medium">{t.locations}</p>
                 </div>
                 
@@ -410,7 +410,7 @@ const LandingPage: React.FC = () => {
                   <div className="mb-4 text-primary-blue">
                     <Clock className="h-12 w-12" />
                   </div>
-                  <h3 className="text-5xl font-bold text-primary-blue mb-2">5+</h3>
+                  <h3 className="text-5xl font-bold text-primary-blue mb-2">15+</h3>
                   <p className="text-gray-600 font-medium">{t.experience}</p>
                 </div>
                 
@@ -461,8 +461,24 @@ const LandingPage: React.FC = () => {
                   </div>
                 </div>
                 
+                {/* Grid sa slikama */}
                 <div className="md:w-1/2">
-                  {/* Ovde možete dodati neki drugi sadržaj ili ostaviti prazno */}
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <div className="md:col-span-7 aspect-[4/3] overflow-hidden rounded-xl shadow-xl">
+                      <img 
+                        src="/slike od jasne/knez miletina biblioteka.jpg" 
+                        alt="Knez Miletina biblioteka" 
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="md:col-span-5 aspect-[3/4] overflow-hidden rounded-xl shadow-xl md:mt-12">
+                      <img 
+                        src="/slike od jasne/dedinje 2 uvecana.jpg" 
+                        alt="Dedinje" 
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
