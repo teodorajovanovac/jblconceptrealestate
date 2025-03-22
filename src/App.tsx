@@ -44,7 +44,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-          <CmsDataProvider defaultLang = "rs">
+          <CmsDataProvider defaultLang = "sr">
             <HelmetProvider context={helmetContext}>
               <Router>
                 <div className="App">
