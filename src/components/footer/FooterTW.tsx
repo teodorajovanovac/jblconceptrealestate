@@ -57,19 +57,19 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">{t("footer-quick-links")}</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/pricing" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/pricing#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <FileText size={18} />
                     {t("footer-pricing")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/service" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/service#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Briefcase size={18} />
                     {t("footer-services")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/terms#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
                     {t("footer-terms")}
                   </Link>
@@ -82,28 +82,34 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">{t("footer-documents")}</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/privacy-policy" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/privacy-policy#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Shield size={18} />
                     {t("footer-privacy-policy")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms-of-use" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/terms-of-use#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
                     {t("footer-terms-of-use")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/info" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/info#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Info size={18} />
                     {t("footer-info")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/#faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <HelpCircle size={18} />
                     {t("footer-faq")}
                   </Link>
+                </li>
+                <li>
+                  <a href="/Ugovor o posredovanju_dvojezični_CONCEPT (1).pdf" target="_blank" rel="noopener noreferrer" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                    <FileText size={18} />
+                    Ugovor o posredovanju
+                  </a>
                 </li>
               </ul>
             </div>
@@ -160,14 +166,14 @@ const Footer = () => {
                   </a>
                   {/*<a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Facebook size={22} />
-                  </a>*/}
-                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
+                  </a>
+                  <a href="https://www.tiktok.com/@realestate_concept" className="hover:text-gold hover:scale-110 transition-all">
                     <FaTiktok size={20} />
                   </a>
                   {/*<a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Twitter size={22} />
-                  </a>*/}
-                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
+                  </a>
+                  <a href="https://www.linkedin.com/in/jasna-baji%C4%87-ljubi%C4%8Di%C4%87-5176b534/" className="hover:text-gold hover:scale-110 transition-all">
                     <Linkedin size={22} />
                   </a>
                 </div>

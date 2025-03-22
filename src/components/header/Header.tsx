@@ -108,6 +108,7 @@ const Header: React.FC = () => {
                 </span>
               </a>
             ))}
+            
             <button 
               onClick={toggleLanguage} 
               className={`relative transition-colors mx-3 group text-[1.1em] ${getHoverColorClass()}`}

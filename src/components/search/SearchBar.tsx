@@ -6,7 +6,7 @@ import { PRICE_RANGES, AREA_RANGE, TransactionType } from '../../utils/constants
 
 // Custom styled slider
 const CustomSlider = styled(Slider)(({ theme }) => ({
-  color: '#2563eb',
+  color: '#0A142F',
   height: 3,
   '& .MuiSlider-thumb': {
     height: 20,
@@ -14,12 +14,12 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
     backgroundColor: '#fff',
     border: '2px solid currentColor',
     '&:hover, &.Mui-focusVisible': {
-      boxShadow: '0 0 0 8px rgba(37, 99, 235, 0.16)',
+      boxShadow: '0 0 0 8px rgba(10, 20, 47, 0.16)',
     },
   },
   '& .MuiSlider-track': {
     height: 3,
-    backgroundColor: '#2563eb',
+    backgroundColor: '#0A142F',
   },
   '& .MuiSlider-rail': {
     height: 3,
@@ -40,7 +40,7 @@ interface SearchFilters {
   priceRange: number[];
   areaRange: number[];
   features: string[];
-  state: string[];
+  bathrooms: string[];
   floor: string[];
   heating: string[];
   parking: string[];
@@ -73,6 +73,7 @@ const Dropdown = ({ title, options, selected, onChange, isOpen, onToggle }: Drop
 
   const handleChange = (option: string) => {
     console.log(`Dropdown selected: ${option} in ${title}`);
+    console.log(`Current selected items in ${title}:`, selected);
     onChange(option);
   };
 
@@ -95,16 +96,36 @@ const Dropdown = ({ title, options, selected, onChange, isOpen, onToggle }: Drop
           <div className="p-2 space-y-1">
             {options.map((option, index) => (
               <div 
-                key={`${option}-${index}`}
+                key={`${title}-${option}-${index}`}
                 className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer"
+                onClick={() => handleChange(option)}
+                role="checkbox"
+                aria-checked={selected.includes(option)}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleChange(option);
+                  }
+                }}
               >
                 <input
                   type="checkbox"
+                  id={`${title}-${option}-${index}`}
                   checked={selected.includes(option)}
-                  onChange={() => handleChange(option)}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    handleChange(option);
+                  }}
                   className="rounded border-gray-300 text-primary-blue focus:ring-primary-blue mr-2"
+                  aria-label={option}
                 />
-                <label className="text-sm text-gray-700">{option}</label>
+                <label 
+                  htmlFor={`${title}-${option}-${index}`}
+                  className="text-sm text-gray-700 cursor-pointer flex-grow"
+                >
+                  {option}
+                </label>
               </div>
             ))}
           </div>
@@ -126,7 +147,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   const [selectedRooms, setSelectedRooms] = useState<string[]>([])
   const [selectedLocations, setSelectedLocations] = useState<string[]>([])
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
-  const [selectedState, setSelectedState] = useState<string[]>([])
+  const [selectedBathrooms, setSelectedBathrooms] = useState<string[]>([])
   const [selectedFloor, setSelectedFloor] = useState<string[]>([])
   const [selectedHeating, setSelectedHeating] = useState<string[]>([])
   const [selectedParking, setSelectedParking] = useState<string[]>([])
@@ -180,7 +201,12 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   
   const featureOptions = [
     'Terasa', 'Lift', 'Ostava', 'Namešten', 'Obezbeđenje', 
-    'Parking', 'Garaža', 'Klima', 'Internet', 'Interfon'
+    'Parking', 'Garaža', 'Klima', 'Internet', 'Interfon', 'Uknjiženo'
+  ];
+
+  // Add bathroom options
+  const bathroomOptions = [
+    '1 kupatilo', '2 kupatila', '3 kupatila', '4+ kupatila'
   ];
 
   // Update handleCheckboxChange function
@@ -198,44 +224,46 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       newSelected = [...selected, value];
     }
     
-    // Update state
+    console.log(`Toggling value: ${value} in category ${selected === selectedRooms ? 'rooms' : 
+                                                        selected === selectedLocations ? 'locations' : 
+                                                        selected === selectedPropertyTypes ? 'propertyTypes' : 'other'}`);
+    console.log('Previous selection:', selected);
+    console.log('New selection:', newSelected);
+    
+    // Update state with new selection
     setSelected(newSelected);
     
     // Immediately trigger a search with the updated filters
-    // This is the key change - we need to trigger a search right after changing the selection
     setTimeout(() => {
+      // First, create a copy of what the state will be
+      const updatedPropertyTypes = selected === selectedPropertyTypes ? newSelected : selectedPropertyTypes;
+      const updatedRooms = selected === selectedRooms ? newSelected : selectedRooms;
+      const updatedLocations = selected === selectedLocations ? newSelected : selectedLocations;
+      const updatedFeatures = selected === selectedFeatures ? newSelected : selectedFeatures;
+      
+      console.log('Creating filters with updated values:', {
+        propertyTypes: updatedPropertyTypes,
+        rooms: updatedRooms,
+        locations: updatedLocations,
+        features: updatedFeatures
+      });
+      
       const filters: SearchFilters = {
         transactionType,
         searchTerm,
-        propertyTypes: value.startsWith('Kuća') || value.startsWith('Stan') || 
-                       value.startsWith('Zemljište') || value.startsWith('Poslovni') || 
-                       value.startsWith('Garaža') 
-                       ? (selected === selectedPropertyTypes ? newSelected : selectedPropertyTypes)
-                       : selectedPropertyTypes,
-        rooms: value.includes('soba') || value === 'Garsonjera'
-               ? (selected === selectedRooms ? newSelected : selectedRooms)
-               : selectedRooms,
-        locations: ['Stari Grad', 'Vračar', 'Savski Venac', 'Novi Beograd', 'Zemun', 'Dedinje',
-                     'Voždovac', 'Zvezdara', 'Čukarica', 'Rakovica', 'Palilula', 'Banovo brdo'].includes(value)
-                    ? (selected === selectedLocations ? newSelected : selectedLocations)
-                    : selectedLocations,
+        propertyTypes: updatedPropertyTypes,
+        rooms: updatedRooms,
+        locations: updatedLocations,
         priceRange,
         areaRange,
-        features: ['Terasa', 'Lift', 'Ostava', 'Namešten', 'Obezbeđenje', 'Parking', 
-                  'Garaža', 'Klima', 'Internet', 'Interfon'].includes(value)
-                  ? (selected === selectedFeatures ? newSelected : selectedFeatures)
-                  : selectedFeatures,
-        state: ['Novo', 'Dobro', 'Za renoviranje'].includes(value)
-               ? (selected === selectedState ? newSelected : selectedState)
-               : selectedState,
-        floor: ['Suteren', 'Prizemlje', '1. sprat', '2. sprat', '3. sprat', '4. sprat', '5+ sprat', 'Penthaus'].includes(value)
-               ? (selected === selectedFloor ? newSelected : selectedFloor)
-               : selectedFloor,
-        heating: ['Centralno', 'Električno', 'Gas', 'Podno', 'TA peć'].includes(value)
-                   ? (selected === selectedHeating ? newSelected : selectedHeating) 
-                   : selectedHeating,
-        parking: []
+        features: updatedFeatures,
+        bathrooms: selectedBathrooms,
+        floor: selectedFloor,
+        heating: selectedHeating,
+        parking: selectedParking
       };
+      
+      console.log('Sending search filters:', filters);
       
       // Call onSearch with the updated filters
       onSearch(filters);
@@ -263,7 +291,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       priceRange: newPriceRange,
       areaRange: areaRange,
       features: selectedFeatures,
-      state: selectedState,
+      bathrooms: selectedBathrooms,
       floor: selectedFloor,
       heating: selectedHeating,
       parking: selectedParking
@@ -283,7 +311,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     setSelectedRooms([]);
     setSelectedLocations([]);
     setSelectedFeatures([]);
-    setSelectedState([]);
+    setSelectedBathrooms([]);
     setSelectedFloor([]);
     setSelectedHeating([]);
     setSelectedParking([]);
@@ -298,7 +326,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       priceRange: [PRICE_RANGES[transactionType].min, PRICE_RANGES[transactionType].max],
       areaRange: [AREA_RANGE.min, AREA_RANGE.max],
       features: [],
-      state: [],
+      bathrooms: [],
       floor: [],
       heating: [],
       parking: []
@@ -368,8 +396,21 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         <Dropdown
           title="Broj soba"
           options={roomOptions.map(option => option.label)}
-          selected={selectedRooms}
-          onChange={(value) => handleCheckboxChange(value, selectedRooms, setSelectedRooms)}
+          selected={selectedRooms.map(value => {
+            const roomOption = roomOptions.find(opt => opt.value === value);
+            return roomOption ? roomOption.label : value;
+          })}
+          onChange={(label) => {
+            console.log('Room dropdown selection:', label);
+            const option = roomOptions.find(opt => opt.label === label);
+            if (option) {
+              console.log('Found option for room:', option);
+              handleCheckboxChange(option.value, selectedRooms, setSelectedRooms);
+            } else {
+              console.log('No matching room option found for label:', label);
+              handleCheckboxChange(label, selectedRooms, setSelectedRooms);
+            }
+          }}
           isOpen={openDropdown === 'rooms'}
           onToggle={() => toggleDropdown('rooms')}
         />
@@ -429,12 +470,12 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       {showMoreFilters && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Dropdown
-            title="Stanje"
-            options={['Novo', 'Dobro', 'Za renoviranje']}
-            selected={selectedState}
-            onChange={(value) => handleCheckboxChange(value, selectedState, setSelectedState)}
-            isOpen={openDropdown === 'state'}
-            onToggle={() => toggleDropdown('state')}
+            title="Broj kupatila"
+            options={bathroomOptions}
+            selected={selectedBathrooms}
+            onChange={(value) => handleCheckboxChange(value, selectedBathrooms, setSelectedBathrooms)}
+            isOpen={openDropdown === 'bathrooms'}
+            onToggle={() => toggleDropdown('bathrooms')}
           />
 
           <Dropdown
@@ -485,17 +526,20 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             );
           })}
           
-          {selectedRooms.map(room => (
-            <div key={`room-${room}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
-              {room}
-              <button 
-                onClick={() => handleCheckboxChange(room, selectedRooms, setSelectedRooms)}
-                className="ml-1 text-blue-500 hover:text-blue-700"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          ))}
+          {selectedRooms.map(value => {
+            const option = roomOptions.find(opt => opt.value === value);
+            return (
+              <div key={`room-${value}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
+                {option?.label || value}
+                <button 
+                  onClick={() => handleCheckboxChange(value, selectedRooms, setSelectedRooms)}
+                  className="ml-1 text-blue-500 hover:text-blue-700"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            );
+          })}
           
           {selectedLocations.map(location => (
             <div key={`location-${location}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
@@ -534,7 +578,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             <ChevronDown className={`ml-1 w-5 h-5 transform transition-transform ${showMoreFilters ? 'rotate-180' : ''}`} />
           </button>
           {(selectedPropertyTypes.length > 0 || selectedRooms.length > 0 || selectedLocations.length > 0 || 
-            selectedFeatures.length > 0 || selectedState.length > 0 || selectedFloor.length > 0 || 
+            selectedFeatures.length > 0 || selectedBathrooms.length > 0 || selectedFloor.length > 0 || 
             selectedHeating.length > 0 || searchTerm !== '') && (
             <button 
               onClick={clearFilters}
@@ -561,11 +605,13 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
               priceRange: [priceRange[0], priceRange[1]],
               areaRange: [areaRange[0], areaRange[1]],
               features: selectedFeatures,
-              state: selectedState,
+              bathrooms: selectedBathrooms,
               floor: selectedFloor,
               heating: selectedHeating,
               parking: selectedParking
             };
+            
+            console.log("Applying search filters:", filters);
             
             // Call onSearch with all filters
             onSearch(filters);

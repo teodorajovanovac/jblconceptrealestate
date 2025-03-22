@@ -261,45 +261,63 @@ h3.gradient-text {
 
 /* Animated Send Button */
 .send-button {
-  background-color: var(--primary-dark-blue);
+  font-family: 'Century Gothic', sans-serif;
+  font-size: 18px;
+  background: var(--primary-dark-blue);
   color: white;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 2px;
-  display: inline-flex;
+  padding: 0.7em 1em;
+  padding-left: 0.9em;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-  font-family: 'Century Gothic', sans-serif;
-  position: relative;
+  border: none;
+  border-radius: 16px;
   overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
   width: 100%;
-}
-
-.send-button:hover {
-  background-color: white;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: 44px;
+  position: relative;
+  outline: none;
+  box-shadow: none;
 }
 
 .send-button span {
-  position: relative;
-  z-index: 2;
-  transition: color 0.3s ease;
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
 }
 
 .send-button svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  transition: transform 0.3s ease;
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
   position: relative;
   z-index: 2;
+  color: white;
+}
+
+.send-button:hover .svg-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
 }
 
 .send-button:hover svg {
-  transform: translateX(3px);
+  transform: translateX(1.2em) rotate(45deg) scale(1.1);
   color: var(--primary-dark-blue);
+}
+
+.send-button:hover span {
+  transform: translateX(5em);
+  color: var(--primary-dark-blue);
+}
+
+.send-button:active {
+  transform: none;
+}
+
+.send-button:hover {
+  transform: none;
+  background-color: white;
 }
 
 .send-button::before {
@@ -322,14 +340,28 @@ h3.gradient-text {
   color: var(--primary-dark-blue);
 }
 
-/* Specific styles for rounded send buttons */
-.send-button.rounded-full {
-  border-radius: 9999px;
-  overflow: hidden;
+.send-button:hover .svg-wrapper-1 {
+  color: var(--primary-dark-blue);
 }
 
-.send-button.rounded-full::before {
-  border-radius: 9999px;
+.svg-wrapper-1 {
+  position: relative;
+  z-index: 2;
+}
+
+.svg-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateY(0.1em);
+  }
+
+  to {
+    transform: translateY(-0.1em);
+  }
 }
 
 /* End Animated Send Button */
@@ -354,6 +386,7 @@ h3.gradient-text {
 
 .send-button:hover {
   transform: none;
+  background-color: white;
 }
 
 .send-button:active {

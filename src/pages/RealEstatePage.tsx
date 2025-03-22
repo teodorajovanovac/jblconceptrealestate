@@ -23,7 +23,7 @@ interface SearchFilters {
   priceRange: number[];
   areaRange: number[];
   features: string[];
-  state: string[];
+  bathrooms: string[];
   floor: string[];
   heating: string[];
   parking: string[];
@@ -258,9 +258,9 @@ const buildSearchQuery = (filters: SearchFilters) => {
   }
   
   // Dodajemo stanje nekretnine (state)
-  if (filters.state.length > 0) {
-    filters.state.forEach(state => {
-      params.append('state', state);
+  if (filters.bathrooms.length > 0) {
+    filters.bathrooms.forEach(bathroom => {
+      params.append('bathrooms', bathroom);
     });
   }
   
@@ -313,7 +313,7 @@ const RealEstatePage: React.FC = () => {
     priceRange: [0, 1000000],
     areaRange: [0, 500],
     features: [],
-    state: [],
+    bathrooms: [],
     floor: [],
     heating: [],
     parking: []
@@ -329,7 +329,7 @@ const RealEstatePage: React.FC = () => {
     priceRange: [0, 1000000],
     areaRange: [0, 500],
     features: [],
-    state: [],
+    bathrooms: [],
     floor: [],
     heating: [],
     parking: []
@@ -398,7 +398,7 @@ const RealEstatePage: React.FC = () => {
             priceRange: [0, 1000000], 
             areaRange: [0, 500],
             features: [],
-            state: [],
+            bathrooms: [],
             floor: [],
             heating: [],
             parking: []
@@ -466,10 +466,24 @@ const RealEstatePage: React.FC = () => {
       console.log('Starting search with filters:', filters);
       console.log('Total properties before filtering:', properties.length);
       
+      // Counter variables for diagnostics
+      let transactionMatchCount = 0;
+      let typeMatchCount = 0;
+      let roomMatchCount = 0;
+      let locationMatchCount = 0;
+      let featureMatchCount = 0;
+      let bathroomMatchCount = 0;
+      let floorMatchCount = 0;
+      let heatingMatchCount = 0;
+      let priceMatchCount = 0;
+      let areaMatchCount = 0;
+      let totalMatchCount = 0;
+      
       // Filter properties based on all criteria
       const filteredProperties = properties.filter(property => {
         // Check transaction type match
         const transactionMatches = property.actionShortName === (filters.transactionType === 'buy' ? 'P' : 'I');
+        if (transactionMatches) transactionMatchCount++;
         
         // Check property type match
         let typeMatches = true;
@@ -479,65 +493,232 @@ const RealEstatePage: React.FC = () => {
             const propertyType = (property.typeName || '').toLowerCase();
             const subType = (property.subTypeName || '').toLowerCase();
             
-            console.log('Checking property:', {
-              id: property.id,
-              typeName: property.typeName,
-              subTypeName: property.subTypeName,
-              selectedType,
+            let typeMatches = false;
+            
+            if (selectedType === 'stan') {
+              typeMatches = propertyType.includes('stan') || 
+                         propertyType.includes('s.') ||
+                         subType.includes('stan') ||
+                         subType.includes('s.');
+            } 
+            else if (selectedType === 'kuca') {
+              typeMatches = propertyType.includes('kuća') || 
+                         propertyType.includes('kuca') ||
+                         subType.includes('kuća') ||
+                         subType.includes('kuca');
+            }
+            else if (selectedType === 'zemljiste') {
+              typeMatches = propertyType.includes('zemljište') || 
+                         propertyType.includes('zemljiste') ||
+                         propertyType.includes('plac') ||
+                         subType.includes('zemljište') ||
+                         subType.includes('zemljiste') ||
+                         subType.includes('plac');
+            }
+            else if (selectedType === 'poslovni') {
+              typeMatches = propertyType.includes('poslovni') || 
+                         propertyType.includes('lokal') ||
+                         propertyType.includes('kanc') ||
+                         subType.includes('poslovni') ||
+                         subType.includes('lokal') ||
+                         subType.includes('kanc');
+            }
+            else if (selectedType === 'garaza') {
+              typeMatches = propertyType.includes('garaža') || 
+                         propertyType.includes('garaza') ||
+                         subType.includes('garaža') ||
+                         subType.includes('garaza');
+            }
+            
+            console.log(`Property ${property.id} type match for ${selectedType}: ${typeMatches}`, {
               propertyType,
               subType
             });
             
-            let matches = false;
-            switch(selectedType) {
-              case 'stan':
-                return propertyType.includes('stan') || 
-                       propertyType.includes('s.') ||
-                       subType.includes('stan') ||
-                       subType.includes('s.');
-              case 'kuca':
-                return propertyType.includes('kuća') || 
-                       propertyType.includes('kuca') ||
-                       subType.includes('kuća') ||
-                       subType.includes('kuca');
-              case 'zemljiste':
-                return propertyType.includes('zemljište') || 
-                       propertyType.includes('zemljiste') ||
-                       propertyType.includes('plac') ||
-                       subType.includes('zemljište') ||
-                       subType.includes('zemljiste') ||
-                       subType.includes('plac');
-              case 'poslovni':
-                return propertyType.includes('poslovni') || 
-                       propertyType.includes('lokal') ||
-                       propertyType.includes('kanc') ||
-                       subType.includes('poslovni') ||
-                       subType.includes('lokal') ||
-                       subType.includes('kanc');
-              case 'garaza':
-                return propertyType.includes('garaža') || 
-                       propertyType.includes('garaza') ||
-                       subType.includes('garaža') ||
-                       subType.includes('garaza');
-              default:
-                return false;
-            }
+            return typeMatches;
           });
         }
-
-        // Log the matching results for debugging
-        console.log(`Property ${property.id} matching:`, {
-          type: property.typeName,
-          subType: property.subTypeName,
-          transactionMatches,
-          typeMatches,
-          selectedTypes: filters.propertyTypes
-        });
+        if (typeMatches) typeMatchCount++;
+        
+        // Check room count match
+        let roomsMatch = true;
+        if (filters.rooms.length > 0) {
+          const propertyRoomsNo = String(property.roomsNo || '');
           
-          // Return true only if all conditions match
-        return transactionMatches && typeMatches;
+          // Debug property rooms value
+          console.log(`Property ${property.id} room value: ${propertyRoomsNo}`);
+          
+          // If any of the selected room options match, the property passes this filter
+          roomsMatch = filters.rooms.some(roomValue => {
+            let matches = false;
+            
+            // Special case for Garsonjera (0 rooms)
+            if (roomValue === '0') {
+              matches = propertyRoomsNo === '0' || 
+                        propertyRoomsNo === 'Garsonjera' || 
+                        propertyRoomsNo === '0.5';
+            }
+            // Special case for 4+ sobe
+            else if (roomValue === '5') {
+              matches = parseFloat(propertyRoomsNo) >= 4 || 
+                        propertyRoomsNo.includes('4+');
+            }
+            // Normal case
+            else {
+              matches = propertyRoomsNo === roomValue || 
+                        propertyRoomsNo.startsWith(roomValue + ' ') || 
+                        propertyRoomsNo.includes(roomValue);
+            }
+            
+            console.log(`Room match check for property ${property.id}, room value ${roomValue}: ${matches}`);
+            return matches;
+          });
+        }
+        if (roomsMatch) roomMatchCount++;
+        
+        // Check location match
+        let locationMatches = true;
+        if (filters.locations.length > 0) {
+          // Capture all location-related data for comparison
+          const propertyLocationArea = (property.locationArea || '').toLowerCase();
+          const propertyLocationCity = (property.locationCityName || '').toLowerCase();
+          const propertyLocationCounty = (property.locationCountyName || '').toLowerCase();
+          
+          // If any of the selected locations match, the property passes this filter
+          locationMatches = filters.locations.some(selectedLocation => {
+            const location = selectedLocation.toLowerCase();
+            
+            // Check if any property location fields contain the selected location
+            const matches = 
+              propertyLocationArea.includes(location) || 
+              propertyLocationCity.includes(location) ||
+              propertyLocationCounty.includes(location);
+            
+            console.log(`Location match check for property ${property.id}, location '${selectedLocation}': ${matches}`);
+            
+            return matches;
+          });
+        }
+        if (locationMatches) locationMatchCount++;
+        
+        // Check feature match
+        let featuresMatch = true;
+        if (filters.features.length > 0 && property.spaces) {
+          const propertyFeatures = property.spaces.toLowerCase().split(',').map(f => f.trim());
+          
+          // If the property has any of the selected features, it passes this filter
+          featuresMatch = filters.features.some(selectedFeature => {
+            const feature = selectedFeature.toLowerCase();
+            const matches = propertyFeatures.some(propFeature => propFeature.includes(feature));
+            
+            console.log(`Feature match check for property ${property.id}, feature '${selectedFeature}': ${matches}`);
+            return matches;
+          });
+        }
+        if (featuresMatch) featureMatchCount++;
+        
+        // Check bathroom match
+        let bathroomsMatch = true;
+        if (filters.bathrooms.length > 0) {
+          const propertyBathrooms = property.bathroomNO || 0;
+          
+          // If the property has any of the selected bathroom counts, it passes this filter
+          bathroomsMatch = filters.bathrooms.some(selectedBathroom => {
+            let matches = false;
+            
+            // Extract the number from bathroom option (e.g., "2 kupatila" -> 2)
+            const bathroomCount = parseInt(selectedBathroom.split(' ')[0]);
+            
+            if (selectedBathroom.includes('4+')) {
+              matches = propertyBathrooms >= 4;
+            } else {
+              matches = propertyBathrooms === bathroomCount;
+            }
+            
+            console.log(`Bathroom match check for property ${property.id}, bathroom count '${selectedBathroom}': ${matches}`);
+            return matches;
+          });
+        }
+        if (bathroomsMatch) bathroomMatchCount++;
+        
+        // Check floor match
+        let floorMatches = true;
+        if (filters.floor.length > 0 && property.floorNoString) {
+          const propertyFloor = property.floorNoString.toLowerCase();
+          
+          // If the property floor matches any of the selected floors, it passes this filter
+          floorMatches = filters.floor.some(selectedFloor => {
+            const floor = selectedFloor.toLowerCase();
+            const matches = propertyFloor.includes(floor);
+            
+            console.log(`Floor match check for property ${property.id}, floor '${selectedFloor}': ${matches}`);
+            return matches;
+          });
+        }
+        if (floorMatches) floorMatchCount++;
+        
+        // Check heating match
+        let heatingMatches = true;
+        if (filters.heating.length > 0 && property.spaces) {
+          const propertySpaces = property.spaces.toLowerCase();
+          
+          // If the property has any of the selected heating types, it passes this filter
+          heatingMatches = filters.heating.some(selectedHeating => {
+            const heating = selectedHeating.toLowerCase();
+            const matches = propertySpaces.includes(heating);
+            
+            console.log(`Heating match check for property ${property.id}, heating '${selectedHeating}': ${matches}`);
+            return matches;
+          });
+        }
+        if (heatingMatches) heatingMatchCount++;
+        
+        // Check price range match
+        const priceMatches = 
+          property.price >= filters.priceRange[0] && 
+          property.price <= filters.priceRange[1];
+        if (priceMatches) priceMatchCount++;
+        
+        // Check area range match
+        const areaMatches = 
+          !property.area || 
+          (property.area >= filters.areaRange[0] && 
+           property.area <= filters.areaRange[1]);
+        if (areaMatches) areaMatchCount++;
+        
+        // Return true only if all conditions match
+        const allMatches = transactionMatches && 
+                typeMatches && 
+                roomsMatch && 
+                locationMatches && 
+                featuresMatch &&
+                bathroomsMatch &&
+                floorMatches &&
+                heatingMatches &&
+                priceMatches && 
+                areaMatches;
+                
+        if (allMatches) totalMatchCount++;
+        
+        return allMatches;
       });
 
+      // Update log filter success rates
+      console.log('Filter results summary:', {
+        total: properties.length,
+        transactionMatches: transactionMatchCount,
+        typeMatches: typeMatchCount,
+        roomMatches: roomMatchCount,
+        locationMatches: locationMatchCount,
+        featureMatches: featureMatchCount,
+        bathroomMatches: bathroomMatchCount,
+        floorMatches: floorMatchCount,
+        heatingMatches: heatingMatchCount,
+        priceMatches: priceMatchCount,
+        areaMatches: areaMatchCount,
+        finalMatches: totalMatchCount
+      });
+      
       console.log('Filtered properties count:', filteredProperties.length);
 
       // Update state with filtered results

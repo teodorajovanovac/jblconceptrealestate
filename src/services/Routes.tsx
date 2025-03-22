@@ -11,6 +11,8 @@ import PropertyPage from '../pages/PropertyPage'
 import AboutUsPage from "../pages/AboutUsPage";
 import AgentPage from "../pages/AgentPage";
 import ContactPage from '../pages/ContactPage'
+import LoginPage from '../pages/LoginPage'
+import AdminDashboardPage from '../pages/AdminDashboardPage'
 
 
 const AppRoutes = () => {
@@ -36,6 +38,10 @@ const AppRoutes = () => {
       <Route path="/property/:id" element={<PropertyPage />} />
       <Route path="/about-us/:id" element={<AgentPage />} />
       <Route path="/contact" element={<ContactPage />} />
+      
+      {/* Admin routes */}
+      <Route path="/promeni" element={<LoginPage />} />
+      <Route path="/promeni/dashboard" element={<AdminDashboardPage />} />
       
       {/* Routes for non-authenticated users */}
       {!token && (
