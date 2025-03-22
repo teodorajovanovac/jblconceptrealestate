@@ -18,14 +18,6 @@ import Testimonials from '../components/testimonials/Testimonials'
 import FAQ from '../components/faq/FAQ'
 import JBLGoldLogo from '../assets/jblgold.svg';  // Import the gold gradient logo
 import Spinner from '../components/ui/Spinner';
-
-// Import property images
-// import property1Image from '../assets/fotke za home/1.jpg'
-// import property2Image from '../assets/fotke za home/2.jpg'
-// import property3Image from '../assets/fotke za home/3.jpg'
-// import property4Image from '../assets/fotke za home/4.jpg'
-// import property5Image from '../assets/fotke za home/5.jpg'
-// import property6Image from '../assets/fotke za home/6.jpg'
 import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { motion } from 'framer-motion';
@@ -419,7 +411,7 @@ const LandingPage: React.FC = () => {
           </section>
 
           {/* About Team Section */}
-          <div className="w-full bg-gray-50 py-20">
+          <div className="w-full bg-gray-50 py-2">
             <div className="max-w-7xl mx-auto px-4">
               <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-primary-blue mb-6">{t.aboutUs}</h2>
@@ -465,49 +457,82 @@ const LandingPage: React.FC = () => {
               
               {/* About Text and CTA */}
               <div className="flex flex-col md:flex-row gap-16 items-center">
+                {/* Text section - now visible on mobile above the image */}
                 <div className="md:w-1/2">
-                  <p className="text-gray-700 text-lg leading-relaxed mb-8">
+                  <p className="text-gray-700 text-lg leading-relaxed mb-8 md:hidden text-center px-4">
                     {t.aboutDescription}
                   </p>
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-start">
-                      <span className="text-primary-blue mr-2 mt-1">✓</span>
-                      <span className="text-gray-700">{t.aboutFeature1}</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-primary-blue mr-2 mt-1">✓</span>
-                      <span className="text-gray-700">{t.aboutFeature2}</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-primary-blue mr-2 mt-1">✓</span>
-                      <span className="text-gray-700">{t.aboutFeature3}</span>
-                    </li>
-                  </ul>
-                  <div className="flex">
-                    <Link to="/about-us">
-                      <button className="cta-button">
-                        <span>{t.meetOurTeam}</span>
-                        <Users className="icon" />
-                      </button>
-                    </Link>
+                  <div className="hidden md:block">
+                    <p className="text-gray-700 text-lg leading-relaxed mb-8">
+                      {t.aboutDescription}
+                    </p>
+                    <ul className="space-y-3 mb-8">
+                      <li className="flex items-start">
+                        <span className="text-primary-blue mr-2 mt-1">✓</span>
+                        <span className="text-gray-700">{t.aboutFeature1}</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary-blue mr-2 mt-1">✓</span>
+                        <span className="text-gray-700">{t.aboutFeature2}</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary-blue mr-2 mt-1">✓</span>
+                        <span className="text-gray-700">{t.aboutFeature3}</span>
+                      </li>
+                    </ul>
+                    <div className="flex">
+                      <Link to="/about-us">
+                        <button className="cta-button">
+                          <span>{t.meetOurTeam}</span>
+                          <Users className="icon" />
+                        </button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
                 
-                {/* Grid sa slikama */}
-                <div className="md:w-1/2">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                    <div className="md:col-span-7 aspect-[4/3] overflow-hidden rounded-xl shadow-xl">
+                {/* Images section */}
+                <div className="md:w-1/2 relative">
+                  {/* Mobile overlay content */}
+                  <div className="md:hidden absolute inset-0 z-10 flex flex-col justify-center items-center p-6 text-white">
+                    <ul className="space-y-3 mb-8 text-center">
+                      <li className="flex items-center justify-center">
+                        <span className="text-white mr-2">✓</span>
+                        <span>{t.aboutFeature1}</span>
+                      </li>
+                      <li className="flex items-center justify-center">
+                        <span className="text-white mr-2">✓</span>
+                        <span>{t.aboutFeature2}</span>
+                      </li>
+                      <li className="flex items-center justify-center">
+                        <span className="text-white mr-2">✓</span>
+                        <span>{t.aboutFeature3}</span>
+                      </li>
+                    </ul>
+                    <Link to="/about-us" className="mt-auto">
+                      <button className="cta-button bg-primary-blue hover:bg-primary-blue/90">
+                        <span className="text-white">{t.meetOurTeam}</span>
+                        <Users className="icon text-white" />
+                      </button>
+                    </Link>
+                  </div>
+
+                  {/* Image grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-0">
+                    <div className="md:col-span-7 aspect-[4/3] overflow-hidden rounded-xl shadow-xl relative">
+                      {/* Gradient only shows on mobile */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1C]/90 via-[#0A0F1C]/50 to-transparent md:hidden"></div>
                       <img 
                         src="/slike od jasne/knez miletina biblioteka.jpg" 
                         alt="Knez Miletina biblioteka" 
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500 opacity-85"
                       />
                     </div>
-                    <div className="md:col-span-5 aspect-[3/4] overflow-hidden rounded-xl shadow-xl md:mt-12">
+                    <div className="hidden md:block md:col-span-5 aspect-[3/4] overflow-hidden rounded-xl shadow-xl">
                       <img 
                         src="/slike od jasne/dedinje 2 uvecana.jpg" 
                         alt="Dedinje" 
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500 opacity-85"
                       />
                     </div>
                   </div>
