@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Mail, Send, MessageSquare, ArrowRight } from "lucide-react"
+import { Mail, Send, MessageSquare, ArrowRight, Phone } from "lucide-react"
 
 export default function ContactForm() {
   const [email, setEmail] = useState("")
@@ -36,7 +36,9 @@ export default function ContactForm() {
       trustBadge3: "Dostupni 24/7",
       callToAction: "Posetite našu kancelariju",
       preferPhone: "Radije biste telefonirali?",
-      phoneNumber: "+381 61 2299988"
+      phoneNumber: "+381 61 2299988",
+      contactEmail: "office@jblconcept.rs",
+      email: "Email:"
     },
     en: {
       title: "Send us a message",
@@ -52,7 +54,9 @@ export default function ContactForm() {
       trustBadge3: "Available 24/7",
       callToAction: "Visit our office",
       preferPhone: "Prefer to call?",
-      phoneNumber: "+381 61 2299988"
+      phoneNumber: "+381 61 2299988",
+      contactEmail: "office@jblconcept.rs",
+      email: "Email:"
     }
   }
 
@@ -145,7 +149,7 @@ export default function ContactForm() {
                 </form>
                 
                 {/* Trust badges */}
-                <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-100">
+                <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-200">
                   <div className="text-center">
                     <div className="text-primary-blue text-sm font-medium">{t.trustBadge1}</div>
                   </div>
@@ -156,11 +160,28 @@ export default function ContactForm() {
                     <div className="text-primary-blue text-sm font-medium">{t.trustBadge3}</div>
                   </div>
                 </div>
+                
+                {/* Contact Information - phone numbers only */}
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <p className="text-gray-500 mb-2 text-sm font-medium">{t.preferPhone}</p>
+                  <div className="flex items-center mb-2">
+                    <Phone className="h-5 w-5 text-primary-blue mr-2" />
+                    <a href="tel:+381612299988" className="text-lg font-bold text-primary-blue hover:text-secondary-blue transition-colors">
+                      {t.phoneNumber}
+                    </a>
+                  </div>
+                  <div className="flex items-center mb-4">
+                    <Phone className="h-5 w-5 text-primary-blue mr-2" />
+                    <a href="tel:+381612299988" className="text-lg font-bold text-primary-blue hover:text-secondary-blue transition-colors">
+                      {t.phoneNumber}
+                    </a>
+                  </div>
+                </div>
               </>
             )}
           </motion.div>
           
-          {/* Right column - Office image and additional contact info */}
+          {/* Right column - Office image and address */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -170,12 +191,12 @@ export default function ContactForm() {
           >
             <div className="rounded-3xl overflow-hidden shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300 h-72 md:h-80">
               <img 
-                src="/assets/images/office.jpg" 
+                src="/slike od jasne/office jbl full pic.jpg" 
                 alt="Our office" 
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  target.src = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80';
+                  target.src = '/slike od jasne/office jbl full pic.jpg';
                 }}
               />
             </div>
@@ -188,10 +209,10 @@ export default function ContactForm() {
                 11000 Beograd
               </p>
               
-              <div className="pt-4 border-t border-gray-200">
-                <p className="text-gray-500 mb-1 text-sm">{t.preferPhone}</p>
-                <a href="tel:+381612299988" className="text-xl font-bold text-primary-blue hover:text-secondary-blue transition-colors">
-                  {t.phoneNumber}
+              <div className="flex items-center mt-2">
+                <Mail className="h-5 w-5 text-primary-blue mr-2" />
+                <a href={`mailto:${t.contactEmail}`} className="text-lg font-bold text-primary-blue hover:text-secondary-blue transition-colors">
+                  {t.contactEmail}
                 </a>
               </div>
             </div>

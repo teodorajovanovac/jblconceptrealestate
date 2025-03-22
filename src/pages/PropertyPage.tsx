@@ -143,7 +143,8 @@ export default function PropertyPage() {
   const processFeatures = () => {
     if (!property) return {};
     
-    const features: Record<string, any> = {
+    // Create initial features object with all properties
+    const allFeatures: Record<string, any> = {
       "Tip nekretnine": property.subTypeName 
         ? `${property.typeName} + ${property.subTypeName}`
         : property.typeName || 'N/A',
@@ -154,6 +155,14 @@ export default function PropertyPage() {
       "Dodatne prostorije": property.spaces || 'N/A',
       "Karakteristike": property.description || 'N/A',
     };
+    
+    // Filter out any properties with 'N/A' values
+    const features: Record<string, any> = {};
+    Object.entries(allFeatures).forEach(([key, value]) => {
+      if (value !== 'N/A') {
+        features[key] = value;
+      }
+    });
 
     return features;
   };
@@ -195,7 +204,11 @@ export default function PropertyPage() {
       <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-16">
         {/* Property Gallery */}
         <div className="relative z-0">
-          <PropertyGallery images={formatGalleryImages()} />
+          <PropertyGallery 
+            images={formatGalleryImages()} 
+            propertyId={property.id}
+            propertyTitle={property.portalName || "Nekretnina"}
+          />
         </div>
 
         {/* Main Content */}

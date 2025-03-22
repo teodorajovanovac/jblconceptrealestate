@@ -5,12 +5,14 @@ import FooterTW from '../components/footer/FooterTW';
 import Seo from '../services/meta/Seo';
 import SearchBar from '../components/search/SearchBar';
 import { Link } from 'react-router-dom';
-import { MapPin, Bed, Bath, Square } from 'lucide-react';
+import { MapPin, Bed, Bath, Square, Heart } from 'lucide-react';
 import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { IoOptions } from 'react-icons/io5';
 import Spinner from '../components/ui/Spinner';
 import { PRICE_RANGES, AREA_RANGE, TransactionType } from '../utils/constants';
+import FavoritesDrawer from '../components/property/FavoritesDrawer';
+import useFavorites from '../hooks/useFavorites';
 
 interface SearchFilters {
   transactionType: 'buy' | 'rent';
@@ -29,6 +31,8 @@ interface SearchFilters {
 
 // Kreiranje PropertyCard komponente unutar RealEstatePage
 const PropertyCard = ({ property, index, language }: { property: RealEstateDto; index: number; language: string; }) => {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  
   const formatPrice = (price: number) => {
     return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
@@ -43,7 +47,7 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
   const getLuxuryBadge = () => {
     if (property.lux === 1) {
       return (
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 left-4 z-10">
           <span className="bg-primary-blue text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
             Premium
           </span>
@@ -56,7 +60,7 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
   const getPropertyTypeBadge = () => {
     if (property.typeName) {
       return (
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute bottom-4 left-4 z-10">
           <span className="bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-medium shadow-lg">
             {property.typeName}
           </span>
@@ -69,6 +73,14 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
   const isRental = property.actionName?.toLowerCase().includes('izdavanje') || 
                    property.actionName?.toLowerCase().includes('rent');
 
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(property.id);
+    // Refresh the page after toggling favorite status
+    window.location.reload();
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -77,19 +89,9 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
       whileHover={{ y: -5, scale: 1.02 }}
       className="h-full"
     >
-      <Link to={`/property/${property.id}`}>
+      <Link to={`/property/${property.id}`} className="block h-full">
         <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full relative">
-          {/* Action Badge */}
-          <div className="absolute top-4 left-4 z-20">
-            <span className={`${isRental ? 'bg-primary-gold' : 'bg-primary-blue'} text-white px-4 py-2 rounded-full text-base font-semibold shadow-lg`}>
-              {property.actionName || (language === 'sr' ? "Prodaja" : "For Sale")}
-            </span>
-          </div>
-          
-          {/* Property Type Badge */}
-          {getPropertyTypeBadge()}
-
-          {/* Property Image */}
+          {/* Property Image with Overlays */}
           <div className="relative h-[280px] overflow-hidden">
             <img 
               src={property.photos && property.photos.length > 0 
@@ -102,12 +104,39 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
               }}
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent h-24" />
+            
+            {/* Action Badge - Top Left */}
+            <div className="absolute top-4 left-4 z-20">
+              <span className={`${isRental ? 'bg-primary-gold' : 'bg-primary-blue'} text-white px-4 py-2 rounded-full text-base font-semibold shadow-lg`}>
+                {property.actionName || (language === 'sr' ? "Prodaja" : "For Sale")}
+              </span>
+            </div>
+            
+            {/* Property Type Badge - Bottom Left */}
+            {getPropertyTypeBadge()}
+            
+            {/* Price - Bottom Right */}
             <div className="absolute bottom-4 right-4">
               <span className="text-white text-[1.8rem] font-bold shadow-lg px-3 py-1 bg-black/50 rounded-lg">
                 {formatPrice(property.price)} €
               </span>
             </div>
           </div>
+
+          {/* Favorite Button - Top Right, outside the image container for clear position */}
+          <button 
+            className="absolute top-4 right-4 z-20 p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-300"
+            onClick={handleFavoriteClick}
+            aria-label={isFavorite(property.id) ? "Remove from favorites" : "Add to favorites"}
+          >
+            <Heart 
+              className={`h-5 w-5 transition-colors duration-300 ${
+                isFavorite(property.id) 
+                  ? 'text-red-500 fill-red-500' 
+                  : 'hover:text-red-500'
+              }`} 
+            />
+          </button>
 
           <div className="p-6">
             {/* Portal Name instead of Property Title */}
@@ -267,9 +296,27 @@ export default function RealEstatePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
+  const [isFavoritesDrawerOpen, setIsFavoritesDrawerOpen] = useState(false);
   const loaderRef = useRef<HTMLDivElement>(null);
-  const propertiesPerLoad = 12; // Changed from 30 to 12 for better grid layout
-  const additionalPropertiesPerScroll = 6; // Changed from 10 to 6 for better grid layout
+  const { getFavoritesCount } = useFavorites();
+  const [favoritesCount, setFavoritesCount] = useState(0);
+  const propertiesPerLoad = 12;
+  const additionalPropertiesPerScroll = 6;
+
+  // Update favorites count
+  useEffect(() => {
+    setFavoritesCount(getFavoritesCount());
+    
+    const handleFavoritesUpdate = () => {
+      setFavoritesCount(getFavoritesCount());
+    };
+    
+    window.addEventListener('favoritesUpdated', handleFavoritesUpdate);
+    
+    return () => {
+      window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
+    };
+  }, [getFavoritesCount]);
 
   // Funkcija za učitavanje više nekretnina
   const loadMoreProperties = useCallback(() => {
@@ -506,8 +553,28 @@ export default function RealEstatePage() {
             </p>
           </motion.div>
 
+          {/* Favorites Button */}
+          {favoritesCount > 0 && (
+          <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="fixed left-4 top-28 z-30"
+            >
+              <button
+                onClick={() => setIsFavoritesDrawerOpen(true)}
+                className="flex items-center space-x-2 bg-white rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <Heart className="h-5 w-5 text-red-500 fill-red-500" />
+                <span className="font-medium text-gray-800">
+                  {favoritesCount} {language === 'sr' ? 'omiljene' : 'favorites'}
+                </span>
+              </button>
+          </motion.div>
+          )}
+
           {/* Search Bar Component */}
-            <SearchBar onSearch={handleSearch} />
+          <SearchBar onSearch={handleSearch} />
           
           {/* Results Section */}
           <div className="mt-8">
@@ -559,6 +626,12 @@ export default function RealEstatePage() {
           </div>
         </div>
       </main>
+      
+      {/* Favorites Drawer */}
+      <FavoritesDrawer 
+        isOpen={isFavoritesDrawerOpen}
+        onClose={() => setIsFavoritesDrawerOpen(false)}
+      />
       
       <FooterTW />
     </div>

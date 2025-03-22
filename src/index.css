@@ -98,3 +98,11 @@ main {
 *, *::before, *::after {
   font-family: inherit;
 }
+
+/* Povećanje fonta navigacije za 10% - jači selektor */
+header a,
+header button,
+.landing-page header a,
+.landing-page header button {
+  font-size: 1.1em !important; /* 1.1 = povećanje za 10% */
+}

@@ -102,7 +102,7 @@ const Header = () => {
               <a
                 key={item.link}
                 href={item.link}
-                className={`relative mx-3 group transition-colors ${getHoverColorClass()}`}
+                className={`relative mx-3 group transition-colors text-[1.1em] ${getHoverColorClass()}`}
               >
                 <span className="relative">
                   {item.caption}
@@ -112,7 +112,7 @@ const Header = () => {
             ))}
             <button 
               onClick={toggleLanguage} 
-              className={`relative transition-colors mx-3 group ${getHoverColorClass()}`}
+              className={`relative transition-colors mx-3 group text-[1.1em] ${getHoverColorClass()}`}
             >
               <span className="relative">
                 {language === "sr" ? "EN" : "SR"}
@@ -163,7 +163,7 @@ const Header = () => {
               <li key={item.link}>
                 <a
                   href={item.link}
-                  className="hover:text-primary-gold transition-colors"
+                  className="hover:text-primary-gold transition-colors text-[1.1em] md:text-[2.2em]"
                   onClick={toggleMenu}
                 >
                   {item.caption}
@@ -176,7 +176,7 @@ const Header = () => {
                   toggleLanguage()
                   toggleMenu()
                 }}
-                className="hover:text-primary-gold transition-colors"
+                className="hover:text-primary-gold transition-colors text-[1.1em] md:text-[2.2em]"
               >
                 {language === "sr" ? "EN" : "SR"}
               </button>

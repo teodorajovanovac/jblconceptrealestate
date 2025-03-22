@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { Heart, Share2, ChevronLeft, ChevronRight } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css"
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen"
@@ -10,16 +10,23 @@ import Slideshow from "yet-another-react-lightbox/plugins/slideshow"
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails"
 import Zoom from "yet-another-react-lightbox/plugins/zoom"
 import "yet-another-react-lightbox/plugins/thumbnails.css"
+import ShareModal from "./ShareModal"
+import useFavorites from "../../hooks/useFavorites"
 
 interface PropertyGalleryProps {
-  images: string[]
+  images: string[];
+  propertyId?: number;
+  propertyTitle?: string;
 }
 
-export default function PropertyGallery({ images }: PropertyGalleryProps) {
+export default function PropertyGallery({ images, propertyId = 0, propertyTitle = "Nekretnina" }: PropertyGalleryProps) {
   const [index, setIndex] = useState(-1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const location = useLocation();
+  const { isFavorite, toggleFavorite } = useFavorites();
   
   // Make sure images is an array and has at least one item
   const safeImages = Array.isArray(images) && images.length > 0 ? images : ['/placeholder-image.jpg'];
@@ -27,6 +34,9 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
 
   // Format images for Lightbox
   const slides = safeImages.map((src) => ({ src }));
+
+  // Get current URL for sharing
+  const currentUrl = window.location.href;
 
   // Handle touch events for mobile swipe
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -64,6 +74,22 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
     );
   };
 
+  // Toggle share modal
+  const handleShareClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsShareModalOpen(true);
+  };
+
+  // Toggle favorite
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (propertyId) {
+      toggleFavorite(propertyId);
+      // Refresh the page after toggling favorite status
+      window.location.reload();
+    }
+  };
+
   // Handle image loading errors
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = '/placeholder-image.jpg'; // Fallback image
@@ -72,7 +98,6 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
 
   return (
     <>
-  
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4">
         <Link to="/properties" className="flex items-center text-gray-800">
@@ -80,17 +105,27 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
           <span>Nazad</span>
         </Link>
         <div className="flex items-center space-x-4">
-          <button className="p-2">
-            <Share2 className="h-6 w-6" />
+          <button 
+            className="p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-300" 
+            onClick={handleShareClick}
+            aria-label="Share property"
+          >
+            <Share2 className="h-5 w-5" />
           </button>
-          <button className="p-2">
-            <Heart className="h-6 w-6" />
+          <button 
+            className="p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-300" 
+            onClick={handleFavoriteClick}
+            aria-label={isFavorite(propertyId) ? "Remove from favorites" : "Add to favorites"}
+          >
+            <Heart 
+              className={`h-5 w-5 ${isFavorite(propertyId) ? 'text-red-500 fill-red-500' : ''}`} 
+            />
           </button>
         </div>
       </div>
 
       {/* Mobile Gallery - Single image with swipe */}
-      <div className="md:hidden w-full h-[300px] relative overflow-hidden">
+      <div className="md:hidden w-full h-[300px] md:h-[350px] relative overflow-hidden">
         <div 
           className="h-full w-full"
           onTouchStart={handleTouchStart}
@@ -109,7 +144,7 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
             <>
               {/* Navigation Controls */}
               <button 
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/70 rounded-full p-1.5"
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   prevImage();
@@ -119,7 +154,7 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
               </button>
               
               <button 
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/70 rounded-full p-1.5"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   nextImage();
@@ -129,7 +164,7 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
               </button>
               
               {/* Image indicator */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-2 py-1 rounded-full text-xs">
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium">
                 {currentImageIndex + 1} / {safeImages.length}
               </div>
             </>
@@ -225,11 +260,25 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
 
         {/* Share and Like buttons - desktop */}
         <div className="hidden md:flex absolute top-4 right-4 space-x-2">
-          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors">
+          <button 
+            className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+            onClick={handleShareClick}
+            aria-label="Share property"
+          >
             <Share2 className="h-5 w-5" />
           </button>
-          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors">
-            <Heart className="h-5 w-5" />
+          <button 
+            className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors group"
+            onClick={handleFavoriteClick}
+            aria-label={isFavorite(propertyId) ? "Remove from favorites" : "Add to favorites"}
+          >
+            <Heart 
+              className={`h-5 w-5 transition-colors duration-300 ${
+                isFavorite(propertyId) 
+                  ? 'text-red-500 fill-red-500' 
+                  : 'group-hover:text-red-500'
+              }`} 
+            />
           </button>
         </div>
       </div>
@@ -250,10 +299,14 @@ export default function PropertyGallery({ images }: PropertyGalleryProps) {
             backgroundColor: "rgba(0, 0, 0, .9)",
           },
         }}
-        render={{
-          buttonPrev: () => null,
-          buttonNext: () => null,
-        }}
+      />
+
+      {/* Share Modal */}
+      <ShareModal 
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        url={currentUrl}
+        title={propertyTitle}
       />
     </>
   )
