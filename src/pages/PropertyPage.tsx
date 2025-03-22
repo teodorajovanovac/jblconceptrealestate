@@ -15,6 +15,7 @@ import realEstate from "../data/realEstate"
 import { RealEstateDto, AgentDto } from "../data/models/realEstate"
 import Spinner from '../components/ui/Spinner'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
+import { useCmsData } from "../services/CmsProvider"
 
 const defaultAgent: AgentDto = {
   name: "Agent",
@@ -33,6 +34,7 @@ export default function PropertyPage() {
   const [property, setProperty] = useState<RealEstateDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useCmsData();
   
   const agentCardRef = useRef<HTMLDivElement>(null);
   const agentCardWrapperRef = useRef<HTMLDivElement>(null);
@@ -62,12 +64,12 @@ export default function PropertyPage() {
           setProperty(result);
           setError(null);
         } else {
-          setError("Nekretnina nije pronađena");
+          setError(t("property-not-found"));
           setProperty(null);
         }
       } catch (err) {
         console.error("Error fetching property details:", err);
-        setError("Došlo je do greške prilikom učitavanja podataka");
+        setError(t("property-error"));
         setProperty(null);
       } finally {
         setIsLoading(false);
@@ -75,7 +77,7 @@ export default function PropertyPage() {
     };
 
     fetchPropertyDetails();
-  }, [id]);
+  }, [id, t]);
 
   // Handle scroll for sticky elements
   useEffect(() => {
@@ -136,15 +138,15 @@ export default function PropertyPage() {
     
     // Create initial features object with all properties
     const allFeatures: Record<string, any> = {
-      "Tip nekretnine": property.subTypeName 
+      [t("property-type")]: property.subTypeName 
         ? `${property.typeName} + ${property.subTypeName}`
         : property.typeName || 'N/A',
-      "Površina": property.area ? `${property.area} m²` : 'N/A',
-      "Broj soba": property.roomsNo || 'N/A',
-      "Broj kupatila": property.bathroomNO || 'N/A',
-      "Sprat": property.floorNoString || 'N/A',
-      "Dodatne prostorije": property.spaces || 'N/A',
-      "Karakteristike": property.description || 'N/A',
+      [t("property-area")]: property.area ? `${property.area} m²` : 'N/A',
+      [t("property-rooms")]: property.roomsNo || 'N/A',
+      [t("property-bathrooms")]: property.bathroomNO || 'N/A',
+      [t("property-floor")]: property.floorNoString || 'N/A',
+      [t("property-additional-rooms")]: property.spaces || 'N/A',
+      [t("property-characteristics")]: property.description || 'N/A',
     };
     
     // Filter out any properties with 'N/A' values
@@ -172,15 +174,15 @@ export default function PropertyPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Nekretnina nije pronađena</h2>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">{t("property-not-found")}</h2>
           <p className="text-gray-600 mb-6">
-            {error || "Tražena nekretnina ne postoji ili je uklonjena."}
+            {error || t("property-removed")}
           </p>
           <Link 
             to="/properties" 
             className="inline-block bg-primary-blue text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
           >
-            Povratak na listu nekretnina
+            {t("property-back-to-list")}
           </Link>
         </div>
       </div>
@@ -208,9 +210,9 @@ export default function PropertyPage() {
           <div className="md:hidden">
             <Tabs defaultValue="description" className="w-full">
               <TabsList className="w-full px-2 h-12 grid grid-cols-3 gap-1">
-                <TabsTrigger value="description">Opis</TabsTrigger>
-                <TabsTrigger value="features">Karakteristike</TabsTrigger>
-                <TabsTrigger value="location">Lokacija</TabsTrigger>
+                <TabsTrigger value="description">{t("property-description")}</TabsTrigger>
+                <TabsTrigger value="features">{t("property-features")}</TabsTrigger>
+                <TabsTrigger value="location">{t("property-location")}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="description" className="px-4">
@@ -225,7 +227,7 @@ export default function PropertyPage() {
 
               <TabsContent value="features" className="px-4">
                 <PropertyFeatures 
-                  title="Karakteristike" 
+                  title={t("property-features")} 
                   features={processFeatures()} 
                 />
               </TabsContent>
@@ -295,7 +297,7 @@ export default function PropertyPage() {
                       </span>
                       <span>
                         <span className="font-medium">{property.roomsNo}</span>{" "}
-                        <span className="text-gray-600">sobe</span>
+                        <span className="text-gray-600">{t("property-rooms")}</span>
                       </span>
                     </div>
                     <div className="flex items-center">
@@ -304,7 +306,7 @@ export default function PropertyPage() {
                       </span>
                       <span>
                         <span className="font-medium">{property.bathroomNO}</span>{" "}
-                        <span className="text-gray-600">kupatila</span>
+                        <span className="text-gray-600">{t("property-bathrooms")}</span>
                       </span>
                     </div>
                     <div className="flex items-center">
@@ -313,7 +315,7 @@ export default function PropertyPage() {
                       </span>
                       <span>
                         <span className="font-medium">{property.area}</span>{" "}
-                        <span className="text-gray-600">m²</span>
+                        <span className="text-gray-600">{t("property-area")}</span>
                       </span>
                     </div>
                     <div className="flex items-center">
@@ -327,7 +329,7 @@ export default function PropertyPage() {
 
                 {/* Property Description */}
                 <div>
-                  <h2 className="text-2xl font-bold text-primary-blue mb-4">Opis</h2>
+                  <h2 className="text-2xl font-bold text-primary-blue mb-4">{t("property-description")}</h2>
                   <div className="prose max-w-none text-gray-700"
                     dangerouslySetInnerHTML={{ __html: property.realEstateDescription || "" }}>
                   </div>
@@ -335,7 +337,7 @@ export default function PropertyPage() {
 
                 {/* Property Features */}
                 <PropertyFeatures
-                  title="Karakteristike"
+                  title={t("property-features")}
                   features={processFeatures()}
                 />
 
@@ -371,12 +373,12 @@ export default function PropertyPage() {
         {/* Mobile Contact Agent Button */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t md:hidden">
           <div className="w-full">
-            <Link 
-              to={`/contact?property=${property.id}`} 
-              className="cta-button inline-block rounded-full"
-            >
-              <span>{language === 'sr' ? 'Raspitajte se danas' : 'Enquire Today'}</span>
-            </Link>
+            <button className="w-full cta-button">
+              <span>{t("property-contact-agent")}</span>
+              <svg className="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 18H4V8L12 13L20 8V18ZM12 11L4 6H20L12 11Z" fill="white"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>

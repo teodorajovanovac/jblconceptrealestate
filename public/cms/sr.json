@@ -13,12 +13,32 @@
     "form-message-placeholder": "Vaša poruka" ,
     "form-request-placeholder": "Opišite vaš zahtev...",
     "form-sending": "Slanje poruke...",
-    "form-send-button": "Pošaljite poruku"
-
+    "form-send-button": "Pošaljite poruku",
+    "contactform-choose-service": "Izaberite uslugu",
+    "contactform-other-inquiries": "Drugi upiti:",
+    "contact-header": "Kontaktirajte nas",
+    "form-enter-name": "Unesite vaše ime",
+    "form-enter-lastname": "Unesite vaše prezime",
+    "form-enter-email": "Unesite vašu email adresu",
+    "form-enter-phone": "Unesite vašu telefonnu adresu",
+    "form-enter-message": "Unesite vašu poruku",
+    "contactform-choose-service": "Izaberite uslugu",
+    "form-request-placeholder": "Opišite vaš zahtev...",
+    "contact-form-text": "Naš stručni tim je tu da vam pomogne u svim aspektima vezanim za nekretnine - od kupovine i prodaje, preko menadžmenta nekretnina do konsaltinga i istraživanja tržišta. Kontaktirajte nas i odgovorićemo vam u roku od 2 sata.",
     
-    
-
-   
-    
-    
+    "property-not-found": "Nekretnina nije pronađena",
+    "property-error": "Došlo je do greške prilikom učitavanja podataka",
+    "property-removed": "Tražena nekretnina ne postoji ili je uklonjena.",
+    "property-back-to-list": "Povratak na listu nekretnina",
+    "property-description": "Opis",
+    "property-features": "Karakteristike",
+    "property-location": "Lokacija",
+    "property-rooms": "sobe",
+    "property-bathrooms": "kupatila",
+    "property-area": "Površina",
+    "property-type": "Tip nekretnine",
+    "property-floor": "Sprat",
+    "property-additional-rooms": "Dodatne prostorije",
+    "property-characteristics": "Karakteristike",
+    "property-contact-agent": "Kontaktirajte agenta"
 }

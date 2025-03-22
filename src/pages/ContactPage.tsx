@@ -327,12 +327,10 @@ const ContactPage: React.FC =() => {
                   <>
                     <div className="space-y-4">
                       <h1 className="text-3xl font-bold text-primary-blue">
-                        {/* {language === 'sr' ? 'Kontaktirajte nas' : 'Contact us'} */}
+                          {t("contact-header")}
                       </h1>
                       <p className="text-gray-600">
-                        {/* {language === 'sr' 
-                          ? "Naš stručni tim je tu da vam pomogne u svim aspektima vezanim za nekretnine - od kupovine i prodaje, preko menadžmenta nekretnina do konsaltinga i istraživanja tržišta. Kontaktirajte nas i odgovorićemo vam u roku od 2 sata."
-                          : "Our expert team is here to help you with all aspects of real estate - from buying and selling to property management, consulting, and market research. Contact us and we will respond within 2 hours."} */}
+                          {t("contact-form-text")}
                       </p>
                     </div>
 
@@ -340,7 +338,7 @@ const ContactPage: React.FC =() => {
                       <div className="grid gap-6 sm:grid-cols-2">
                         <div className="space-y-2">
                           <label className="flex items-center text-sm font-medium text-gray-700">
-                            {/* {language === 'sr' ? 'Ime' : 'First name'}  */}
+                            {t("form-enter-name")}
                             <span className="text-red-500 ml-1">*</span>
                           </label>
                           <input
@@ -357,14 +355,16 @@ const ContactPage: React.FC =() => {
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-medium text-gray-700">
-                            {/* {language === 'sr' ? 'Prezime' : 'Last name'} */}
+                            {t("form-enter-lastname")}
                           </label>
                           <input
                             type="text"
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleInputChange}
-                            // placeholder={language === 'sr' ? 'Unesite vaše prezime' : 'Enter your last name'}
+                            placeholder={errors.lastName 
+                              ? t("validate-form-fillme") 
+                              : t("form-enter-lastname")}
                             className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent"
                           />
                         </div>
@@ -381,9 +381,9 @@ const ContactPage: React.FC =() => {
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            // placeholder={errors.email 
-                            //   ? (language === 'sr' ? 'Popunite ovo polje' : 'Fill in this field') 
-                            //   : (language === 'sr' ? 'Unesite vašu email adresu' : 'Enter your email')}
+                            placeholder={errors.email 
+                              ? t("validate-form-fillme") 
+                              : t("form-enter-email")}
                             className={`w-full pl-10 pr-4 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                             required
                           />
@@ -392,7 +392,7 @@ const ContactPage: React.FC =() => {
 
                       <div className="space-y-2">
                         <label className="flex items-center text-sm font-medium text-gray-700">
-                          {/* {language === 'sr' ? 'Broj telefona' : 'Phone number'}  */}
+                          {t("form-enter-phone")}
                           <span className="text-red-500 ml-1">*</span>
                         </label>
                         <div className="relative">
@@ -402,9 +402,9 @@ const ContactPage: React.FC =() => {
                             name="phone"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            // placeholder={errors.phone 
-                            //   ? (language === 'sr' ? 'Popunite ovo polje' : 'Fill in this field') 
-                            //   : '+381 60 123 4567'}
+                            placeholder={errors.phone 
+                              ? t("validate-form-fillme") 
+                              : t("form-enter-phone")}
                             className={`w-full pl-10 pr-4 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                             required
                           />
@@ -413,7 +413,7 @@ const ContactPage: React.FC =() => {
 
                       <div className="space-y-2 relative">
                         <label className="text-sm font-medium text-gray-700">
-                          {/* {language === 'sr' ? 'Zainteresovan/a sam za' : 'I\'m interested in'} */}
+                          {t("contactform-choose-service")}
                         </label>
                         <button
                           ref={serviceButtonRef}
@@ -442,7 +442,7 @@ const ContactPage: React.FC =() => {
                             >
                               <div className="px-3 py-2 border-b border-gray-100">
                                 <h4 className="text-sm font-medium text-gray-500">
-                                  {/* {language === 'sr' ? 'Izaberite uslugu' : 'Choose a service'} */}
+                                  {t("contactform-choose-service")}
                                 </h4>
                               </div>
                               <div className="py-1">
@@ -456,7 +456,7 @@ const ContactPage: React.FC =() => {
                                       {isOther && (
                                         <div className="mx-3 my-2 border-t border-gray-100 pt-2">
                                           <p className="text-xs font-bold text-primary-blue px-3 pb-1">
-                                            {/* {language === 'sr' ? 'Drugi upiti:' : 'Other inquiries:'} */}
+                                            {t("contactform-other-inquiries")}
                                           </p>
                                         </div>
                                       )}
@@ -490,14 +490,14 @@ const ContactPage: React.FC =() => {
 
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-700">
-                          {/* {language === 'sr' ? 'Vaša poruka' : 'Your message'} */}
+                          {t("form-enter-message")}
                         </label>
                         <textarea
                           name="message"
                           value={formData.message}
                           onChange={handleInputChange}
                           rows={4}
-                          // placeholder={language === 'sr' ? 'Opišite vaš zahtev...' : 'Describe your request...'}
+                          placeholder={t("form-request-placeholder")}
                           className={`w-full px-4 py-2 border ${errors.message ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                         />
                       </div>
@@ -512,11 +512,11 @@ const ContactPage: React.FC =() => {
                         {isSubmitting ? (
                           <div className="flex items-center justify-center">
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                            {/* {language === 'sr' ? 'Slanje poruke...' : 'Sending message...'} */}
+                            {t("form-sending")}
                           </div>
                         ) : (
                           <div className="flex items-center justify-center">
-                            {/* {language === 'sr' ? 'Pošaljite poruku' : 'Send message'} */}
+                            {t("form-send-button")}
                           </div>
                         )}
                       </motion.button>
