@@ -117,7 +117,7 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
             
             {/* Price - Bottom Right */}
             <div className="absolute bottom-4 right-4">
-              <span className="text-white text-[1.8rem] font-bold shadow-lg px-3 py-1 bg-black/50 rounded-lg">
+              <span className="text-white text-[1.8rem] font-bold shadow-lg px-3 py-1 bg-custom-black/50 rounded-lg">
                 {formatPrice(property.price)} €
               </span>
             </div>
@@ -288,7 +288,7 @@ const buildSearchQuery = (filters: SearchFilters) => {
   return params.toString();
 };
 
-export default function RealEstatePage() {
+const RealEstatePage: React.FC = () => {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr');
   const [properties, setProperties] = useState<RealEstateDto[]>([]);
   const [filteredProperties, setFilteredProperties] = useState<RealEstateDto[]>([]);
@@ -302,6 +302,38 @@ export default function RealEstatePage() {
   const [favoritesCount, setFavoritesCount] = useState(0);
   const propertiesPerLoad = 12;
   const additionalPropertiesPerScroll = 6;
+
+  // Create a state for search filters with default values
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+    transactionType: 'buy', // Set default to 'buy'
+    searchTerm: '',
+    propertyTypes: [],
+    rooms: [],
+    locations: [],
+    priceRange: [0, 1000000],
+    areaRange: [0, 500],
+    features: [],
+    state: [],
+    floor: [],
+    heating: [],
+    parking: []
+  });
+
+  // Build initial search query with default 'buy' transaction type
+  const initialQuery = buildSearchQuery({
+    transactionType: 'buy',
+    searchTerm: '',
+    propertyTypes: [],
+    rooms: [],
+    locations: [],
+    priceRange: [0, 1000000],
+    areaRange: [0, 500],
+    features: [],
+    state: [],
+    floor: [],
+    heating: [],
+    parking: []
+  });
 
   // Update favorites count
   useEffect(() => {
@@ -336,20 +368,6 @@ export default function RealEstatePage() {
     }
   }, [displayedProperties, filteredProperties, isLoading, hasMore]);
 
-  useEffect(() => {
-    const handleLanguageChange = () => {
-      setLanguage(localStorage.getItem('language') || 'sr');
-    };
-
-    window.addEventListener('storage', handleLanguageChange);
-    window.addEventListener('languageChange', handleLanguageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleLanguageChange);
-      window.removeEventListener('languageChange', handleLanguageChange);
-    };
-  }, []);
-
   // Učitavanje SVIH nekretnina sa API-ja
   useEffect(() => {
     const fetchAllProperties = async () => {
@@ -369,9 +387,35 @@ export default function RealEstatePage() {
           console.log('Unique property types from API:', Array.from(uniqueTypes));
           
           setProperties(response.data);
-          setFilteredProperties(response.data);
-          setDisplayedProperties(response.data.slice(0, propertiesPerLoad));
-          setHasMore(response.data.length > propertiesPerLoad);
+          
+          // Apply default 'buy' filter when page loads
+          const defaultFilters: SearchFilters = {
+            transactionType: 'buy',
+            searchTerm: '',
+            propertyTypes: [],
+            rooms: [],
+            locations: [],
+            priceRange: [0, 1000000], 
+            areaRange: [0, 500],
+            features: [],
+            state: [],
+            floor: [],
+            heating: [],
+            parking: []
+          };
+          
+          // Filter properties for 'buy' transaction type
+          const buyProperties = response.data.filter(property => 
+            property.actionShortName === 'P'
+          );
+          
+          setFilteredProperties(buyProperties);
+          setDisplayedProperties(buyProperties.slice(0, propertiesPerLoad));
+          setHasMore(buyProperties.length > propertiesPerLoad);
+          
+          if (buyProperties.length === 0) {
+            setError(language === 'sr' ? 'Nema pronađenih nekretnina' : 'No properties found');
+          }
         } else {
           setError(language === 'sr' ? 'Nema pronađenih nekretnina' : 'No properties found');
         }
@@ -527,6 +571,20 @@ export default function RealEstatePage() {
     }
   };
 
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      setLanguage(localStorage.getItem('language') || 'sr');
+    };
+
+    window.addEventListener('storage', handleLanguageChange);
+    window.addEventListener('languageChange', handleLanguageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleLanguageChange);
+      window.removeEventListener('languageChange', handleLanguageChange);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen w-full bg-gray-50">
       <Seo 
@@ -637,3 +695,5 @@ export default function RealEstatePage() {
     </div>
   );
 } 
+
+export default RealEstatePage; 

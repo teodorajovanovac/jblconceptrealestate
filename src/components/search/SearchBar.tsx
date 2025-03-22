@@ -315,7 +315,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       <div className="flex justify-center gap-3 mb-6">
         <button
           onClick={() => handleTransactionTypeChange('buy')}
-          className={`px-10 py-3 rounded-lg text-lg font-semibold transition-all duration-200 shadow ${
+          className={`px-10 py-3 rounded-full text-lg font-semibold transition-all duration-200 shadow ${
             transactionType === 'buy'
               ? 'bg-primary-blue text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -325,7 +325,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         </button>
         <button
           onClick={() => handleTransactionTypeChange('rent')}
-          className={`px-10 py-3 rounded-lg text-lg font-semibold transition-all duration-200 shadow ${
+          className={`px-10 py-3 rounded-full text-lg font-semibold transition-all duration-200 shadow ${
             transactionType === 'rent'
               ? 'bg-primary-blue text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -575,9 +575,9 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
               document.getElementById('search-button')?.classList.remove('opacity-75');
             }, 300);
           }}
-          className="bg-primary-blue text-white px-10 py-3 rounded-lg hover:bg-secondary-blue transition-colors text-lg font-medium"
+          className="cta-button rounded-full"
         >
-          Pretraži
+          <span>Pretraži</span>
         </button>
       </div>
     </div>

@@ -1,4 +1,3 @@
-import { Property } from "../../types/property"
 import { Bed, Bath, Square, MapPin } from "lucide-react"
 import { Link } from "react-router-dom"
 

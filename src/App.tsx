@@ -13,7 +13,7 @@ import { CmsDataProvider } from './services/CmsProvider';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1e3a8a', // primary-blue
+      main: 'rgb(0, 30, 74)', // primary-dark-blue
     },
   },
 })

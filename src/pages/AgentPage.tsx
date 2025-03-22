@@ -88,7 +88,7 @@ export default function AgentPage() {
                     key={social}
                     href="#"
                     whileHover={{ scale: 1.1 }}
-                    className="rounded-full border border-primary-blue p-2 text-primary-blue hover:bg-primary-blue hover:text-white transition-colors"
+                    className="rounded-full border border-primary-dark-blue p-2 text-primary-dark-blue hover:bg-gold-color hover:text-primary-dark-blue transition-colors"
                   >
                     {social === 'facebook' && <Facebook className="h-5 w-5" />}
                     {social === 'instagram' && <Instagram className="h-5 w-5" />}
@@ -109,11 +109,11 @@ export default function AgentPage() {
                   <p className="text-sm uppercase tracking-widest text-gray-500">{agent.title[language]}</p>
                   <div className="space-y-2">
                     <p className="text-sm uppercase tracking-widest">
-                      <a href={`tel:${agent.contact.phone}`} className="text-primary-blue hover:text-secondary-blue">
+                      <a href={`tel:${agent.contact.phone}`} className="text-primary-dark-blue hover:text-gold-color">
                         {language === 'sr' ? 'POZOVI' : 'CALL'}
                       </a>
                       {" | "}
-                      <a href={`mailto:${agent.contact.email}`} className="text-primary-blue hover:text-secondary-blue">
+                      <a href={`mailto:${agent.contact.email}`} className="text-primary-dark-blue hover:text-gold-color">
                         EMAIL
                       </a>
                     </p>

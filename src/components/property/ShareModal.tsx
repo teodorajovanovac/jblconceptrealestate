@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, Copy, Facebook, Twitter, Mail, Link as LinkIcon } from "lucide-react";
+import { X, Copy, Facebook, Twitter, Mail, Link as LinkIcon, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ShareModalProps {
@@ -31,22 +31,22 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, url, title }) 
     {
       name: "Facebook",
       icon: <Facebook className="h-5 w-5" />,
-      bgColor: "bg-blue-600",
-      hoverColor: "hover:bg-blue-700",
+      bgColor: "bg-primary-dark-blue",
+      hoverColor: "hover:bg-gold-color hover:text-primary-dark-blue",
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&t=${encodeURIComponent(title)}`,
     },
     {
       name: "Twitter",
       icon: <Twitter className="h-5 w-5" />,
-      bgColor: "bg-sky-500",
-      hoverColor: "hover:bg-sky-600",
+      bgColor: "bg-primary-dark-blue",
+      hoverColor: "hover:bg-gold-color hover:text-primary-dark-blue",
       url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
     },
     {
       name: "Email",
       icon: <Mail className="h-5 w-5" />,
-      bgColor: "bg-gray-600",
-      hoverColor: "hover:bg-gray-700",
+      bgColor: "bg-primary-dark-blue",
+      hoverColor: "hover:bg-gold-color hover:text-primary-dark-blue",
       url: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`Check out this property: ${url}`)}`,
     },
   ];
@@ -54,7 +54,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, url, title }) 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-custom-black/60">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -83,10 +83,10 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, url, title }) 
                 </div>
                 <button
                   onClick={handleCopyLink}
-                  className="rounded-lg px-3 py-1 bg-primary-blue text-white hover:bg-primary-blue/90 transition-colors text-sm flex items-center"
+                  className="rounded-lg px-3 py-1 bg-primary-dark-blue text-white hover:bg-gold-color hover:text-primary-dark-blue transition-colors text-sm flex items-center"
                 >
-                  <Copy className="h-4 w-4 mr-1" />
-                  {isCopied ? "Kopirano!" : "Kopiraj"}
+                  {isCopied ? 'Kopirano!' : 'Kopiraj link'}
+                  {isCopied ? <Check className="ml-1 h-4 w-4" /> : <Copy className="ml-1 h-4 w-4" />}
                 </button>
               </div>
               

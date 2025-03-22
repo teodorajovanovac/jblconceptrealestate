@@ -29,11 +29,11 @@ export default function RangeSlider({
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-2">
-        <span className="text-gray-700 font-medium">{label}</span>
+        <span className="text-custom-black/70 font-medium">{label}</span>
         <div className="flex gap-2">
-          <span className="text-gray-600">{formatValue(value[0])}</span>
-          <span className="text-gray-400">-</span>
-          <span className="text-gray-600">{formatValue(value[1])}</span>
+          <span className="text-custom-black/60">{formatValue(value[0])}</span>
+          <span className="text-custom-black/40">-</span>
+          <span className="text-custom-black/60">{formatValue(value[1])}</span>
         </div>
       </div>
       <Slider.Root
@@ -47,15 +47,15 @@ export default function RangeSlider({
         max={max}
         step={step}
       >
-        <Slider.Track className="bg-gray-200 relative grow rounded-full h-[3px]">
-          <Slider.Range className="absolute bg-primary-blue rounded-full h-full" />
+        <Slider.Track className="bg-custom-black/20 relative grow rounded-full h-[3px]">
+          <Slider.Range className="absolute bg-primary-dark-blue rounded-full h-full" />
         </Slider.Track>
         <Slider.Thumb
-          className="block w-5 h-5 bg-white border-2 border-primary-blue rounded-full hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-blue"
+          className="block w-5 h-5 bg-white border-2 border-primary-dark-blue rounded-full hover:bg-custom-black/5 focus:outline-none focus:ring-2 focus:ring-primary-dark-blue"
           aria-label="Min value"
         />
         <Slider.Thumb
-          className="block w-5 h-5 bg-white border-2 border-primary-blue rounded-full hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-blue"
+          className="block w-5 h-5 bg-white border-2 border-primary-dark-blue rounded-full hover:bg-custom-black/5 focus:outline-none focus:ring-2 focus:ring-primary-dark-blue"
           aria-label="Max value"
         />
       </Slider.Root>

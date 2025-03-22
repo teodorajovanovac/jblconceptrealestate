@@ -17,14 +17,22 @@ export default {
     extend: {
       colors: {
         'primary-white': 'white',
-        'primary-blue': 'rgba(0,28,79,1)',
-        'primary-gold': 'rgb(246,229,112)',
-        'secondary-blue': 'rgba(32,157,245,1)',
-        'secondary-light-green': 'var(--secundary-light-green)',
-        'secondary-dark-green': 'var(--secundary-dark-green)',
-        'secondary-black': 'var(--secundary-black)',
-        'menu-hover': 'rgb(184, 186, 197)',
-        'menu-hover-dark': 'var(--hover-color-2)',
+        'gold': 'rgb(255, 214, 100)',
+        'green': 'rgb(48, 105, 68)',
+        'primary-light-blue': 'rgb(33, 146, 231)',
+        'primary-dark-blue': 'rgb(0, 30, 74)',
+        'tertiary-blue': 'rgb(0, 43, 74)',
+        'custom-black': 'rgb(28, 39, 71)',
+        
+        // Updated to match App.css
+        'primary-blue': 'var(--primary-dark-blue)',
+        'primary-gold': 'var(--gold-color)',
+        'secondary-blue': 'var(--primary-light-blue)',
+        'secondary-light-green': 'var(--green-color)',
+        'secondary-dark-green': 'var(--green-color)',
+        'secondary-black': 'var(--custom-black)',
+        'menu-hover': 'rgba(255, 214, 100, 0.7)',
+        'menu-hover-dark': 'rgba(0, 30, 74, 0.9)',
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -59,8 +67,8 @@ export default {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         blue: {
-          700: "#1e2b6b",
-          900: "#0f1338",
+          700: "rgb(0, 30, 74)",
+          900: "rgb(0, 43, 74)",
         },
       },
       borderRadius: {

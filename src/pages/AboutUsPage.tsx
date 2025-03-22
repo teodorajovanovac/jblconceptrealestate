@@ -71,16 +71,17 @@ export default function AboutUsPage() {
                   transition={{ duration: 0.5 }}
                 >
                   <Link to={`/about-us/${member.id}`} className="block">
-                    <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg shadow-md">
+                    <div className="relative group overflow-hidden rounded-lg">
                       <img
                         src={member.image}
                         alt={member.name}
-                        className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
                       />
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/60 group-hover:opacity-100">
-                        <div className="border border-white px-6 py-2 text-sm tracking-widest text-white">
-                          {language === 'sr' ? 'SAZNAJ VIŠE' : 'LEARN MORE'}
+                      <div className="absolute inset-0 flex items-center justify-center bg-custom-black/0 opacity-0 transition-all duration-300 group-hover:bg-custom-black/60 group-hover:opacity-100">
+                        <div className="flex space-x-4">
+                          <div className="border border-white px-6 py-2 text-sm tracking-widest text-white">
+                            {language === 'sr' ? 'SAZNAJ VIŠE' : 'LEARN MORE'}
+                          </div>
                         </div>
                       </div>
                     </div>

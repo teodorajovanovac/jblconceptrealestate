@@ -24,9 +24,9 @@ export default function GalleryModal({ images, isOpen, onClose, initialIndex = 0
   }
 
   return (
-    <div className="fixed inset-0 bg-black z-50 flex flex-col">
+    <div className="fixed inset-0 bg-custom-black z-50 flex flex-col">
       {/* Header */}
-      <div className="relative h-16 flex items-center justify-between px-4 bg-black/90">
+      <div className="relative h-16 flex items-center justify-between px-4 bg-custom-black/90">
         <button onClick={onClose} className="text-white hover:text-gray-300">
           <X className="h-6 w-6" />
         </button>
@@ -54,20 +54,22 @@ export default function GalleryModal({ images, isOpen, onClose, initialIndex = 0
         {/* Navigation Buttons */}
         <button
           onClick={handlePrevious}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black/75"
+          disabled={currentIndex === 0}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-custom-black/50 p-2 rounded-full text-white hover:bg-custom-black/75"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
         <button
           onClick={handleNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full text-white hover:bg-black/75"
+          disabled={currentIndex === images.length - 1}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-custom-black/50 p-2 rounded-full text-white hover:bg-custom-black/75"
         >
           <ChevronRight className="h-6 w-6" />
         </button>
       </div>
 
       {/* Thumbnails */}
-      <div className="h-20 bg-black/90 overflow-x-auto">
+      <div className="h-20 bg-custom-black/90 overflow-x-auto">
         <div className="flex gap-2 p-2">
           {images.map((image, index) => (
             <button

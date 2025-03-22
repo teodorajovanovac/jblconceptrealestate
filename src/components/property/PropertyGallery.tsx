@@ -150,7 +150,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
                   prevImage();
                 }}
               >
-                <ChevronLeft className="h-5 w-5 text-primary-blue" />
+                <ChevronLeft className="h-5 w-5 text-primary-dark-blue" />
               </button>
               
               <button 
@@ -160,11 +160,11 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
                   nextImage();
                 }}
               >
-                <ChevronRight className="h-5 w-5 text-primary-blue" />
+                <ChevronRight className="h-5 w-5 text-primary-dark-blue" />
               </button>
               
               {/* Image indicator */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-custom-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium">
                 {currentImageIndex + 1} / {safeImages.length}
               </div>
             </>
@@ -188,7 +188,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
                 className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
                 onError={handleImageError}
               />
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-custom-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
             </div>
 
             {/* Right side thumbnails */}
@@ -204,7 +204,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
                   className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
                   onError={handleImageError}
                 />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-custom-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
                 
                 {/* "View all photos" button on the last thumbnail */}
                 {idx === 3 && safeImages.length > 5 && (
@@ -236,7 +236,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
                     prevImage();
                   }}
                 >
-                  <ChevronLeft className="h-6 w-6 text-primary-blue" />
+                  <ChevronLeft className="h-6 w-6 text-primary-dark-blue" />
                 </button>
                 
                 <button 
@@ -246,11 +246,11 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
                     nextImage();
                   }}
                 >
-                  <ChevronRight className="h-6 w-6 text-primary-blue" />
+                  <ChevronRight className="h-6 w-6 text-primary-dark-blue" />
                 </button>
                 
                 {/* Image indicator */}
-                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-custom-black/50 text-white px-3 py-1.5 rounded-full text-sm font-medium">
                   {currentImageIndex + 1} / {safeImages.length}
                 </div>
               </>

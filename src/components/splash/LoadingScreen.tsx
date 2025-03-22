@@ -41,7 +41,7 @@ export default function LoadingScreen({ loading }: LoadingScreenProps) {
           transition={{ duration: 0.4, ease: "easeInOut" }} // Povećano sa 0.25s na 0.4s za sporiju animaciju
         >
           {/* <div className="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-700" /> */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary-blue to-secondary-blue" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary-dark-blue to-primary-light-blue" />
           <div className="relative z-10 flex flex-col items-center justify-center">
             <motion.div 
               className="w-[32rem] h-[32rem] relative" // Dodatno povećano sa w-96 h-96 na 38rem (608px)

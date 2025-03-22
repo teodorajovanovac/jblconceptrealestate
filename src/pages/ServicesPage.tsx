@@ -4,6 +4,7 @@ import { Building2, Key, Shield, Calculator, FileText, Search, Star, Phone, Chec
 import Header from '../components/header/Header'
 import FooterTW from '../components/footer/FooterTW'
 import Seo from '../services/meta/Seo'
+import { Link } from "react-router-dom"
 
 const services = [
   {
@@ -363,12 +364,12 @@ export default function ServicesPage() {
                     ? 'Kontaktirajte naš tim stručnjaka da razgovaramo o vašim potrebama za nekretninama u Srbiji.'
                     : 'Contact our team of experts to discuss your real estate needs in Serbia.'}
                 </p>
-                <a 
-                  href="/contact"
-                  className="bg-black text-white px-6 py-2 rounded-md font-medium inline-block hover:bg-gray-800 transition-colors"
+                <Link
+                  to="/contact"
+                  className="cta-button rounded-full"
                 >
-                  {language === 'sr' ? 'Kontaktirajte nas' : 'Contact Us'}
-                </a>
+                  <span>{language === 'sr' ? 'Kontaktirajte nas' : 'Contact Us'}</span>
+                </Link>
               </div>
             </div>
           </div>

@@ -35,11 +35,11 @@ const Header: React.FC = () => {
   // Odredi boju teksta na osnovu stranice i skrola
   const getTextColorClass = () => {
     if (isScrolled) {
-      return "bg-primary-blue text-primary-white";
+      return "bg-primary-dark-blue text-primary-white";
     } else if (isHomePage) {
       return "bg-transparent text-white";
     } else {
-      return "bg-transparent text-primary-blue";
+      return "bg-transparent text-primary-dark-blue";
     }
   }
 
@@ -50,7 +50,7 @@ const Header: React.FC = () => {
     } else if (isHomePage) {
       return "hover:text-gray-300";
     } else {
-      return "hover:text-secondary-blue";
+      return "hover:text-primary-light-blue";
     }
   }
 
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
     } else if (isHomePage) {
       return "bg-gray-300";
     } else {
-      return "bg-secondary-blue";
+      return "bg-primary-light-blue";
     }
   }
 
@@ -151,7 +151,7 @@ const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       <nav
-        className={`fixed top-0 left-0 w-full h-screen bg-primary-blue text-primary-white transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 w-full h-screen bg-primary-dark-blue text-primary-white transform transition-transform duration-300 ease-in-out ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         } md:hidden`}
       >
@@ -161,7 +161,7 @@ const Header: React.FC = () => {
               <li key={item.link}>
                 <a
                   href={item.link}
-                  className="hover:text-primary-gold transition-colors text-[1.1em] md:text-[2.2em]"
+                  className="hover:text-gold transition-colors text-[1.1em] md:text-[2.2em]"
                   onClick={toggleMenu}
                 >
                   {item.caption}
@@ -174,7 +174,7 @@ const Header: React.FC = () => {
                   toggleLanguage()
                   toggleMenu()
                 }}
-                className="hover:text-primary-gold transition-colors text-[1.1em] md:text-[2.2em]"
+                className="hover:text-gold transition-colors text-[1.1em] md:text-[2.2em]"
               >
                 {currentLanguage === "sr" ? "EN" : "SR"}
               </button>

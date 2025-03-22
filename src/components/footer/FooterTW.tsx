@@ -36,7 +36,7 @@ const Footer = () => {
     .sort((a, b) => a.order - b.order);
 
   return (
-    <footer className="bg-[#0A0F1C] text-white w-full">
+    <footer className="bg-primary-dark-blue text-white w-full">
       <div className="w-full">
         <div className="flex flex-col md:flex-row">
           {/* Logo Section */}
@@ -58,19 +58,19 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">Brzi linkovi</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/pricing" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/pricing" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <FileText size={18} />
                     Cenovnik
                   </Link>
                 </li>
                 <li>
-                  <Link to="/service" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/service" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Briefcase size={18} />
                     Usluge
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/terms" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
                     Opšti uslovi poslovanja
                   </Link>
@@ -83,25 +83,25 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">Dokumenti</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/privacy-policy" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/privacy-policy" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Shield size={18} />
                     Politika privatnosti
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms-of-use" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/terms-of-use" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
                     Uslovi korišćenja
                   </Link>
                 </li>
                 <li>
-                  <Link to="/info" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/info" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Info size={18} />
                     Info
                   </Link>
                 </li>
                 <li>
-                  <Link to="/faq" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <HelpCircle size={18} />
                     FAQ
                   </Link>
@@ -118,7 +118,7 @@ const Footer = () => {
                     href="https://www.google.com/maps/place/Мајке+Јевросиме+47,+Београд/@44.8146524,20.4641472,20.02z/data=!4m6!3m5!1s0x475a7ab1c9677c5f:0xea099311df32f4ce!8m2!3d44.8145671!4d20.4644988!16s%2Fg%2F11dzpqhx8p?hl=sr&entry=ttu&g_ep=EgoyMDI1MDMxNi4wIKXMDSoASAFQAw%3D%3D"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-primary-gold group flex justify-center md:justify-start"
+                    className="hover:text-gold group flex justify-center md:justify-start"
                   >
                     <div className="flex items-start gap-3 text-center md:text-left">
                       <MapPin size={18} className="flex-shrink-0 mt-1" />
@@ -130,19 +130,19 @@ const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:office@jblconcept.rs" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <a href="mailto:office@jblconcept.rs" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Mail size={18} />
                     office@jblconcept.rs
                   </a>
                 </li>
                 <li>
-                  <a href="tel:+381618027377" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <a href="tel:+381618027377" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Phone size={18} />
                     +381 66 80 27 377
                   </a>
                 </li>
                 <li>
-                  <a href="tel:+381612299988" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <a href="tel:+381612299988" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Phone size={18} />
                     +381 61 22 999 88
                   </a>
@@ -156,19 +156,19 @@ const Footer = () => {
                   <a href="https://www.instagram.com/realestateconcept.jbl/" 
                      target="_blank"
                      rel="noopener noreferrer"
-                     className="hover:text-primary-gold hover:scale-110 transition-all">
+                     className="hover:text-gold hover:scale-110 transition-all">
                     <Instagram size={22} />
                   </a>
-                  <a href="#" className="hover:text-primary-gold hover:scale-110 transition-all">
+                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Facebook size={22} />
                   </a>
-                  <a href="#" className="hover:text-primary-gold hover:scale-110 transition-all">
+                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <FaTiktok size={20} />
                   </a>
-                  <a href="#" className="hover:text-primary-gold hover:scale-110 transition-all">
+                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Twitter size={22} />
                   </a>
-                  <a href="#" className="hover:text-primary-gold hover:scale-110 transition-all">
+                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Linkedin size={22} />
                   </a>
                 </div>

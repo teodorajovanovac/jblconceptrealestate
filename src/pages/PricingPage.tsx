@@ -3,6 +3,7 @@ import { Calculator, Clipboard, Home, LineChart, ShoppingBag, Users } from 'luci
 import Header from '../components/header/Header';
 import FooterTW from '../components/footer/FooterTW';
 import Seo from '../services/meta/Seo';
+import { Link } from 'react-router-dom';
 
 const PricingPage = () => {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr');
@@ -404,12 +405,12 @@ const PricingPage = () => {
                   ? 'Kontaktirajte naš tim za detaljne informacije o cenama i uslugama.'
                   : 'Contact our team for detailed pricing and service information.'}
               </p>
-              <a
-                href="/contact"
-                className="bg-black text-white px-6 py-2 rounded-md font-medium inline-block hover:bg-gray-800 transition-colors"
+              <Link
+                to="/contact"
+                className="cta-button rounded-full"
               >
-                {language === 'sr' ? 'Kontaktirajte nas' : 'Contact Us'}
-              </a>
+                <span>{language === 'sr' ? 'Kontaktirajte nas' : 'Contact Us'}</span>
+              </Link>
             </div>
           </div>
         </div>

@@ -63,8 +63,51 @@ JBL Real Estate Concept predstavlja jedinstveni spoj inovativnosti, visokog prof
 - **Boje i Tipografija – Detaljni Parametri:**  
   Vizuelni identitet JBL Real Estate Concept oslanja se na pažljivo odabrane boje i tipografske elemente:
   - **Boje:**  
-    - **Primarni gradijent:** Kombinuje tamnu plavu nijansu (CMYK: 92/86/50/67, RGB: 15/18/43, PANTONE 2768 C) i tople zlatne tonove (CMYK: 0/25/65/20, RGB: 214/171/93, PANTONE 282C).  
-    - **Sekundarne boje:** Uključuju nijanse zelene i tamno crne, sa precizno definisanim CMYK i RGB vrednostima, čime se osigurava ravnoteža između luksuza i ozbiljnosti.  
+    - ​Boje igraju ključnu ulogu u definisanju identiteta brenda, pružajući vizuelnu doslednost i prepoznatljivost. Za brend "Građanski front" odabrane su sledeće boje koje reflektuju njegove vrednosti i estetiku:​
+
+Primarni gradijent:
+
+Tamna plava nijansa:
+
+CMYK: 100/40/0/69​
+
+RGB: 0/43/74​
+
+HEX: #002B4A​
+
+PANTONE: 7463 C​
+
+Svetla plava nijansa:
+
+CMYK: 100/32/0/25​
+
+RGB: 0/125/186​
+
+HEX: #007DBA​
+
+PANTONE: 7461 C​
+
+Ove dve nijanse plave boje stvaraju dinamičan gradijent koji simbolizuje poverenje, stabilnost i profesionalizam.​
+
+Sekundarne boje:
+
+Zelena nijansa:
+
+HEX: #316944​
+
+RGB: 49/105/68​
+
+CMYK: 53/0/35/59​
+
+Zlatna nijansa:
+
+HEX: #DBB756​
+
+RGB: 219/183/86​
+
+CMYK: 0/16/61/14​
+
+Zelena boja dodaje element svežine i rasta, dok zlatna unosi osećaj prestiža i topline. Kombinacija ovih sekundarnih boja sa primarnim plavim nijansama osigurava ravnotežu između luksuza i ozbiljnosti, pružajući brendu "Građanski front" prepoznatljiv i sofisticiran vizuelni identitet.
   - **Tipografija:**  
     - **Primarna:** Koristi se font **Century Gothic** i njegov Bold oblik za klasičan, čist izgled ispisa.  
     - **Primarna – digital:** Za digitalne medije preferira se **Noto Serif** sa njegovim Bold varijantom, čime se postiže moderan i čitljiv dizajn.  

@@ -318,7 +318,7 @@ export const properties: PropertyData[] = [
     },
     // Use only 2 images
     images: [property1, property2],
-    mapLocation: {
+  mapLocation: {
       lat: 44.8184,
       lng: 20.4575,
     },

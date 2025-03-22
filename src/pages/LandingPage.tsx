@@ -123,7 +123,7 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
             
             {/* Price - Bottom Right */}
             <div className="absolute bottom-4 right-4">
-              <span className="text-white text-[1.8rem] font-bold shadow-lg px-3 py-1 bg-black/50 rounded-lg">
+              <span className="text-white text-[1.8rem] font-bold shadow-lg px-3 py-1 bg-custom-black/50 rounded-lg">
                 {formatPrice(property.price)} €
               </span>
             </div>
@@ -332,7 +332,7 @@ const LandingPage: React.FC = () => {
               className="absolute inset-0 w-full h-full object-cover"
             />
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black/40 z-0"></div>
+            <div className="absolute inset-0 bg-custom-black/40 z-0"></div>
         </div>
 
         {/* Header with transparent background and white text */}
@@ -416,10 +416,10 @@ const LandingPage: React.FC = () => {
                 </div>
                 <Link
                   to="/properties"
-                  className="inline-flex items-center px-6 py-3 bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 transition-all duration-200 font-medium"
+                  className="cta-button rounded-full"
                 >
-                  {language === 'sr' ? 'Pogledaj sve nekretnine' : 'View all properties'}
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <span>{language === 'sr' ? 'Pogledaj sve nekretnine' : 'View all properties'}</span>
+                  <ArrowRight className="icon" />
                 </Link>
               </div>
               
@@ -500,30 +500,28 @@ const LandingPage: React.FC = () => {
                   </p>
                   <div className="hidden md:block">
                     <p className="text-gray-700 text-lg leading-relaxed mb-8">
-                      {t.aboutDescription}
-                    </p>
-                    <ul className="space-y-3 mb-8">
-                      <li className="flex items-start">
-                        <span className="text-primary-blue mr-2 mt-1">✓</span>
-                        <span className="text-gray-700">{t.aboutFeature1}</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="text-primary-blue mr-2 mt-1">✓</span>
-                        <span className="text-gray-700">{t.aboutFeature2}</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="text-primary-blue mr-2 mt-1">✓</span>
-                        <span className="text-gray-700">{t.aboutFeature3}</span>
-                      </li>
-                    </ul>
-                    <div className="flex">
-                      <Link to="/about-us">
-                        <button className="cta-button">
-                          <span>{t.meetOurTeam}</span>
-                          <Users className="icon" />
-                        </button>
-                      </Link>
-                    </div>
+                    {t.aboutDescription}
+                  </p>
+                  <ul className="space-y-3 mb-8">
+                    <li className="flex items-start">
+                      <span className="text-primary-blue mr-2 mt-1">✓</span>
+                      <span className="text-gray-700">{t.aboutFeature1}</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-primary-blue mr-2 mt-1">✓</span>
+                      <span className="text-gray-700">{t.aboutFeature2}</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-primary-blue mr-2 mt-1">✓</span>
+                      <span className="text-gray-700">{t.aboutFeature3}</span>
+                    </li>
+                  </ul>
+                  <div className="flex">
+                    <Link to="/about-us" className="cta-button rounded-full">
+                      <span>{t.meetOurTeam}</span>
+                      <Users className="icon" />
+                    </Link>
+                  </div>
                   </div>
                 </div>
                 
@@ -545,11 +543,9 @@ const LandingPage: React.FC = () => {
                         <span>{t.aboutFeature3}</span>
                       </li>
                     </ul>
-                    <Link to="/about-us" className="mt-auto">
-                      <button className="cta-button bg-primary-blue hover:bg-primary-blue/90">
-                        <span className="text-white">{t.meetOurTeam}</span>
-                        <Users className="icon text-white" />
-                      </button>
+                    <Link to="/about-us" className="mt-auto cta-button rounded-full">
+                      <span className="text-white">{t.meetOurTeam}</span>
+                      <Users className="icon" />
                     </Link>
                   </div>
 

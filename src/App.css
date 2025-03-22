@@ -1,41 +1,17 @@
-:root{
+:root {
+  /* Primary color palette */
   --primary-white: white;
-  --primary-blue: rgba(15,18,43,1);
-  --secundary-blue: rgba(44,46,114,1);
-  --secundary-light-green:rgba(37,102,69);
-  --secundary-dark-green:rgba(38,51,28);
-  --secundary-black:black;
-
-  --hover-color-1:rgb(184, 186, 197);
-  --hover-color-2:rgb(11, 11, 29);
-
-  --color-primary-back: var(--primary-blue);
-  --color-primary-fore: var(--primary-blue);
-  --color-secundary-fore: var(--primary-blue);
-  --color-alter-fore: rgb(246,229,112);
-
-  --color-primary-back-grad1: var(--primary-blue);
-  --color-primary-back-grad2: var(--secundary-blue);
-  --color-primary-fore-grad1: var(--secundary-blue);
-  --color-primary-fore-grad2: var(--secundary-blue);
-
-  --color-def-a: var(--primary-blue);
-  --color-def-a-hover: var(--secundary-blue);
-  --color-def-fore: var(--primary-blue);
+  --gold-color: rgb(255, 214, 100);
+  --green-color: rgb(48, 105, 68);
+  --primary-light-blue: rgb(33, 146, 231);
+  --primary-dark-blue: rgb(0, 30, 74);
+  --custom-black: rgb(28, 39, 71);
   
-  --color-landingpage-fore:var(--color-def-fore);
-  --color-landingpage-title:var(--color-def-grayone);
-  --color-landingpage-highlight-e:var(--color-def-green);
-  --color-landingpage-back1: var(--color-primary-back);
-  --color-landingpage-back1: var(--color-primary-back);
-
-  --color-footer-back:var(--color-primary-back);
-
-  --color-footer-fore: #fcfff5;
-  --color-footer-link: var(--color-footer-link);
-  --color-footer-border: var(--color-landingpage-title);
+  /* Hover state colors */
+  --hover-gold: rgba(255, 214, 100, 0.7);
+  --hover-blue: rgba(0, 30, 74, 0.9);
   
-  /* Dodajemo Century Gothic kao glavni font */
+  /* Font family */
   font-family: 'Century Gothic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -45,12 +21,11 @@
   width: 100vw;
   min-height: 100vh;
   font-family: 'Century Gothic', sans-serif;
-  color: var(--color-primary-fore);
+  color: var(--primary-dark-blue);
 }
 
 body {
   background: var(--primary-white);
-  /* background: linear-gradient(135deg, var(--color-primary-back-grad1) 60%,  var(--color-primary-back-grad2) 100%); */
   margin: 0;  
   display: flex;
   place-items: center;
@@ -61,20 +36,20 @@ body {
 }
 
 .main {
-  flex-grow: 1; /* Main content takes up available space */
-  display: flex; /* Use Flexbox */
+  flex-grow: 1;
+  display: flex;
   flex-direction: column;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center;
+  align-items: center;
 }
 
-a{
-  color: var(--color-def-a);
+a {
+  color: var(--primary-dark-blue);
   text-decoration: inherit;
 }
 
 a:hover {
-  color: var(--primary-blue);
+  color: var(--primary-light-blue);
 }
 
 .hover-underline-animation2 {
@@ -90,7 +65,7 @@ a:hover {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: var(--color-def-a);
+  background-color: var(--primary-dark-blue);
   transform-origin: bottom right;
   transition: transform 0.25s ease-out;
 }
@@ -113,7 +88,7 @@ a:hover {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: var(--color-def-a);
+  background-color: var(--primary-dark-blue);
   transition: width 0.25s ease-out;
 }
 
@@ -121,15 +96,15 @@ a:hover {
   width: 100%;
 }
 
-.jbllogo{
+.jbllogo {
   min-width: 300px;
   width: 50vw;
-  fill:white;
+  fill: white;
 }
 
 .goldGradient {
-  background: rgb(15,18,43);
-  background: linear-gradient(135deg, rgba(248,241,140,1) 30%, rgba(152,110,42,1) 100%);
+  background: var(--primary-dark-blue);
+  background: linear-gradient(135deg, var(--gold-color) 30%, rgba(204, 164, 60, 1) 100%);
 }
 
 .logo {
@@ -138,9 +113,11 @@ a:hover {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -168,9 +145,9 @@ a:hover {
   color: #888;
 }
 
-/* Dodajemo novi gradijent za naslove */
+/* Gradient text styling */
 .gradient-text {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secundary-blue) 100%);
+  background: linear-gradient(135deg, var(--primary-dark-blue) 0%, var(--primary-light-blue) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -197,27 +174,28 @@ h3.gradient-text {
   margin-bottom: 2rem;
 }
 
-/* Modernizovano CTA dugme - kockasti dizajn */
+/* CTA button styling */
 .cta-button {
   min-width: 140px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--primary-blue, #1e3a8a);
+  background-color: var(--primary-dark-blue);
   border: none;
   color: white;
   font-weight: 600;
   gap: 10px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
-  border-radius: 2px; /* Kockasti oblik */
+  border-radius: 16px;
   padding: 0 1.8rem;
   text-align: center;
   font-family: 'Century Gothic', sans-serif;
+  outline: none;
 }
 
 .cta-button .icon {
@@ -225,7 +203,7 @@ h3.gradient-text {
   height: 18px;
   position: relative;
   z-index: 2;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .cta-button .icon path {
@@ -242,31 +220,33 @@ h3.gradient-text {
 }
 
 .cta-button::before {
-  width: 100%;
-  height: 100%;
+  width: 120%;
+  height: 120%;
   position: absolute;
   content: "";
-  background-color: white;
-  left: -100%;
-  top: 0;
+  background-color: var(--gold-color);
+  left: -120%;
+  top: -10%;
   transition: transform 0.4s ease;
   z-index: 1;
 }
 
 .cta-button:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
+  transform: none;
 }
 
 .cta-button:hover span {
-  color: var(--primary-blue, #1e3a8a);
+  color: var(--primary-dark-blue);
 }
 
 .cta-button:hover .icon {
-  color: var(--primary-blue, #1e3a8a);
+  color: var(--primary-dark-blue);
+  transform: translateX(3px);
 }
 
 .cta-button:hover .icon path {
-  fill: var(--primary-blue, #1e3a8a);
+  fill: var(--primary-dark-blue);
 }
 
 .cta-button:hover::before {
@@ -274,16 +254,119 @@ h3.gradient-text {
 }
 
 .cta-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transform: none;
+  box-shadow: none;
   transition: all 0.1s ease;
 }
 
-/* Prilagođavanje za dugmad pune širine */
+/* Animated Send Button */
+.send-button {
+  background-color: var(--primary-dark-blue);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  font-family: 'Century Gothic', sans-serif;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.send-button:hover {
+  background-color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.send-button span {
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.send-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.send-button:hover svg {
+  transform: translateX(3px);
+  color: var(--primary-dark-blue);
+}
+
+.send-button::before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: "";
+  background-color: var(--gold-color);
+  left: -100%;
+  top: 0;
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  z-index: 1;
+}
+
+.send-button:hover::before {
+  transform: translateX(100%);
+}
+
+.send-button:hover span {
+  color: var(--primary-dark-blue);
+}
+
+/* Specific styles for rounded send buttons */
+.send-button.rounded-full {
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.send-button.rounded-full::before {
+  border-radius: 9999px;
+}
+
+/* End Animated Send Button */
+
+/* Fully rounded button variation */
+.cta-button.rounded-full {
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  outline: none;
+  padding: 0 2rem;
+}
+
+.cta-button.rounded-full:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Send button hover fixes */
+.send-button {
+  outline: none;
+}
+
+.send-button:hover {
+  transform: none;
+}
+
+.send-button:active {
+  transform: none;
+}
+
+/* Full-width button adjustments */
 button.w-full.cta-button::before,
 a.w-full.cta-button::before {
-  width: 100%;
-  left: -100%;
+  width: 120%;
+  left: -120%;
+  top: -10%;
+  height: 120%;
 }
 
 button.w-full.cta-button:hover::before,

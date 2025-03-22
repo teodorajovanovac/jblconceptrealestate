@@ -90,7 +90,7 @@ export default function ContactForm() {
           transition={{ duration: 0.5 }}
           className="text-center mb-14"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-primary-blue mb-4">{t.title}</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-primary-dark-blue mb-4">{t.title}</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t.subtitle}</p>
         </motion.div>
         
@@ -114,8 +114,8 @@ export default function ContactForm() {
             ) : (
               <>
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 rounded-full bg-primary-blue/10 flex items-center justify-center mr-4">
-                    <MessageSquare className="h-6 w-6 text-primary-blue" />
+                  <div className="w-12 h-12 rounded-full bg-primary-dark-blue/10 flex items-center justify-center mr-4">
+                    <MessageSquare className="h-6 w-6 text-primary-dark-blue" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-800">{t.contactHeading}</h3>
                 </div>
@@ -130,7 +130,7 @@ export default function ContactForm() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder={t.emailPlaceholder}
-                      className="w-full px-10 py-4 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all"
+                      className="w-full px-10 py-4 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-dark-blue focus:border-transparent transition-all"
                       required
                     />
                   </div>
@@ -138,12 +138,25 @@ export default function ContactForm() {
                   <div className="w-full">
                     <button 
                       type="submit" 
-                      className="cta-button w-full"
+                      className="send-button w-full"
                     >
-                      <span>{language === 'sr' ? 'Pošalji poruku' : 'Send Message'}</span>
-                      <svg className="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" fill="white"/>
-                      </svg>
+                      <div className="svg-wrapper-1">
+                        <div className="svg-wrapper">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            height="24"
+                          >
+                            <path fill="none" d="M0 0h24v24H0z"></path>
+                            <path
+                              fill="currentColor"
+                              d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                      <span>{language === 'sr' ? 'Pošalji' : 'Send'}</span>
                     </button>
                   </div>
                 </form>
@@ -151,13 +164,13 @@ export default function ContactForm() {
                 {/* Trust badges */}
                 <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-200">
                   <div className="text-center">
-                    <div className="text-primary-blue text-sm font-medium">{t.trustBadge1}</div>
+                    <div className="text-primary-dark-blue text-sm font-medium">{t.trustBadge1}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-primary-blue text-sm font-medium">{t.trustBadge2}</div>
+                    <div className="text-primary-dark-blue text-sm font-medium">{t.trustBadge2}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-primary-blue text-sm font-medium">{t.trustBadge3}</div>
+                    <div className="text-primary-dark-blue text-sm font-medium">{t.trustBadge3}</div>
                   </div>
                 </div>
                 
@@ -165,14 +178,14 @@ export default function ContactForm() {
                 <div className="mt-8 pt-6 border-t border-gray-200">
                   <p className="text-gray-500 mb-2 text-sm font-medium">{t.preferPhone}</p>
                   <div className="flex items-center mb-2">
-                    <Phone className="h-5 w-5 text-primary-blue mr-2" />
-                    <a href="tel:+381612299988" className="text-lg font-bold text-primary-blue hover:text-secondary-blue transition-colors">
+                    <Phone className="h-5 w-5 text-primary-dark-blue mr-2" />
+                    <a href="tel:+381612299988" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
                       {t.phoneNumber}
                     </a>
                   </div>
                   <div className="flex items-center mb-4">
-                    <Phone className="h-5 w-5 text-primary-blue mr-2" />
-                    <a href="tel:+381612299988" className="text-lg font-bold text-primary-blue hover:text-secondary-blue transition-colors">
+                    <Phone className="h-5 w-5 text-primary-dark-blue mr-2" />
+                    <a href="tel:+381612299988" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
                       {t.phoneNumber}
                     </a>
                   </div>
@@ -210,8 +223,8 @@ export default function ContactForm() {
               </p>
               
               <div className="flex items-center mt-2">
-                <Mail className="h-5 w-5 text-primary-blue mr-2" />
-                <a href={`mailto:${t.contactEmail}`} className="text-lg font-bold text-primary-blue hover:text-secondary-blue transition-colors">
+                <Mail className="h-5 w-5 text-primary-dark-blue mr-2" />
+                <a href={`mailto:${t.contactEmail}`} className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
                   {t.contactEmail}
                 </a>
               </div>
