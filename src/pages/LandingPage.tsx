@@ -19,6 +19,7 @@ import FAQ from '../components/faq/FAQ'
 import JBLGoldLogo from '../assets/jblgold.svg';  // Import the gold gradient logo
 import Spinner from '../components/ui/Spinner';
 import useFavorites from '../hooks/useFavorites';
+import { useCmsData } from "../services/CmsProvider"
 
 // Import property images
 // import property1Image from '../assets/fotke za home/1.jpg'
@@ -200,15 +201,15 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
 
 const LandingPage: React.FC = () => {
     TagManager.dataLayer(tagManagerArgs)
-    const [language, setLanguage] = useState<'sr' | 'en'>(localStorage.getItem('language') as 'sr' | 'en' || 'sr')
     const [scrollPosition, setScrollPosition] = useState(0);
     const [featuredProperties, setFeaturedProperties] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { t, currentLanguage } = useCmsData();
 
     useEffect(() => {
       const handleLanguageChange = () => {
-        setLanguage(localStorage.getItem('language') as 'sr' | 'en' || 'sr');
+        // Već se hendluje kroz useCmsData hook
       };
       
       const handleScroll = () => {
@@ -252,56 +253,11 @@ const LandingPage: React.FC = () => {
       fetchData();
     }, []);
 
-    const translations = {
-      sr: {
-        tagline: 'EKSKLUZIVNE NEKRETNINE U VAŠEM KRAJU',
-        headline: 'PRONAĐITE SVOJ DOM IZ SNOVA',
-        subheading: 'Vrhunska usluga i stručni saveti u svakom koraku vašeg putovanja kroz nekretnine',
-        searchButton: 'Nekretnine',
-        featuredProperties: 'Izdvojene nekretnine',
-        viewAllProperties: 'Sve nekretnine',
-        aboutUs: 'O nama',
-        meetOurTeam: 'Upoznajte naš tim',
-        // About section
-        clients: 'Klijenata',
-        experience: 'Godina iskustva',
-        team: 'Zaposlenih',
-        locations: 'Lokacija',
-        aboutTitle: 'Sigurnost, Elegancija, Ekskluzivnost',
-        aboutDescription: 'JBL Concept Real Estate predstavlja jedinstveni spoj inovativnosti, visokog profesionalizma i savremenog dizajna u sektoru nekretnina. Kao renomirana agencija sa sedištem u Beogradu, pružamo premium usluge u kupovini, prodaji i investiranju u nekretnine. Naš tim stručnjaka se posvećuje pronalaženju savršenih nekretnina za naše klijente, bilo da kupuju ili prodaju.',
-        aboutFeature1: 'Personalizovana usluga',
-        aboutFeature2: 'Stručni saveti',
-        aboutFeature3: 'Dugoročna partnerstva'
-      },
-      en: {
-        tagline: 'PREMIUM PROPERTIES IN YOUR AREA',
-        headline: 'FIND YOUR DREAM HOME ',
-        subheading: 'Unparalleled service and expert advice at every step of your real estate journey',
-        searchButton: 'Properties',
-        featuredProperties: 'Featured Properties',
-        viewAllProperties: 'View All',
-        aboutUs: 'About Us',
-        meetOurTeam: 'Meet Our Team',
-        // About section
-        clients: 'Clients',
-        experience: 'Years Experience',
-        team: 'Team Members',
-        locations: 'Locations',
-        aboutTitle: 'Exclusivity, Elegance, Reliability',
-        aboutDescription: 'JBL Concept Real Estate represents a unique blend of innovation, high professionalism, and modern design in the real estate sector. As a renowned agency based in Belgrade, we provide premium services in buying, selling, and investing in real estate. Our team of experts is dedicated to finding the perfect properties for our clients, whether buying or selling.',
-        aboutFeature1: 'Personalized service',
-        aboutFeature2: 'Expert advice',
-        aboutFeature3: 'Long-term partnerships'
-      }
-    }
-
-    const t = translations[language as 'sr' | 'en']
-
     // Helper function to format property data
     const formatPropertyForDisplay = (property: RealEstateDto) => {
       return {
         id: property.id,
-        title: property.locationArea || language === 'sr' ? "Premium nekretnina" : "Premium Property",
+        title: property.locationArea || currentLanguage === 'sr' ? "Premium nekretnina" : "Premium Property",
         price: property.price,
         location: `${property.locationCityName}${property.locationArea ? `, ${property.locationArea}` : ''}`,
         bedrooms: property.roomsNo,
@@ -317,7 +273,7 @@ const LandingPage: React.FC = () => {
 
     return( 
       <div className="landing-page flex flex-col min-h-screen w-full overflow-hidden">
-        <Seo title={language === 'sr' ? "JBL Concept Nekretnine" : "JBL Concept Real Estate"}/>
+        <Seo title={currentLanguage === 'sr' ? "JBL Concept Nekretnine" : "JBL Concept Real Estate"}/>
         
         {/* Video Background i Hero Section - 100vh */}
         <div className="h-screen w-full relative flex flex-col">
@@ -350,19 +306,8 @@ const LandingPage: React.FC = () => {
               <div className="w-36 h-1 bg-gold mx-auto mb-3"></div>
               
               <p className="mb-6 max-w-3xl mx-auto text-2xl md:text-3xl font-light leading-relaxed">
-                {language === 'sr' 
-                  ? (
-                    <>
-                      Ekskluzivne nekretnine, izuzetna usluga.<br />
-                      Vaša investicija u siguran životni koncept.
-                    </>
-                  )
-                  : (
-                    <>
-                      Exclusive properties, premium service.<br />
-                      Your secure investment in luxury.
-                    </>
-                  )}
+                {t("landing-hero-tagline1")}<br />
+                {t("landing-hero-tagline2")}
               </p>
             </div>
           </div>
@@ -378,25 +323,25 @@ const LandingPage: React.FC = () => {
               className="flex flex-col items-center text-white hover:text-gold transition-colors duration-300 animate-pulse"
             >
               <span className="mb-2 text-sm font-light">
-                {language === 'sr' ? 'Skroluj za više' : 'Scroll for more'}
+                {t("landing-scroll-for-more")}
               </span>
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="h-6 w-6 animate-bounce" 
                 fill="none" 
-                    viewBox="0 0 24 24" 
+                viewBox="0 0 24 24" 
                 stroke="currentColor"
               >
                 <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
                   strokeWidth={2} 
                   d="M19 14l-7 7m0 0l-7-7m7 7V3" 
                 />
-                  </svg>
+              </svg>
             </button>
-              </div>
-            </div>
+          </div>
+        </div>
 
         {/* Ostatak sadržaja */}
         <div className="relative z-10 flex flex-col">
@@ -406,19 +351,17 @@ const LandingPage: React.FC = () => {
               <div className="flex justify-between items-start mb-12">
                 <div className="max-w-2xl">
                   <h2 className="text-3xl font-bold text-primary-blue mb-4">
-                    {language === 'sr' ? 'Izdvojene nekretnine' : 'Featured Properties'}
+                    {t("landing-featuredProperties")}
                   </h2>
                   <p className="text-gray-600 text-lg">
-                    {language === 'sr' 
-                      ? 'Otkrijte našu ekskluzivnu selekciju premium nekretnina. Svaka nekretnina je pažljivo odabrana da zadovolji najviše standarde kvaliteta i luksuza.'
-                      : 'Discover our exclusive selection of premium properties. Each property is carefully selected to meet the highest standards of quality and luxury.'}
+                    {t("landing-featured-description")}
                   </p>
                 </div>
                 <Link
                   to="/properties"
                   className="cta-button rounded-full"
                 >
-                  <span>{language === 'sr' ? 'Pogledaj sve nekretnine' : 'View all properties'}</span>
+                  <span>{t("landing-view-all-properties")}</span>
                   <ArrowRight className="icon" />
                 </Link>
               </div>
@@ -427,18 +370,18 @@ const LandingPage: React.FC = () => {
                 {isLoading ? (
                   <div className="col-span-full">
                     <Spinner size="lg" />
-                        </div>
+                  </div>
                 ) : error ? (
                   <div className="col-span-full text-center text-red-500 py-10">
                     {error}
-                      </div>
+                  </div>
                 ) : (
                   featuredProperties.map((property, index) => (
                     <PropertyCard
                       key={property.id}
                       property={property}
                       index={index}
-                      language={language}
+                      language={currentLanguage}
                     />
                   ))
                 )}
@@ -450,9 +393,9 @@ const LandingPage: React.FC = () => {
           <div className="w-full bg-gray-50 py-2">
             <div className="max-w-7xl mx-auto px-4">
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-bold text-primary-blue mb-6">{t.aboutUs}</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-primary-blue mb-6">{t("landing-aboutUs")}</h2>
                 <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto">
-                  {t.aboutTitle}
+                  {t("landing-aboutTitle")}
                 </p>
               </div>
               
@@ -463,7 +406,7 @@ const LandingPage: React.FC = () => {
                     <Globe className="h-12 w-12" />
                   </div>
                   <h3 className="text-5xl font-bold text-primary-blue mb-2">1</h3>
-                  <p className="text-gray-600 font-medium">{t.locations}</p>
+                  <p className="text-gray-600 font-medium">{t("landing-locations")}</p>
                 </div>
                 
                 <div className="flex flex-col items-center text-center">
@@ -471,7 +414,7 @@ const LandingPage: React.FC = () => {
                     <Clock className="h-12 w-12" />
                   </div>
                   <h3 className="text-5xl font-bold text-primary-blue mb-2">15+</h3>
-                  <p className="text-gray-600 font-medium">{t.experience}</p>
+                  <p className="text-gray-600 font-medium">{t("landing-experience")}</p>
                 </div>
                 
                 <div className="flex flex-col items-center text-center">
@@ -479,7 +422,7 @@ const LandingPage: React.FC = () => {
                     <Briefcase className="h-12 w-12" />
                   </div>
                   <h3 className="text-5xl font-bold text-primary-blue mb-2">100+</h3>
-                  <p className="text-gray-600 font-medium">{t.clients}</p>
+                  <p className="text-gray-600 font-medium">{t("landing-clients")}</p>
                 </div>
                 
                 <div className="flex flex-col items-center text-center">
@@ -487,7 +430,7 @@ const LandingPage: React.FC = () => {
                     <UsersIcon className="h-12 w-12" />
                   </div>
                   <h3 className="text-5xl font-bold text-primary-blue mb-2">10+</h3>
-                  <p className="text-gray-600 font-medium">{t.team}</p>
+                  <p className="text-gray-600 font-medium">{t("landing-team")}</p>
                 </div>
               </div>
               
@@ -496,32 +439,32 @@ const LandingPage: React.FC = () => {
                 {/* Text section - now visible on mobile above the image */}
                 <div className="md:w-1/2">
                   <p className="text-gray-700 text-lg leading-relaxed mb-8 md:hidden text-center px-4">
-                    {t.aboutDescription}
+                    {t("landing-aboutDescription")}
                   </p>
                   <div className="hidden md:block">
                     <p className="text-gray-700 text-lg leading-relaxed mb-8">
-                    {t.aboutDescription}
-                  </p>
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-start">
-                      <span className="text-primary-blue mr-2 mt-1">✓</span>
-                      <span className="text-gray-700">{t.aboutFeature1}</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-primary-blue mr-2 mt-1">✓</span>
-                      <span className="text-gray-700">{t.aboutFeature2}</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-primary-blue mr-2 mt-1">✓</span>
-                      <span className="text-gray-700">{t.aboutFeature3}</span>
-                    </li>
-                  </ul>
-                  <div className="flex">
-                    <Link to="/about-us" className="cta-button rounded-full">
-                      <span>{t.meetOurTeam}</span>
-                      <Users className="icon" />
-                    </Link>
-                  </div>
+                      {t("landing-aboutDescription")}
+                    </p>
+                    <ul className="space-y-3 mb-8">
+                      <li className="flex items-start">
+                        <span className="text-primary-blue mr-2 mt-1">✓</span>
+                        <span className="text-gray-700">{t("landing-aboutFeature1")}</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary-blue mr-2 mt-1">✓</span>
+                        <span className="text-gray-700">{t("landing-aboutFeature2")}</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="text-primary-blue mr-2 mt-1">✓</span>
+                        <span className="text-gray-700">{t("landing-aboutFeature3")}</span>
+                      </li>
+                    </ul>
+                    <div className="flex">
+                      <Link to="/about-us" className="cta-button rounded-full">
+                        <span>{t("landing-meetOurTeam")}</span>
+                        <Users className="icon" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
                 
@@ -532,19 +475,19 @@ const LandingPage: React.FC = () => {
                     <ul className="space-y-3 mb-8 text-center">
                       <li className="flex items-center justify-center">
                         <span className="text-white mr-2">✓</span>
-                        <span>{t.aboutFeature1}</span>
+                        <span>{t("landing-aboutFeature1")}</span>
                       </li>
                       <li className="flex items-center justify-center">
                         <span className="text-white mr-2">✓</span>
-                        <span>{t.aboutFeature2}</span>
+                        <span>{t("landing-aboutFeature2")}</span>
                       </li>
                       <li className="flex items-center justify-center">
                         <span className="text-white mr-2">✓</span>
-                        <span>{t.aboutFeature3}</span>
+                        <span>{t("landing-aboutFeature3")}</span>
                       </li>
                     </ul>
                     <Link to="/about-us" className="mt-auto cta-button rounded-full">
-                      <span className="text-white">{t.meetOurTeam}</span>
+                      <span className="text-white">{t("landing-meetOurTeam")}</span>
                       <Users className="icon" />
                     </Link>
                   </div>

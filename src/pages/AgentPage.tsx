@@ -6,11 +6,12 @@ import Header from "../components/header/Header"
 import FooterTW from "../components/footer/FooterTW"
 import Seo from '../services/meta/Seo'
 import agentsData from '../assets/data/agents.json'
+import { useCmsData } from "../services/CmsProvider"
 
 export default function AgentPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
+  const { t, currentLanguage } = useCmsData()
 
   useEffect(() => {
     // Scroll to top when component mounts
@@ -42,7 +43,7 @@ export default function AgentPage() {
 
   return (
     <>
-      <Seo title={`${agent.name} - ${agent.title[language as keyof typeof agent.title]}`} />
+      <Seo title={`${agent.name} - ${agent.title[currentLanguage as keyof typeof agent.title]}`} />
       <Header />
       <main className="pt-24 pb-16">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -106,15 +107,15 @@ export default function AgentPage() {
               >
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold text-primary-blue">{agent.name}</h2>
-                  <p className="text-sm uppercase tracking-widest text-gray-500">{agent.title[language]}</p>
+                  <p className="text-sm uppercase tracking-widest text-gray-500">{agent.title[currentLanguage]}</p>
                   <div className="space-y-2">
                     <p className="text-sm uppercase tracking-widest">
                       <a href={`tel:${agent.contact.phone}`} className="text-primary-dark-blue hover:text-gold-color">
-                        {language === 'sr' ? 'POZOVI' : 'CALL'}
+                        {t("agent-call")}
                       </a>
                       {" | "}
                       <a href={`mailto:${agent.contact.email}`} className="text-primary-dark-blue hover:text-gold-color">
-                        EMAIL
+                        {t("agent-email")}
                       </a>
                     </p>
                   </div>
@@ -129,7 +130,7 @@ export default function AgentPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              {agent.bio[language as 'sr' | 'en'].split("\n\n").map((paragraph, index) => (
+              {agent.bio[currentLanguage as 'sr' | 'en'].split("\n\n").map((paragraph, index) => (
                 <p key={index} className="text-gray-600 leading-relaxed mb-6">
                   {paragraph.trim()}
                 </p>

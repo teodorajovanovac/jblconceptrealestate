@@ -1,66 +1,12 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Mail, Send, MessageSquare, ArrowRight, Phone } from "lucide-react"
+import { useCmsData } from "../../services/CmsProvider"
 
 export default function ContactForm() {
   const [email, setEmail] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
-
-  useEffect(() => {
-    const handleLanguageChange = () => {
-      setLanguage(localStorage.getItem('language') || 'sr');
-    };
-
-    window.addEventListener('storage', handleLanguageChange);
-    window.addEventListener('languageChange', handleLanguageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleLanguageChange);
-      window.removeEventListener('languageChange', handleLanguageChange);
-    };
-  }, []);
-
-  const translations = {
-    sr: {
-      title: "Pošaljite nam poruku",
-      subtitle: "Imate pitanje ili želite da saznate više o našim uslugama?",
-      emailPlaceholder: "Vaša email adresa",
-      buttonText: "Pošalji poruku",
-      contactHeading: "Kontaktirajte nas",
-      contactText: "Naš tim je uvek spreman da vam pomogne i odgovori na sva vaša pitanja o nekretninama. Ostavite nam svoju email adresu i uskoro ćemo vas kontaktirati.",
-      successTitle: "Hvala na poruci!",
-      successMessage: "Uspešno ste poslali poruku. Naš tim će vas kontaktirati u najkraćem mogućem roku.",
-      trustBadge1: "Brz odgovor",
-      trustBadge2: "Stručna pomoć",
-      trustBadge3: "Dostupni 24/7",
-      callToAction: "Posetite našu kancelariju",
-      preferPhone: "Radije biste telefonirali?",
-      phoneNumber: "+381 61 2299988",
-      contactEmail: "office@jblconcept.rs",
-      email: "Email:"
-    },
-    en: {
-      title: "Send us a message",
-      subtitle: "Have a question or want to learn more about our services?",
-      emailPlaceholder: "Your email address",
-      buttonText: "Send message",
-      contactHeading: "Contact us",
-      contactText: "Our team is always ready to help you and answer all your questions about real estate. Leave us your email address and we will contact you soon.",
-      successTitle: "Thank you for your message!",
-      successMessage: "You have successfully sent a message. Our team will contact you as soon as possible.",
-      trustBadge1: "Fast response",
-      trustBadge2: "Expert help",
-      trustBadge3: "Available 24/7",
-      callToAction: "Visit our office",
-      preferPhone: "Prefer to call?",
-      phoneNumber: "+381 (0)61 22 999 88",
-      contactEmail: "office@jblconcept.rs",
-      email: "Email:"
-    }
-  }
-
-  const t = translations[language as 'sr' | 'en']
+  const { t } = useCmsData()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -80,6 +26,15 @@ export default function ContactForm() {
     }, 8000)
   }
 
+  if (isSubmitted) {
+    return (
+      <div className="text-center p-8 bg-green-50 rounded-lg border border-green-100">
+        <h3 className="text-xl font-bold text-green-700 mb-2">{t("contactform-success-title")}</h3>
+        <p className="text-green-600">{t("contactform-success-message")}</p>
+      </div>
+    )
+  }
+
   return (
     <section className="py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8">
@@ -90,8 +45,8 @@ export default function ContactForm() {
           transition={{ duration: 0.5 }}
           className="text-center mb-14"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-primary-dark-blue mb-4">{t.title}</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t.subtitle}</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-primary-dark-blue mb-4">{t("contactform-title")}</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t("contactform-subtitle")}</p>
         </motion.div>
         
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -108,8 +63,8 @@ export default function ContactForm() {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Send className="text-green-600 h-8 w-8" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-3">{t.successTitle}</h3>
-                <p className="text-gray-600">{t.successMessage}</p>
+                <h3 className="text-2xl font-bold text-gray-800 mb-3">{t("contactform-success-title")}</h3>
+                <p className="text-gray-600">{t("contactform-success-message")}</p>
               </div>
             ) : (
               <>
@@ -117,10 +72,10 @@ export default function ContactForm() {
                   <div className="w-12 h-12 rounded-full bg-primary-dark-blue/10 flex items-center justify-center mr-4">
                     <MessageSquare className="h-6 w-6 text-primary-dark-blue" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-800">{t.contactHeading}</h3>
+                  <h3 className="text-2xl font-bold text-gray-800">{t("contactform-heading")}</h3>
                 </div>
                 
-                <p className="text-gray-600 mb-8">{t.contactText}</p>
+                <p className="text-gray-600 mb-8">{t("contactform-text")}</p>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="relative">
@@ -129,7 +84,7 @@ export default function ContactForm() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder={t.emailPlaceholder}
+                      placeholder={t("contactform-email-placeholder")}
                       className="w-full px-10 py-4 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-dark-blue focus:border-transparent transition-all"
                       required
                     />
@@ -156,42 +111,42 @@ export default function ContactForm() {
                           </svg>
                         </div>
                       </div>
-                      <span>{language === 'sr' ? 'Pošalji' : 'Send'}</span>
+                      <span>{t("contactform-button-text")}</span>
                     </button>
                   </div>
                 </form>
-                
-                {/* Trust badges */}
-                <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-200">
-                  <div className="text-center">
-                    <div className="text-primary-dark-blue text-sm font-medium">{t.trustBadge1}</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-primary-dark-blue text-sm font-medium">{t.trustBadge2}</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-primary-dark-blue text-sm font-medium">{t.trustBadge3}</div>
-                  </div>
-                </div>
-                
-                {/* Contact Information - phone numbers only */}
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <p className="text-gray-500 mb-2 text-sm font-medium">{t.preferPhone}</p>
-                  <div className="flex items-center mb-2">
-                    <Phone className="h-5 w-5 text-primary-dark-blue mr-2" />
-                    <a href="tel:+381612299988" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
-                      {t.phoneNumber}
-                    </a>
-                  </div>
-                  <div className="flex items-center mb-4">
-                    <Phone className="h-5 w-5 text-primary-dark-blue mr-2" />
-                    <a href="tel:+381612299988" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
-                      {t.phoneNumber}
-                    </a>
-                  </div>
-                </div>
               </>
             )}
+            
+            {/* Trust badges */}
+            <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-200">
+              <div className="text-center">
+                <div className="text-primary-dark-blue text-sm font-medium">{t("contactform-trust-badge1")}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-primary-dark-blue text-sm font-medium">{t("contactform-trust-badge2")}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-primary-dark-blue text-sm font-medium">{t("contactform-trust-badge3")}</div>
+              </div>
+            </div>
+            
+            {/* Contact Information - phone numbers only */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <p className="text-gray-500 mb-2 text-sm font-medium">{t("contactform-prefer-phone")}</p>
+              <div className="flex items-center mb-2">
+                <Phone className="h-5 w-5 text-primary-dark-blue mr-2" />
+                <a href="tel:+381612299988" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
+                  {t("contactform-phone-number")}
+                </a>
+              </div>
+              <div className="flex items-center mb-4">
+                <Phone className="h-5 w-5 text-primary-dark-blue mr-2" />
+                <a href="tel:+381612299988" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
+                  {t("contactform-phone-number")}
+                </a>
+              </div>
+            </div>
           </motion.div>
           
           {/* Right column - Office image and address */}
@@ -215,7 +170,7 @@ export default function ContactForm() {
             </div>
             
             <div className="bg-white rounded-3xl p-8 shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300">
-              <h3 className="text-xl font-bold text-gray-800 mb-3">{t.callToAction}</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-3">{t("contactform-cta")}</h3>
               <p className="text-gray-600 mb-6">
                 JBL Concept Real Estate<br />
                 Majke Jevrosime 47<br />
@@ -224,8 +179,8 @@ export default function ContactForm() {
               
               <div className="flex items-center mt-2">
                 <Mail className="h-5 w-5 text-primary-dark-blue mr-2" />
-                <a href={`mailto:${t.contactEmail}`} className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
-                  {t.contactEmail}
+                <a href={`mailto:${t("contactform-email")}`} className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
+                  {t("contactform-email")}
                 </a>
               </div>
             </div>

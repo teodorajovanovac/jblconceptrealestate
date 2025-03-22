@@ -18,13 +18,14 @@ import {
   MapPin, 
   Mail 
 } from "lucide-react"
+import { useCmsData } from "../../services/CmsProvider"
 
 const Footer = () => {
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr');
+  const { t, currentLanguage } = useCmsData();
 
   useEffect(() => {
     const handleLanguageChange = () => {
-      setLanguage(localStorage.getItem('language') || 'sr');
+      // Ova funkcija se poziva kad se promeni jezik
     };
 
     window.addEventListener('languageChange', handleLanguageChange);
@@ -32,7 +33,7 @@ const Footer = () => {
   }, []);
 
   const footerLinks = menuData
-    .filter((item) => item.lang === language && item.category === "footer")
+    .filter((item) => item.lang === currentLanguage && item.category === "footer")
     .sort((a, b) => a.order - b.order);
 
   return (
@@ -45,9 +46,7 @@ const Footer = () => {
               <ReactLogo className="w-full max-w-[220px]" />
             </div>
             <p className="text-base text-center text-gray-400">
-              {language === 'sr' 
-                ? 'Ekskluzivni agent za prodaju i iznajmljivanje luksuznih nekretnina u Beogradu i Srbiji' 
-                : 'Exclusive agent for sale and rent of luxury properties in Belgrade and Serbia'}
+              {t("footer-tagline")}
             </p>
           </div>
 
@@ -55,24 +54,24 @@ const Footer = () => {
           <div className="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-3 gap-8 p-4 md:p-8">
             {/* Quick Links Column */}
             <div className="text-center md:text-left">
-              <h3 className="text-lg font-semibold mb-4">Brzi linkovi</h3>
+              <h3 className="text-lg font-semibold mb-4">{t("footer-quick-links")}</h3>
               <ul className="space-y-3">
                 <li>
                   <Link to="/pricing" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <FileText size={18} />
-                    Cenovnik
+                    {t("footer-pricing")}
                   </Link>
                 </li>
                 <li>
                   <Link to="/service" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Briefcase size={18} />
-                    Usluge
+                    {t("footer-services")}
                   </Link>
                 </li>
                 <li>
                   <Link to="/terms" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
-                    Opšti uslovi poslovanja
+                    {t("footer-terms")}
                   </Link>
                 </li>
               </ul>
@@ -80,30 +79,30 @@ const Footer = () => {
 
             {/* Documents Column */}
             <div className="text-center md:text-left">
-              <h3 className="text-lg font-semibold mb-4">Dokumenti</h3>
+              <h3 className="text-lg font-semibold mb-4">{t("footer-documents")}</h3>
               <ul className="space-y-3">
                 <li>
                   <Link to="/privacy-policy" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Shield size={18} />
-                    Politika privatnosti
+                    {t("footer-privacy-policy")}
                   </Link>
                 </li>
                 <li>
                   <Link to="/terms-of-use" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
-                    Uslovi korišćenja
+                    {t("footer-terms-of-use")}
                   </Link>
                 </li>
                 <li>
                   <Link to="/info" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Info size={18} />
-                    Info
+                    {t("footer-info")}
                   </Link>
                 </li>
                 <li>
                   <Link to="/faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <HelpCircle size={18} />
-                    FAQ
+                    {t("footer-faq")}
                   </Link>
                 </li>
               </ul>
@@ -111,7 +110,7 @@ const Footer = () => {
 
             {/* Contact Column */}
             <div className="text-center md:text-left">
-              <h3 className="text-lg font-semibold mb-4">Kontakt</h3>
+              <h3 className="text-lg font-semibold mb-4">{t("footer-contact")}</h3>
               <ul className="space-y-3">
                 <li>
                   <a 
@@ -123,8 +122,8 @@ const Footer = () => {
                     <div className="flex items-start gap-3 text-center md:text-left">
                       <MapPin size={18} className="flex-shrink-0 mt-1" />
                       <div>
-                        <div className="text-base">CONCEPT REAL ESTATE doo Beograd</div>
-                        <div className="text-base text-gray-400">Majke Jevrosime 47, Beograd, Srbija</div>
+                        <div className="text-base">{t("footer-company-name")}</div>
+                        <div className="text-base text-gray-400">{t("footer-company-address")}</div>
                       </div>
                     </div>
                   </a>
@@ -151,7 +150,7 @@ const Footer = () => {
 
               {/* Social Media Links */}
               <div className="mt-6">
-                <h4 className="text-base font-semibold mb-4">Pratite nas</h4>
+                <h4 className="text-base font-semibold mb-4">{t("footer-follow-us")}</h4>
                 <div className="flex justify-center md:justify-start space-x-4">
                   <a href="https://www.instagram.com/realestateconcept.jbl/" 
                      target="_blank"
@@ -159,15 +158,15 @@ const Footer = () => {
                      className="hover:text-gold hover:scale-110 transition-all">
                     <Instagram size={22} />
                   </a>
-                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
+                  {/*<a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Facebook size={22} />
-                  </a>
+                  </a>*/}
                   <a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <FaTiktok size={20} />
                   </a>
-                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
+                  {/*<a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Twitter size={22} />
-                  </a>
+                  </a>*/}
                   <a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Linkedin size={22} />
                   </a>
@@ -181,10 +180,10 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-0">
           <div className="w-full px-4 py-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <p className="text-base text-gray-400 mb-2 md:mb-0">
-              © 2025 JBL Concept. Sva prava zadržana.
+              {t("footer-copyright")}
             </p>
             <p className="text-sm text-gray-500 opacity-60">
-              Dizajn i izrada <a 
+              {t("footer-design-by")} <a 
                 href="https://ajsasoft.com" 
                 target="_blank" 
                 rel="noopener noreferrer" 

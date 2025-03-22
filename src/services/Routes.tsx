@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 //List all pages
 import LandingPage from "../pages/LandingPage";
 import ErrorPage from "../pages/ErrorPage";
-import Test from "../pages/Test";
 import PricingPage from "../pages/PricingPage";
 import ServicesPage from "../pages/ServicesPage";
 import TermsPage from "../pages/TermsPage";
@@ -37,7 +36,6 @@ const AppRoutes = () => {
       <Route path="/property/:id" element={<PropertyPage />} />
       <Route path="/about-us/:id" element={<AgentPage />} />
       <Route path="/contact" element={<ContactPage />} />
-      <Route path="/test" element={<Test />} />
       
       {/* Routes for non-authenticated users */}
       {!token && (
