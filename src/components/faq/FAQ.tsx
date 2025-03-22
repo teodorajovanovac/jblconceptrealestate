@@ -136,38 +136,42 @@ export default function FAQ() {
               className="mb-4"
             >
               <div 
-                onClick={() => toggleItem(item.id)}
-                className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300 cursor-pointer flex justify-between items-center"
+                className="bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300 overflow-hidden"
               >
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {item.question[language as 'sr' | 'en']}
-                </h3>
-                <div className="flex-shrink-0 ml-4">
-                  {expandedId === item.id ? (
-                    <ChevronUp className="w-5 h-5 text-primary-blue" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-primary-blue" />
-                  )}
+                <div 
+                  onClick={() => toggleItem(item.id)}
+                  className="p-6 cursor-pointer flex justify-between items-center"
+                >
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {item.question[language as 'sr' | 'en']}
+                  </h3>
+                  <div className="flex-shrink-0 ml-4">
+                    {expandedId === item.id ? (
+                      <ChevronUp className="w-5 h-5 text-primary-blue" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-primary-blue" />
+                    )}
+                  </div>
                 </div>
+                
+                <AnimatePresence>
+                  {expandedId === item.id && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-6 border-t border-gray-100">
+                        <p className="text-gray-600 leading-relaxed pt-4">
+                          {item.answer[language as 'sr' | 'en']}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-              
-              <AnimatePresence>
-                {expandedId === item.id && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="bg-white rounded-b-xl p-6 shadow-md border border-gray-100 border-t-0 -mt-1">
-                      <p className="text-gray-600 leading-relaxed">
-                        {item.answer[language as 'sr' | 'en']}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           ))}
         </div>
