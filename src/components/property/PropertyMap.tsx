@@ -14,7 +14,20 @@ interface PropertyMapProps {
 export default function PropertyMap({ address }: PropertyMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const circleRef = useRef<L.Circle | null>(null);
   const [mapLocation, setMapLocation] = useState<[number, number] | null>(null);
+  const initialRadius = 200; // Početni radijus kruga u metrima
+
+  // Funkcija za ažuriranje veličine kruga prema nivou zuma
+  const updateCircleRadius = () => {
+    if (mapRef.current && circleRef.current && mapLocation) {
+      const zoom = mapRef.current.getZoom();
+      // Prilagođavanje radijusa prema nivou zuma
+      // Koristi se eksponencijalna funkcija da bi odnos bio konstantan
+      const newRadius = initialRadius * Math.pow(2, (15 - zoom));
+      circleRef.current.setRadius(newRadius);
+    }
+  };
 
   useEffect(() => {
     const initializeMap = async () => {
@@ -33,39 +46,38 @@ export default function PropertyMap({ address }: PropertyMapProps) {
 
           // Inicijalizacija mape
           if (!mapRef.current) {
-            mapRef.current = L.map(mapContainerRef.current).setView([lat, lng], 15);
+            const map = L.map(mapContainerRef.current).setView([lat, lng], 15);
+            mapRef.current = map;
 
             // Dodajemo tile layer
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               attribution: '© OpenStreetMap contributors',
               maxZoom: 19,
               className: 'map-tiles'
-            }).addTo(mapRef.current);
+            }).addTo(map);
 
-            // Custom marker icon
-            const customIcon = L.divIcon({
-              className: 'custom-marker',
-              html: `
-                <div class="w-16 h-16 bg-primary-blue opacity-50 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
-                   
-                </div>
-              `,
-              iconSize: [24, 24],
-              iconAnchor: [12, 12]
-            });
-//<div class="w-2 h-2 bg-white opacity-100 rounded-full"></div>
-            // Dodajemo marker
-            L.marker([lat, lng], { icon: customIcon })
-              .bindPopup(`
-                <div class="p-2">
-                  <div class="font-medium text-primary-blue">${address}</div>
-                  <div class="text-sm text-gray-600">JBL Concept Real Estate</div>
-                </div>
-              `)
-              .addTo(mapRef.current);
+            // Dodajemo krug koji će se prilagođavati zumu
+            const circle = L.circle([lat, lng], {
+              color: '#2563eb',      // Primary blue color
+              fillColor: '#2563eb',  // Fill with primary blue
+              fillOpacity: 0.2,      // Semi-transparent
+              weight: 2,             // Border width
+              radius: initialRadius  // Početni radijus u metrima
+            }).addTo(map);
+            
+            circleRef.current = circle;
+
+            // Dodajemo event listener za zoom događaj
+            map.on('zoomend', updateCircleRadius);
           } else {
             // Ako mapa već postoji, samo ažuriramo view
             mapRef.current.setView([lat, lng], 15);
+            
+            // Ako krug postoji, ažuriramo njegovu poziciju
+            if (circleRef.current) {
+              circleRef.current.setLatLng([lat, lng]);
+              updateCircleRadius();
+            }
           }
         }
       } catch (error) {
@@ -78,8 +90,10 @@ export default function PropertyMap({ address }: PropertyMapProps) {
     // Cleanup
     return () => {
       if (mapRef.current) {
+        mapRef.current.off('zoomend', updateCircleRadius);
         mapRef.current.remove();
         mapRef.current = null;
+        circleRef.current = null;
       }
     };
   }, [address]);

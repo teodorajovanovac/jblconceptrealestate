@@ -100,7 +100,7 @@ export default function FAQ() {
     en: {
       title: "FREQUENTLY ASKED QUESTIONS",
       subtitle: "Everything you need to know about our services",
-      contact: "Couldn't find your answer? ",
+      contact: "Didn't find your answer? ",
       contactLink: "Contact us"
     }
   }
@@ -112,7 +112,7 @@ export default function FAQ() {
   }
 
   return (
-    <section className="py-24 bg-white">
+    <section id="faq" className="py-16 md:py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

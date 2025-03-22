@@ -58,19 +58,19 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">Brzi linkovi</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/pricing" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/pricing#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <FileText size={18} />
                     Cenovnik
                   </Link>
                 </li>
                 <li>
-                  <Link to="/service" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/service#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Briefcase size={18} />
                     Usluge
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/terms#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
                     Opšti uslovi poslovanja
                   </Link>
@@ -83,28 +83,34 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">Dokumenti</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/privacy-policy" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/privacy-policy#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Shield size={18} />
                     Politika privatnosti
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms-of-use" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/terms-of-use#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
                     Uslovi korišćenja
                   </Link>
                 </li>
                 <li>
-                  <Link to="/info" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/info#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Info size={18} />
                     Info
                   </Link>
                 </li>
                 <li>
-                  <Link to="/faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/#faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <HelpCircle size={18} />
                     FAQ
                   </Link>
+                </li>
+                <li>
+                  <a href="/Ugovor o posredovanju_dvojezični_CONCEPT (1).pdf" target="_blank" rel="noopener noreferrer" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                    <FileText size={18} />
+                    Ugovor o posredovanju
+                  </a>
                 </li>
               </ul>
             </div>

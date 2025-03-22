@@ -20,6 +20,9 @@ const PricingPage = () => {
     // Create a custom event listener for language changes
     window.addEventListener('languageChange', handleLanguageChange);
 
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+
     // Cleanup
     return () => {
       window.removeEventListener('storage', handleLanguageChange);
@@ -31,7 +34,7 @@ const PricingPage = () => {
     <div className="min-h-screen w-full bg-gray-50">
       <Seo title={language === 'sr' ? 'Cenovnik' : 'Price List'} />
       <Header />
-      <main className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
+      <main id="top" className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="max-w-[1400px] mx-auto">
           <div className="space-y-6">
             {/* Header */}

@@ -198,15 +198,23 @@ export default function ServicesPage() {
       setLanguage(localStorage.getItem('language') || 'sr');
     };
 
+    window.addEventListener('storage', handleLanguageChange);
     window.addEventListener('languageChange', handleLanguageChange);
-    return () => window.removeEventListener('languageChange', handleLanguageChange);
+    
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+
+    return () => {
+      window.removeEventListener('storage', handleLanguageChange);
+      window.removeEventListener('languageChange', handleLanguageChange);
+    };
   }, []);
 
   return (
-    <div className="page-container">
+    <div className="min-h-screen bg-gray-50">
       <Seo title={language === 'sr' ? 'Usluge' : 'Services'} />
       <Header />
-      <main className="content-wrapper">
+      <main id="top" className="content-wrapper">
         <div className="w-full">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="space-y-6">
