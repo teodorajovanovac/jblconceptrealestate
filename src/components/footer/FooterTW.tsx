@@ -162,13 +162,13 @@ const Footer = () => {
                   <a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Facebook size={22} />
                   </a>
-                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
+                  <a href="https://www.tiktok.com/@realestate_concept" className="hover:text-gold hover:scale-110 transition-all">
                     <FaTiktok size={20} />
                   </a>
                   <a href="#" className="hover:text-gold hover:scale-110 transition-all">
                     <Twitter size={22} />
                   </a>
-                  <a href="#" className="hover:text-gold hover:scale-110 transition-all">
+                  <a href="https://www.linkedin.com/in/jasna-baji%C4%87-ljubi%C4%8Di%C4%87-5176b534/" className="hover:text-gold hover:scale-110 transition-all">
                     <Linkedin size={22} />
                   </a>
                 </div>

@@ -218,7 +218,68 @@ export default function PropertyPage() {
               <TabsContent value="description" className="px-4">
                 <div className="space-y-4">
                   <h1 className="text-2xl font-bold">{property.portalName}</h1>
-                  <p className="text-xl font-bold">{formatPrice(property.price)}</p>
+                  <div className={`${
+                    property.actionName?.toLowerCase().includes('izdavanje') 
+                      ? 'bg-primary-gold' 
+                      : 'bg-primary-blue'
+                  } rounded-lg p-5 inline-block shadow-lg relative w-full`}>
+                    {/* Card content */}
+                    <div className="relative z-20">
+                      {/* Transaction Type Tag */}
+                      <div className="flex items-center mb-1">
+                        <Tag className={`w-4 h-4 mr-1 ${
+                          property.actionName?.toLowerCase().includes('izdavanje') 
+                            ? 'text-primary-blue' 
+                            : 'text-white'
+                        }`} />
+                        <span className={`text-xs font-medium uppercase tracking-wider ${
+                          property.actionName?.toLowerCase().includes('izdavanje') 
+                            ? 'text-primary-blue' 
+                            : 'text-white'
+                        }`}>
+                          {property.actionName || "Prodaja"}
+                        </span>
+                      </div>
+                      
+                      {/* Price */}
+                      <div className={`text-xl font-bold mt-1 ${
+                        property.actionName?.toLowerCase().includes('izdavanje') 
+                          ? 'text-primary-blue' 
+                          : 'text-white'
+                      }`}>
+                        {formatPrice(property.price)}
+                      </div>
+                      
+                      {/* Price per m² */}
+                      {property.priceM2 && (
+                        <div className={`text-sm mt-1 flex items-center ${
+                          property.actionName?.toLowerCase().includes('izdavanje') 
+                            ? 'text-primary-blue/80' 
+                            : 'text-white/80'
+                        }`}>
+                          <Euro className="w-4 h-4 mr-1" />
+                          {property.priceM2.toLocaleString()} / m²
+                        </div>
+                      )}
+                      
+                      {/* Additional mobile details */}
+                      <div className={`pt-3 mt-3 border-t border-black/20 text-sm ${
+                        property.actionName?.toLowerCase().includes('izdavanje')
+                          ? 'text-primary-blue/90'
+                          : 'text-white/90'
+                      }`}>
+                        <div className="flex items-center">
+                          <Square className="w-4 h-4 mr-2" />
+                          <span>{property.area} m² {t("property-area")}</span>
+                        </div>
+                        <div className="flex items-center mt-1">
+                          <Home className="w-4 h-4 mr-2" />
+                          <span>{property.typeName}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
                   <div className="prose max-w-none text-gray-700" 
                     dangerouslySetInnerHTML={{ __html: property.realEstateDescription || "" }}>
                   </div>
@@ -255,7 +316,7 @@ export default function PropertyPage() {
               <div className="lg:col-span-2 space-y-8">
                 {/* Property Header */}
                 <div>
-                  <div className="flex justify-between items-start">
+                  <div className="flex flex-col">
                     <div>
                       <h1 className="text-2xl md:text-3xl font-bold text-primary-blue">
                         {property.portalName}
@@ -272,19 +333,6 @@ export default function PropertyPage() {
                           <Tag className="w-4 h-4 mr-1" />
                           {property.actionName || "Prodaja"}
                         </span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="bg-primary-blue rounded-lg p-4 inline-block">
-                        <div className="text-2xl md:text-3xl font-bold text-white">
-                          {formatPrice(property.price)}
-                        </div>
-                        {property.priceM2 && (
-                          <div className="text-sm text-white/80 mt-1 flex items-center justify-end">
-                            <Euro className="w-4 h-4 mr-1" />
-                            {property.priceM2.toLocaleString()} / m²
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -354,6 +402,69 @@ export default function PropertyPage() {
               {/* Right Column - Contact Agent */}
               <div className="lg:col-span-1">
                 <div ref={agentCardWrapperRef} className="relative">
+                  <div className="mb-6">
+                    <div className={`${
+                      property.actionName?.toLowerCase().includes('izdavanje') 
+                        ? 'bg-primary-gold' 
+                        : 'bg-primary-blue'
+                    } rounded-lg p-6 shadow-lg relative`}>
+                      {/* Card content */}
+                      <div className="relative z-20">
+                        {/* Transaction Type Tag */}
+                        <div className="flex items-center mb-2">
+                          <Tag className={`w-5 h-5 mr-2 ${
+                            property.actionName?.toLowerCase().includes('izdavanje') 
+                              ? 'text-primary-blue' 
+                              : 'text-white'
+                          }`} />
+                          <span className={`text-sm font-medium uppercase tracking-wider ${
+                            property.actionName?.toLowerCase().includes('izdavanje') 
+                              ? 'text-primary-blue' 
+                              : 'text-white'
+                          }`}>
+                            {property.actionName || "Prodaja"}
+                          </span>
+                        </div>
+                        
+                        {/* Price */}
+                        <div className={`text-2xl md:text-4xl font-bold mt-2 ${
+                          property.actionName?.toLowerCase().includes('izdavanje') 
+                            ? 'text-primary-blue' 
+                            : 'text-white'
+                        }`}>
+                          {formatPrice(property.price)}
+                        </div>
+                        
+                        {/* Price per m² */}
+                        {property.priceM2 && (
+                          <div className={`text-sm mt-2 flex items-center ${
+                            property.actionName?.toLowerCase().includes('izdavanje') 
+                              ? 'text-primary-blue/80' 
+                              : 'text-white/80'
+                          }`}>
+                            <Euro className="w-4 h-4 mr-1" />
+                            {property.priceM2.toLocaleString()} / m²
+                          </div>
+                        )}
+                        
+                        {/* Additional Details */}
+                        <div className={`pt-3 mt-3 border-t border-black/20 text-sm ${
+                          property.actionName?.toLowerCase().includes('izdavanje')
+                            ? 'text-primary-blue/90'
+                            : 'text-white/90'
+                        }`}>
+                          <div className="flex items-center">
+                            <Square className="w-4 h-4 mr-2" />
+                            <span>{property.area} m² {t("property-area")}</span>
+                          </div>
+                          <div className="flex items-center mt-1">
+                            <Home className="w-4 h-4 mr-2" />
+                            <span>{property.typeName}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div ref={agentCardRef} className="w-full z-20">
                     <ContactAgentCard agent={{
                       name: "Agent",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, Copy, Facebook, Twitter, Mail, Link as LinkIcon, Check } from "lucide-react";
+import { X, Copy, Facebook, MessageCircle, Phone, Link as LinkIcon, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ShareModalProps {
@@ -32,22 +32,22 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, url, title }) 
       name: "Facebook",
       icon: <Facebook className="h-5 w-5" />,
       bgColor: "bg-primary-dark-blue",
-      hoverColor: "hover:bg-gold-color hover:text-primary-dark-blue",
+      hoverEffect: "hover:-translate-y-1",
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&t=${encodeURIComponent(title)}`,
     },
     {
-      name: "Twitter",
-      icon: <Twitter className="h-5 w-5" />,
+      name: "Viber",
+      icon: <Phone className="h-5 w-5" />,
       bgColor: "bg-primary-dark-blue",
-      hoverColor: "hover:bg-gold-color hover:text-primary-dark-blue",
-      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+      hoverEffect: "hover:-translate-y-1",
+      url: `viber://forward?text=${encodeURIComponent(title + ': ' + url)}`,
     },
     {
-      name: "Email",
-      icon: <Mail className="h-5 w-5" />,
+      name: "WhatsApp",
+      icon: <MessageCircle className="h-5 w-5" />,
       bgColor: "bg-primary-dark-blue",
-      hoverColor: "hover:bg-gold-color hover:text-primary-dark-blue",
-      url: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`Check out this property: ${url}`)}`,
+      hoverEffect: "hover:-translate-y-1",
+      url: `https://api.whatsapp.com/send?text=${encodeURIComponent(title + ': ' + url)}`,
     },
   ];
 
@@ -83,7 +83,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, url, title }) 
                 </div>
                 <button
                   onClick={handleCopyLink}
-                  className="rounded-lg px-3 py-1 bg-primary-dark-blue text-white hover:bg-gold-color hover:text-primary-dark-blue transition-colors text-sm flex items-center"
+                  className="rounded-lg px-3 py-1 bg-primary-dark-blue text-white transform transition-transform hover:-translate-y-1 text-sm flex items-center"
                 >
                   {isCopied ? 'Kopirano!' : 'Kopiraj link'}
                   {isCopied ? <Check className="ml-1 h-4 w-4" /> : <Copy className="ml-1 h-4 w-4" />}
@@ -100,7 +100,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, url, title }) 
                       href={option.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`${option.bgColor} ${option.hoverColor} text-white rounded-lg py-2 px-3 flex items-center justify-center transition-colors`}
+                      className={`${option.bgColor} ${option.hoverEffect} text-white rounded-lg py-2 px-3 flex items-center justify-center transform transition-transform`}
                     >
                       {option.icon}
                       <span className="ml-2 text-sm">{option.name}</span>
