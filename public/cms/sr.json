@@ -1,0 +1,24 @@
+{
+    "home": "Home",
+    "about": "About Us",
+    "contact": "Contact Us",
+    "validate-form-required":"Ovo polje je obavezno",
+    "validate-form-fillme": "Popunite ovo polje",
+    "form-enter-name": "Unesite vaše ime",
+    "contactform-title": "Kontakt",
+    "message-send-success": "Vaša poruka je uspešno poslata!",
+    "message-send-postinfo": "Hvala na kontaktiranju. Naš tim će vas uskoro kontaktirati. Obično odgovaramo u roku od nekoliko sati.",
+    "contact-header" : "Kontaktirajte nas",
+    "contact-text":"JBL Concept je vaš pouzdan partner za sve vrste usluga vezanih za nekretnine. Pružamo kompletnu podršku - od posredovanja i konsaltinga do menadžmenta nekretnina i pravne pomoći. Naš tim stručnjaka je tu da vam pomogne da ostvarite svoje ciljeve na tržištu nekretnina.",
+    "form-message-placeholder": "Vaša poruka" ,
+    "form-request-placeholder": "Opišite vaš zahtev...",
+    "form-sending": "Slanje poruke...",
+    "form-send-button": "Pošaljite poruku"
+
+    
+    
+
+   
+    
+    
+}

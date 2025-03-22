@@ -17,9 +17,9 @@ export default {
     extend: {
       colors: {
         'primary-white': 'white',
-        'primary-blue': 'rgba(15,18,43,1)',
+        'primary-blue': 'rgba(0,28,79,1)',
         'primary-gold': 'rgb(246,229,112)',
-        'secondary-blue': 'rgba(44,46,114,1)',
+        'secondary-blue': 'rgba(32,157,245,1)',
         'secondary-light-green': 'var(--secundary-light-green)',
         'secondary-dark-green': 'var(--secundary-dark-green)',
         'secondary-black': 'var(--secundary-black)',

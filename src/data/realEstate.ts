@@ -108,31 +108,14 @@ const realEstate = {
     }
   },
 
-  async getData(id?: number): Promise<ApiResponse<RealEstateDto[]>> {
+  async getData(id: number, langCode?: string): Promise<RealEstateDto> {
     try {
-      const page = 1;
-      const pageSize = 87;
-      console.log(`Fetching page ${page} from ${ApiRealEstate}?page=${page}&pageSize=${pageSize}`);
-      
-      const response = await fetch(`${ApiRealEstate}?page=${page}&pageSize=${pageSize}`);
-      const data = await response.json();
-      
-      console.log(`Received ${data.data?.length} properties for page ${page}`);
-      
-      return {
-        isSuccess: true,
-        data: data.data || [],
-        totalRecords: data.totalRecords || 0,
-        totalPages: data.totalPages || 0
-      };
-    } catch (error) {
-      console.error('Error fetching real estate data:', error);
-      return {
-        isSuccess: false,
-        data: [],
-        totalRecords: 0,
-        totalPages: 0
-      };
+      const url = langCode ? `${ApiRealEstate}/${id}?langCode=${langCode}` : `${ApiRealEstate}/${id}`;
+      const response = await axios.get(url);
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching featured data:", err);
+      throw err;
     }
   },
 

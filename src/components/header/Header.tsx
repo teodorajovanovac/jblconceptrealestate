@@ -1,24 +1,22 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import menuData from "../../assets/data/menu.json"
+import { useCmsData } from "../../services/CmsProvider"
 
-const Header = () => {
+const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [language, setLanguage] = useState(localStorage.getItem('language') || "sr")
   const [isHomePage, setIsHomePage] = useState(false)
+  const { changeLanguage, currentLanguage } = useCmsData();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const toggleLanguage = () => {
-    const newLanguage = language === "sr" ? "en" : "sr";
-    setLanguage(newLanguage);
-    localStorage.setItem('language', newLanguage);
-    // Dispatch custom event
-    window.dispatchEvent(new Event('languageChange'));
+    const newLanguage = currentLanguage === "sr" ? "en" : "sr";
+    changeLanguage(newLanguage);
   }
 
   // Filter menu items based on current language and sort by order
   const menuItems = menuData
-    .filter((item) => item.lang === language && item.category === "nav")
+    .filter((item) => item.lang === currentLanguage && item.category === "nav")
     .sort((a, b) => a.order - b.order)
 
   useEffect(() => {
@@ -115,7 +113,7 @@ const Header = () => {
               className={`relative transition-colors mx-3 group text-[1.1em] ${getHoverColorClass()}`}
             >
               <span className="relative">
-                {language === "sr" ? "EN" : "SR"}
+                {currentLanguage === "sr" ? "EN" : "SR"}
                 <span className={`absolute bottom-[-2px] left-0 w-0 h-[1px] ${getUnderlineColorClass()} origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all`}></span>
               </span>
             </button>
@@ -178,7 +176,7 @@ const Header = () => {
                 }}
                 className="hover:text-primary-gold transition-colors text-[1.1em] md:text-[2.2em]"
               >
-                {language === "sr" ? "EN" : "SR"}
+                {currentLanguage === "sr" ? "EN" : "SR"}
               </button>
             </li>
           </ul>

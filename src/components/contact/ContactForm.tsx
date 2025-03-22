@@ -54,7 +54,7 @@ export default function ContactForm() {
       trustBadge3: "Available 24/7",
       callToAction: "Visit our office",
       preferPhone: "Prefer to call?",
-      phoneNumber: "+381 61 2299988",
+      phoneNumber: "+381 (0)61 22 999 88",
       contactEmail: "office@jblconcept.rs",
       email: "Email:"
     }

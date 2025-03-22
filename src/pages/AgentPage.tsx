@@ -64,7 +64,7 @@ export default function AgentPage() {
           >
             <div className="space-y-8">
               <motion.div 
-                className="aspect-[4/5] w-full overflow-hidden rounded-lg"
+                className="aspect-[2/3] w-full overflow-hidden rounded-lg"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}

@@ -71,7 +71,7 @@ export default function AboutUsPage() {
                   transition={{ duration: 0.5 }}
                 >
                   <Link to={`/about-us/${member.id}`} className="block">
-                    <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg shadow-md">
+                    <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg shadow-md">
                       <img
                         src={member.image}
                         alt={member.name}

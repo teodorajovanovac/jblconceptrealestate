@@ -136,15 +136,15 @@ const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="tel:+381612299988" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <a href="tel:+381618027377" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Phone size={18} />
-                    +381 61 2299988
+                    +381 66 80 27 377
                   </a>
                 </li>
                 <li>
                   <a href="tel:+381612299988" className="hover:text-primary-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Phone size={18} />
-                    +381 61 2299988
+                    +381 61 22 999 88
                   </a>
                 </li>
               </ul>

@@ -8,6 +8,7 @@ import ErrorBoundary from './components/error/ErrorBoundary'
 import { useState, useEffect } from 'react';
 import LoadingScreen from './components/splash/LoadingScreen';
 import { BrowserRouter as Router } from 'react-router-dom'
+import { CmsDataProvider } from './services/CmsProvider';
 
 const theme = createTheme({
   palette: {
@@ -43,14 +44,16 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <HelmetProvider context={helmetContext}>
-          <Router>
-            <div className="App">
-              {isHomePage && <LoadingScreen loading={isLoading} />}
-              <AppRoutes />
-            </div>
-          </Router>
-        </HelmetProvider>
+          <CmsDataProvider defaultLang = "rs">
+            <HelmetProvider context={helmetContext}>
+              <Router>
+                <div className="App">
+                  {isHomePage && <LoadingScreen loading={isLoading} />}
+                  <AppRoutes />
+                </div>
+              </Router>
+            </HelmetProvider>
+          </CmsDataProvider>
       </ThemeProvider>
     </ErrorBoundary>
   )

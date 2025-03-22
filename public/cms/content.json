@@ -1,0 +1,10 @@
+[
+  {
+    "category": "navbar"
+  },
+  {"category": "navbar-links", "parent": "navbar", "name": "home", "linkto": "/"},
+  {"category": "navbar-links", "parent": "navbar", "realestate": "realestate", "linkto": "properties"},
+  {"category": "navbar-links", "parent": "navbar", "aboutus": "about-us", "linkto": "aboutus"},
+  {"category": "navbar-links", "parent": "navbar", "contact": "contact", "linkto": "contact"},
+  {"category": "navbar-links", "parent": "navbar", "language": "language", "linkto": "#changeLanguage"}
+]

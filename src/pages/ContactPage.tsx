@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import Header from '../components/header/Header'
 import FooterTW from '../components/footer/FooterTW'
 import Seo from '../services/meta/Seo'
+import { useCmsData } from "../services/CmsProvider"
 
 type ServiceType = 
   | 'buying' 
@@ -25,12 +26,12 @@ type FormData = {
   message: string;
 }
 
-export default function ContactPage() {
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
+const ContactPage: React.FC =() => {
   const [formType, setFormType] = useState<ServiceType>('buying')
   const [showServiceModal, setShowServiceModal] = useState(false)
   const serviceButtonRef = useRef<HTMLButtonElement>(null)
-  
+  const { t } = useCmsData();
+
   // Form state
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -43,26 +44,26 @@ export default function ContactPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    const handleLanguageChange = () => {
-      setLanguage(localStorage.getItem('language') || 'sr');
-    };
+  // useEffect(() => {
+  //   // const handleLanguageChange = () => {
+  //   //   setLanguage(localStorage.getItem('language') || 'sr');
+  //   // };
 
-    window.addEventListener('storage', handleLanguageChange);
-    window.addEventListener('languageChange', handleLanguageChange);
+  //   window.addEventListener('storage', handleLanguageChange);
+  //   window.addEventListener('languageChange', handleLanguageChange);
 
-    return () => {
-      window.removeEventListener('storage', handleLanguageChange);
-      window.removeEventListener('languageChange', handleLanguageChange);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('storage', handleLanguageChange);
+  //     window.removeEventListener('languageChange', handleLanguageChange);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    const currentLanguage = localStorage.getItem('language');
-    if (currentLanguage) {
-      setLanguage(currentLanguage);
-    }
-  }, [localStorage.getItem('language')]);
+  // useEffect(() => {
+  //   const currentLanguage = localStorage.getItem('language');
+  //   if (currentLanguage) {
+  //     setLanguage(currentLanguage);
+  //   }
+  // }, [localStorage.getItem('language')]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -243,17 +244,17 @@ export default function ContactPage() {
     
     // Jednostavnija validacija - samo proverimo da li su obavezna polja popunjena
     if (!formData.firstName.trim()) {
-      newErrors.firstName = language === 'sr' ? 'Ovo polje je obavezno' : 'This field is required';
+      newErrors.firstName = t("validate-form-required")
       isValid = false;
     }
     
     if (!formData.email.trim()) {
-      newErrors.email = language === 'sr' ? 'Ovo polje je obavezno' : 'This field is required';
+      newErrors.email = t("validate-form-required")
       isValid = false;
     }
     
     if (!formData.phone.trim()) {
-      newErrors.phone = language === 'sr' ? 'Ovo polje je obavezno' : 'This field is required';
+      newErrors.phone = t("validate-form-required")
       isValid = false;
     }
     
@@ -290,9 +291,11 @@ export default function ContactPage() {
     }, 1000);
   }
 
+  console.log(t("contactform-title"));
   return (
     <div className="min-h-screen w-full bg-gray-50">
-      <Seo title={language === 'sr' ? 'Kontakt' : 'Contact'} />
+      {/* <Seo title={t("contactform-title")f} /> */}
+      
       <Header />
       <main className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="max-w-[1400px] mx-auto">
@@ -314,24 +317,22 @@ export default function ContactPage() {
                       <CheckCircle className="h-12 w-12 text-green-500" />
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-                      {language === 'sr' ? 'Vaša poruka je uspešno poslata!' : 'Your message has been sent successfully!'}
+                      {t("message-send-success")}
                     </h2>
                     <p className="text-center text-gray-600 max-w-md">
-                      {language === 'sr' 
-                        ? 'Hvala na kontaktiranju. Naš tim će vas uskoro kontaktirati. Obično odgovaramo u roku od nekoliko sati.'
-                        : 'Thank you for contacting us. Our team will get back to you soon. We typically respond within a few hours.'}
+                      {t("message-send-postinfo")}
                     </p>
                   </motion.div>
                 ) : (
                   <>
                     <div className="space-y-4">
                       <h1 className="text-3xl font-bold text-primary-blue">
-                        {language === 'sr' ? 'Kontaktirajte nas' : 'Contact us'}
+                        {/* {language === 'sr' ? 'Kontaktirajte nas' : 'Contact us'} */}
                       </h1>
                       <p className="text-gray-600">
-                        {language === 'sr' 
+                        {/* {language === 'sr' 
                           ? "Naš stručni tim je tu da vam pomogne u svim aspektima vezanim za nekretnine - od kupovine i prodaje, preko menadžmenta nekretnina do konsaltinga i istraživanja tržišta. Kontaktirajte nas i odgovorićemo vam u roku od 2 sata."
-                          : "Our expert team is here to help you with all aspects of real estate - from buying and selling to property management, consulting, and market research. Contact us and we will respond within 2 hours."}
+                          : "Our expert team is here to help you with all aspects of real estate - from buying and selling to property management, consulting, and market research. Contact us and we will respond within 2 hours."} */}
                       </p>
                     </div>
 
@@ -339,7 +340,7 @@ export default function ContactPage() {
                       <div className="grid gap-6 sm:grid-cols-2">
                         <div className="space-y-2">
                           <label className="flex items-center text-sm font-medium text-gray-700">
-                            {language === 'sr' ? 'Ime' : 'First name'} 
+                            {/* {language === 'sr' ? 'Ime' : 'First name'}  */}
                             <span className="text-red-500 ml-1">*</span>
                           </label>
                           <input
@@ -348,22 +349,22 @@ export default function ContactPage() {
                             value={formData.firstName}
                             onChange={handleInputChange}
                             placeholder={errors.firstName 
-                              ? (language === 'sr' ? 'Popunite ovo polje' : 'Fill in this field') 
-                              : (language === 'sr' ? 'Unesite vaše ime' : 'Enter your first name')}
+                              ? t("validate-form-fillme") 
+                              : t("form-enter-name")}
                             className={`w-full px-4 py-2 border ${errors.firstName ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                             required
                           />
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-medium text-gray-700">
-                            {language === 'sr' ? 'Prezime' : 'Last name'}
+                            {/* {language === 'sr' ? 'Prezime' : 'Last name'} */}
                           </label>
                           <input
                             type="text"
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleInputChange}
-                            placeholder={language === 'sr' ? 'Unesite vaše prezime' : 'Enter your last name'}
+                            // placeholder={language === 'sr' ? 'Unesite vaše prezime' : 'Enter your last name'}
                             className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent"
                           />
                         </div>
@@ -380,9 +381,9 @@ export default function ContactPage() {
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            placeholder={errors.email 
-                              ? (language === 'sr' ? 'Popunite ovo polje' : 'Fill in this field') 
-                              : (language === 'sr' ? 'Unesite vašu email adresu' : 'Enter your email')}
+                            // placeholder={errors.email 
+                            //   ? (language === 'sr' ? 'Popunite ovo polje' : 'Fill in this field') 
+                            //   : (language === 'sr' ? 'Unesite vašu email adresu' : 'Enter your email')}
                             className={`w-full pl-10 pr-4 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                             required
                           />
@@ -391,7 +392,7 @@ export default function ContactPage() {
 
                       <div className="space-y-2">
                         <label className="flex items-center text-sm font-medium text-gray-700">
-                          {language === 'sr' ? 'Broj telefona' : 'Phone number'} 
+                          {/* {language === 'sr' ? 'Broj telefona' : 'Phone number'}  */}
                           <span className="text-red-500 ml-1">*</span>
                         </label>
                         <div className="relative">
@@ -401,9 +402,9 @@ export default function ContactPage() {
                             name="phone"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            placeholder={errors.phone 
-                              ? (language === 'sr' ? 'Popunite ovo polje' : 'Fill in this field') 
-                              : '+381 60 123 4567'}
+                            // placeholder={errors.phone 
+                            //   ? (language === 'sr' ? 'Popunite ovo polje' : 'Fill in this field') 
+                            //   : '+381 60 123 4567'}
                             className={`w-full pl-10 pr-4 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                             required
                           />
@@ -412,7 +413,7 @@ export default function ContactPage() {
 
                       <div className="space-y-2 relative">
                         <label className="text-sm font-medium text-gray-700">
-                          {language === 'sr' ? 'Zainteresovan/a sam za' : 'I\'m interested in'}
+                          {/* {language === 'sr' ? 'Zainteresovan/a sam za' : 'I\'m interested in'} */}
                         </label>
                         <button
                           ref={serviceButtonRef}
@@ -422,7 +423,7 @@ export default function ContactPage() {
                         >
                           <span className="flex items-center gap-2">
                             <ServiceIcon className="h-5 w-5 text-primary-blue" />
-                            <span>{services[formType].title[language as 'sr' | 'en']}</span>
+                            {/* <span>{services[formType].title[language as 'sr' | 'en']}</span> */}
                           </span>
                           <span className="text-gray-400">{showServiceModal ? '▲' : '▼'}</span>
                         </button>
@@ -441,7 +442,7 @@ export default function ContactPage() {
                             >
                               <div className="px-3 py-2 border-b border-gray-100">
                                 <h4 className="text-sm font-medium text-gray-500">
-                                  {language === 'sr' ? 'Izaberite uslugu' : 'Choose a service'}
+                                  {/* {language === 'sr' ? 'Izaberite uslugu' : 'Choose a service'} */}
                                 </h4>
                               </div>
                               <div className="py-1">
@@ -455,7 +456,7 @@ export default function ContactPage() {
                                       {isOther && (
                                         <div className="mx-3 my-2 border-t border-gray-100 pt-2">
                                           <p className="text-xs font-bold text-primary-blue px-3 pb-1">
-                                            {language === 'sr' ? 'Drugi upiti:' : 'Other inquiries:'}
+                                            {/* {language === 'sr' ? 'Drugi upiti:' : 'Other inquiries:'} */}
                                           </p>
                                         </div>
                                       )}
@@ -471,10 +472,10 @@ export default function ContactPage() {
                                         <ServiceIcon className={`h-4 w-4 flex-shrink-0 ${isOther ? 'text-primary-blue' : 'text-primary-blue'}`} />
                                         <div>
                                           <div className={`text-sm font-medium ${isOther ? 'text-primary-blue font-bold' : ''}`}>
-                                            {service.title[language as 'sr' | 'en']}
+                                            {/* {service.title[language as 'sr' | 'en']} */}
                                           </div>
                                           <div className="text-xs text-gray-500">
-                                            {service.description[language as 'sr' | 'en']}
+                                            {/* {service.description[language as current]} */}
                                           </div>
                                         </div>
                                       </div>
@@ -489,14 +490,14 @@ export default function ContactPage() {
 
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-700">
-                          {language === 'sr' ? 'Vaša poruka' : 'Your message'}
+                          {/* {language === 'sr' ? 'Vaša poruka' : 'Your message'} */}
                         </label>
                         <textarea
                           name="message"
                           value={formData.message}
                           onChange={handleInputChange}
                           rows={4}
-                          placeholder={language === 'sr' ? 'Opišite vaš zahtev...' : 'Describe your request...'}
+                          // placeholder={language === 'sr' ? 'Opišite vaš zahtev...' : 'Describe your request...'}
                           className={`w-full px-4 py-2 border ${errors.message ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent`}
                         />
                       </div>
@@ -511,11 +512,11 @@ export default function ContactPage() {
                         {isSubmitting ? (
                           <div className="flex items-center justify-center">
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                            {language === 'sr' ? 'Slanje poruke...' : 'Sending message...'}
+                            {/* {language === 'sr' ? 'Slanje poruke...' : 'Sending message...'} */}
                           </div>
                         ) : (
                           <div className="flex items-center justify-center">
-                            {language === 'sr' ? 'Pošaljite poruku' : 'Send message'}
+                            {/* {language === 'sr' ? 'Pošaljite poruku' : 'Send message'} */}
                           </div>
                         )}
                       </motion.button>
@@ -534,9 +535,7 @@ export default function ContactPage() {
                 <div className="absolute bottom-0 left-0 right-0 z-20 p-8 text-white">
                   <blockquote className="space-y-4">
                     <p className="text-lg font-light italic">
-                      {language === 'sr' 
-                        ? "JBL Concept je vaš pouzdan partner za sve vrste usluga vezanih za nekretnine. Pružamo kompletnu podršku - od posredovanja i konsaltinga do menadžmenta nekretnina i pravne pomoći. Naš tim stručnjaka je tu da vam pomogne da ostvarite svoje ciljeve na tržištu nekretnina."
-                        : "JBL Concept is your trusted partner for all types of real estate services. We provide complete support - from brokerage and consulting to property management and legal assistance. Our team of experts is here to help you achieve your real estate goals."}
+                      {t("contact-text")}
                     </p>
                     <footer className="text-sm">
                       <p className="font-medium">JBL Concept</p>
@@ -553,3 +552,5 @@ export default function ContactPage() {
     </div>
   )
 } 
+
+export default ContactPage;

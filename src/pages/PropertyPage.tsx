@@ -57,19 +57,10 @@ export default function PropertyPage() {
         console.log('API Response:', result);
 
         // Check if result exists and has data
-        if (result.isSuccess && result.data && result.data.length > 0) {
+        if (result) {
           // Find the specific property by ID
-          const foundProperty = result.data.find(
-            (prop: RealEstateDto) => prop.id === propertyId
-          );
-          
-          if (foundProperty) {
-            setProperty(foundProperty);
-            setError(null);
-          } else {
-            setError("Nekretnina nije pronađena");
-            setProperty(null);
-          }
+          setProperty(result);
+          setError(null);
         } else {
           setError("Nekretnina nije pronađena");
           setProperty(null);
