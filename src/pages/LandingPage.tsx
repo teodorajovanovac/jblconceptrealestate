@@ -529,7 +529,7 @@ const LandingPage: React.FC = () => {
                 
                 {/* Images section */}
                 <div className="md:w-1/2 relative">
-                  {/* Mobile overlay content */}
+                  {/* Mobile overlay content - moved directly over the first image */}
                   <div className="md:hidden absolute inset-0 z-10 flex flex-col justify-center items-center p-6 text-white">
                     <ul className="space-y-3 mb-8 text-center">
                       <li className="flex items-center justify-center">
@@ -562,9 +562,10 @@ const LandingPage: React.FC = () => {
                         src="/slike od jasne/knez miletina biblioteka.jpg" 
                         alt="Knez Miletina biblioteka" 
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                    <div className="md:col-span-5 aspect-[3/4] overflow-hidden rounded-xl shadow-xl md:mt-12">
+                      />
+                    </div>
+                    {/* Second image - hidden on mobile */}
+                    <div className="hidden md:block md:col-span-5 aspect-[3/4] overflow-hidden rounded-xl shadow-xl">
                       <img 
                         src="/slike od jasne/dedinje 2 uvecana.jpg" 
                         alt="Dedinje" 
