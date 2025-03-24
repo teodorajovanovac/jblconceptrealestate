@@ -1,0 +1,18 @@
+{
+  "contact-phones": [
+    { "phone": "+381 66 80 27 377" },
+    { "phone": "+381 61 22 999 88" }
+  ],
+  "team-members": [
+    {
+      "name": "Jasna Bajić-Ljubičić",
+      "image": "/images/jasna_smile.jpg",
+      "license": "01499736"
+    },
+    {
+      "name": "Jasna Bajić-Ljubičić",
+      "image": "/images/jasna_smile.jpg",
+      "license": "01499736"
+    }
+  ]
+}

@@ -67,12 +67,12 @@ main {
   width: 100%;
 }
 
-@font-face {
+/* @font-face {
   font-family: 'Arquitecta';
   src: url('./assets/fonts/Arquitecta.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
 @font-face {
   font-family: 'Century Gothic';

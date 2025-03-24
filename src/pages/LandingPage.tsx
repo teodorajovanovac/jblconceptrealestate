@@ -2,20 +2,20 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, MapPin, ChevronDown, Building, Home, Users, TrendingUp, Bed, Bath, Square, ArrowRight, Globe, Clock, Users as UsersIcon, Briefcase, Heart } from 'lucide-react'
 import './LandingPage.css'
-import ReactLogo from '../assets/jblgold.svg';
+//import ReactLogo from '../assets/jblgold.svg';
 //import Footer from '../components/footer/Footer';
 import Seo from '../services/meta/Seo';
 import TagManager from 'react-gtm-module'
-import LandingFooter from '../components/landingFooter/LandingFooter';
+//import LandingFooter from '../components/landingFooter/LandingFooter';
 // Zakomentarisaću stari import za video koji nedostaje
 // import videoBackground from '../assets/video za home/video.mp4'
 // Otkomentarišem import za video fajl
-import videoBackground from '../assets/video za home/video.mp4'
+import videoBackground from '../assets/video/video.mp4'
 import Header from '../components/header/Header'
 import FooterTW from '../components/footer/FooterTW'
 import ContactForm from '../components/contact/ContactForm'
 import Testimonials from '../components/testimonials/Testimonials'
-import FAQ from '../components/faq/FAQ'
+//import FAQ from '../components/faq/FAQs'
 import JBLGoldLogo from '../assets/jblgold.svg';  // Import the gold gradient logo
 import Spinner from '../components/ui/Spinner';
 import useFavorites from '../hooks/useFavorites';
@@ -31,6 +31,7 @@ import { useCmsData } from "../services/CmsProvider"
 import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { motion } from 'framer-motion';
+import Faq from '../components/faq/Faq';
 
 const tagManagerArgs = {
   dataLayer: {page: 'home'}, dataLayerName: 'PageDataLayer'
@@ -77,9 +78,10 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
     return null;
   };
 
-  const isRental = property.actionName?.toLowerCase().includes('izdavanje') || 
-                   property.actionName?.toLowerCase().includes('rent');
+  const isRental = property.actionShortName?.toLowerCase().includes('i') || 
+                   property.actionShortName?.toLowerCase().includes('k');
 
+  
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -231,10 +233,12 @@ const LandingPage: React.FC = () => {
       try {
         setIsLoading(true);
         const result = await realEstate.getRealEstateFeatured();
-        if (result.isSuccess && result.data) {
-          const sortedProperties = [...result.data]
-            .sort((a, b) => (b.price || 0) - (a.price || 0))
-            .slice(0, 6);
+        
+        if (result.length>0) {
+          // const sortedProperties = [...result.data]
+          //   .sort((a, b) => (b.price || 0) - (a.price || 0))
+          //   .slice(0, 6);
+          const sortedProperties = [...result].slice(0,6);
           setFeaturedProperties(sortedProperties);
         } else {
           setError("Failed to fetch property data");
@@ -270,6 +274,27 @@ const LandingPage: React.FC = () => {
         type: property.typeName || "Property"
       };
     };
+
+
+    //Read - faqData 
+    const getFaqData = () =>{
+      const obj = t("faq-list", "object");// as Record<string, string>;
+      const faqData = {
+        faqTitle: t("faq-title"),
+        faqSubTitle: t("faq-subtitle"),
+        faqList: Array.isArray(obj)
+          ? obj.map((item) => ({
+          question: item.question, 
+          answer: item.answer,
+        }))
+      : [],
+        faqFooterText: t("faq-contact-text"),
+        faqFooterButtonTitle: t("faq-contact-link")
+      };
+      return faqData
+    }
+    
+    
 
     return( 
       <div className="landing-page flex flex-col min-h-screen w-full overflow-hidden">
@@ -524,7 +549,9 @@ const LandingPage: React.FC = () => {
           <Testimonials />
           
           {/* FAQ Section */}
-          <FAQ />
+          {/* <FAQ /> */}
+
+          <Faq data={getFaqData()} />
         </div>
 
         {/* Footer */}

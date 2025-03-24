@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-// Define the type for the context
 interface CmsContextType {
-  t: (key: string) => string;
+  t: {
+    (key: string): string;
+    (key: string, returnType: "object"): object;
+  };
   changeLanguage: (langCode: string) => void;
   currentLanguage: string;
 }
@@ -20,37 +22,38 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
   children,
 }) => {
   const [cmsData, setCmsData] = useState<Record<string, string>>({});
+  const [staticCmsData, setStaticCmsData] = useState<Record<string, string>>({});
   const [currentLanguage, setCurrentLanguage] = useState<string>(defaultLang);
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
 
-
-  // useEffect(() => {
-  //   const loadSettings = async () => {
-  //     try {
-  //       const response = await axios.get("/cms/settings.json");
-  //       setAvailableLanguages(response.data.availableLanguages);
-  //       console.log("availableLanguages - ok");
-  //     } catch (error) {
-  //       console.error("Error loading settings:", error);
-  //       setAvailableLanguages([defaultLang]); // Fallback to default language
-  //     }
-  //   };
   
-  //   loadSettings();
-  // }, [defaultLang]); // This ensures that it only runs once, when the component mounts.
+  useEffect(() => {
+    const loadStaticData = async () => {
+      try {
+        const response = await axios.get("/cms/cmsdata.json");
+        setStaticCmsData(response.data); // Static data loaded
+      } catch (error) {
+        console.error("Error loading static CMS data:", error);
+      }
+    };
+
+    loadStaticData();
+  }, []); // Empty dependency array ensures this only runs once
+
 
   useEffect(() => {
     const loadSettings = async () => {
       try {
         const response = await axios.get("/cms/settings.json");
         setAvailableLanguages(response.data.availableLanguages);
-        console.log("availableLanguages - ok");
+        //console.log("availableLanguages - ok");
       } catch (error) {
         console.error("Error loading settings:", error);
-        setAvailableLanguages([defaultLang]); // Fallback to default language
+        //setAvailableLanguages([defaultLang]); // Fallback to default language
       }
     };
 
+    
     const fetchUserLanguage = async () => {
       const storedLang = localStorage.getItem("language");
 
@@ -71,6 +74,7 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
           mx: "es",
           fr: "fr",
           de: "de",
+          rs: "sr"
         };
 
         const detectedLang = countryToLang[countryCode] || defaultLang;
@@ -100,9 +104,9 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
       try {
         const response = await axios.get(`/cms/${currentLanguage}.json`);
         setCmsData(response.data);
-        console.log("loadCmsData - ok:"+response.data.length);
+        //console.log("loadCmsData - ok:"+response.data.length);
       } catch (error) {
-        console.error("Error loading cmsData file:", error);
+        //console.error("Error loading cmsData file:", error);
       }
     };
 
@@ -111,10 +115,22 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
     }
   }, [currentLanguage]);
 
-  const t = (key: string): string => {
-    return key.split(".").reduce((obj: any, i) => (obj ? obj[i] : key), cmsData);
-  };
 
+function t(key: string): string;
+function t(key: string, returnType: "object"): object;
+function t(key: string, returnType?: "object"): string | object {
+  const result = key.split(".").reduce((obj: any, i) => (obj ? obj[i] : key), {
+    ...staticCmsData, // Merge static data for easier access
+    ...cmsData, // Dynamic data
+  });
+
+  if (returnType === "object" && typeof result === "object") {
+    return result;
+  }
+  return typeof result === "string" ? result : key;
+}
+
+  
   const changeLanguage = (lang: string) => {
     if (availableLanguages.includes(lang)) {
       localStorage.setItem("language", lang); // Store language in localStorage

@@ -124,20 +124,6 @@
     "contactform-email": "office@jblconcept.rs",
     "contactform-email-label": "Email:",
     
-    "faq-title": "FREQUENTLY ASKED QUESTIONS",
-    "faq-subtitle": "Everything you need to know about our services",
-    "faq-contact": "Didn't find your answer?",
-    "faq-contact-link": "Contact us",
-    "faq-question1": "What types of properties does JBL Concept offer?",
-    "faq-answer1": "JBL Concept offers a wide range of premium properties, including luxury apartments, houses, villas, commercial spaces, and exclusive investment properties in the most attractive locations. Our portfolio includes properties in Serbia and other attractive locations throughout the region.",
-    "faq-question2": "What does the property purchase process look like with JBL Concept?",
-    "faq-answer2": "The process begins with an initial consultation where we define your needs and desires. We then present carefully selected properties that match your criteria. When you find the ideal property, our team guides you through the complete process from negotiations, legal documentation to the final purchase closing, providing expertise at every step.",
-    "faq-question3": "What services are included when selling my property?",
-    "faq-answer3": "Our sales services include professional photography and marketing material preparation, market value assessment, strategic property positioning, targeted marketing to qualified buyers, organization and conducting of visits, negotiating on your behalf, and complete administrative and legal support until the final transfer of ownership.",
-    "faq-question4": "Does JBL Concept work with clients from abroad?",
-    "faq-answer4": "Absolutely! We have extensive experience working with international clients and can provide comprehensive support in multiple languages. We understand the specific requirements of clients who don't live in Serbia and can coordinate the entire process remotely, with transparent communication and efficient administration.",
-    "faq-question5": "What are the advantages of engaging JBL Concept instead of direct buying/selling?",
-    "faq-answer5": "By engaging JBL Concept, you gain access to our exclusive network of contacts, expertise in negotiating the best terms, detailed knowledge of the real estate market and legal regulations, time savings through efficient process management, and significantly reduced stress through professional management of all administrative and legal aspects of the transaction.",
     
     "favorites-title": "Favorite Properties",
     "favorites-empty": "You don't have any favorite properties yet",
@@ -217,5 +203,36 @@
     "terms-privacy": "Privacy",
     "terms-modifications": "Modifications",
     "terms-contact": "Contact",
-    "terms-legal": "Legal Information"
+    "terms-legal": "Legal Information",
+
+    "faq-title": "FREQUENTLY ASKED QUESTIONS",
+    "faq-subtitle": "Everything you need to know about our services",
+    "faq-contact-text": "Didn't find your answer?",
+    "faq-contact-link": "Contact us",
+
+    "faq-list":[
+        {
+            "question": "What types of properties does JBL Concept offer?",
+            "answer": "JBL Concept offers a wide range of premium properties, including luxury apartments, houses, villas, commercial spaces, and exclusive investment properties in the most attractive locations. Our portfolio includes properties in Serbia and other attractive locations throughout the region."
+        },
+        {
+            "question": "What does the property buying process look like with JBL Concept?",
+            "answer": "The process begins with an initial consultation where we define your needs and desires. We then present carefully selected properties that match your criteria. When you find the ideal property, our team guides you through the complete process from negotiations, legal documentation to the final purchase closing, providing expertise at every step."
+        },
+        {
+            "question": "What types of properties does JBL Concept offer?",
+            "answer": "Our sales services include professional photography and marketing material preparation, market value assessment, strategic property positioning, targeted marketing to qualified buyers, organization and conducting of visits, negotiating on your behalf, and complete administrative and legal support until the final transfer of ownership."
+        },
+        {
+            "question": "What services are included when selling my property?",
+            "answer": "Absolutely! We have extensive experience working with international clients and can provide comprehensive support in multiple languages. We understand the specific requirements of clients who don't live in Serbia and can coordinate the entire process remotely, with transparent communication and efficient administration."
+        },
+        {
+            "question": "What are the advantages of engaging JBL Concept instead of direct buying/selling?",
+            "answer": "By engaging JBL Concept, you gain access to our exclusive network of contacts, expertise in negotiating the best terms, detailed knowledge of the real estate market and legal regulations, time savings through efficient process management, and significantly reduced stress through professional management of all administrative and legal aspects of the transaction."
+        }
+    ]
+
+    
+    
 }

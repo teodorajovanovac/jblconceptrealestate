@@ -1,36 +1,37 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import Header from "../components/header/Header"
 import FooterTW from "../components/footer/FooterTW"
 import Seo from '../services/meta/Seo'
 import { useCmsData } from "../services/CmsProvider"
+import getCmsData from "../data/cms"
+import { Agent } from "../data/models/agents"
 
-export default function AboutUsPage() {
+
+const AboutUsPage: React.FC = () => {
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const { t, currentLanguage } = useCmsData();
 
   useEffect(() => {
-    // Ovde se hendluju promene jezika, već je rešeno kroz useCmsData
+    const fetchAgents = async () => {
+      try {
+        const data = await getCmsData().getAgentData();
+        setAgents(data.agents); // Assuming 'agents' is a property in your AgentsResponse
+      } catch (err) {
+        setError("Failed to load agents data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAgents();
   }, []);
 
-  const teamMembers = [
-    {
-      id: 1,
-      name: "Jasna Bajić-Ljubičić",
-      title: currentLanguage === 'sr' ? t("about-director") : t("about-director"),
-      image: "/slike od jasne/jasna close up smile.jpg",
-      license: "01499736",
-      shortBio: t("about-teammember-jasna-desc")
-    },
-    {
-      id: 2,
-      name: "Maja Počivalšek Lazić",
-      title: currentLanguage === 'sr' ? t("about-administrator") : t("about-administrator"),
-      image: "/slike od jasne/maja close up.jpg",
-      license: "01499737",
-      shortBio: t("about-teammember-maja-desc")
-    }
-  ]
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="min-h-screen w-full bg-gray-50">
@@ -49,7 +50,7 @@ export default function AboutUsPage() {
             </motion.h1>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2 max-w-4xl mx-auto">
-              {teamMembers.map((member) => (
+              {agents.map((member) => (
                 <motion.div 
                   key={member.id} 
                   className="group relative"
@@ -60,8 +61,9 @@ export default function AboutUsPage() {
                   <Link to={`/about-us/${member.id}`} className="block">
                     <div className="relative group overflow-hidden rounded-lg">
                       <img
-                        src={member.image}
-                        alt={member.name}
+                        src={member.images[0]}
+                        //alt={member.name}
+                        //alt={member.images[0]}
                         className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-custom-black/0 opacity-0 transition-all duration-300 group-hover:bg-custom-black/60 group-hover:opacity-100">
@@ -74,11 +76,11 @@ export default function AboutUsPage() {
                     </div>
                     <div className="mt-4 space-y-1">
                       <h2 className="font-serif text-xl tracking-wide text-primary-blue">{member.name}</h2>
-                      <p className="text-sm uppercase tracking-widest text-gray-500">{member.title}</p>
+                      <p className="text-sm uppercase tracking-widest text-gray-500">{member.title[currentLanguage]}</p>
                       <p className="text-sm uppercase tracking-widest text-gray-500">
-                        {t("about-team-license")}: {member.license}
+                        {t("about-team-license")}: {member.licence}
                       </p>
-                      <p className="font-serif italic text-gray-600 text-sm">{member.shortBio}</p>
+                      <p className="font-serif italic text-gray-600 text-sm">{member.shortbio[currentLanguage]}</p>
                     </div>
                   </Link>
                 </motion.div>
@@ -91,3 +93,5 @@ export default function AboutUsPage() {
     </div>
   )
 } 
+
+export default AboutUsPage;

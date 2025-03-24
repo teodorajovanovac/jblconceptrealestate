@@ -535,7 +535,7 @@ const ContactPage: React.FC =() => {
                 <div className="absolute bottom-0 left-0 right-0 z-20 p-8 text-white">
                   <blockquote className="space-y-4">
                     <p className="text-lg font-light italic">
-                      {t("contact-text")}
+                      {/* {t("contact-text")} */}
                     </p>
                     <footer className="text-sm">
                       <p className="font-medium">JBL Concept</p>

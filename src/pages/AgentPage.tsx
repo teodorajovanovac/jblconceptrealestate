@@ -5,10 +5,12 @@ import { motion } from "framer-motion"
 import Header from "../components/header/Header"
 import FooterTW from "../components/footer/FooterTW"
 import Seo from '../services/meta/Seo'
-import agentsData from '../assets/data/agents.json'
 import { useCmsData } from "../services/CmsProvider"
+import getCmsData from "../data/cms"
+import { Agent } from "../data/models/agents"
 
-export default function AgentPage() {
+const AgentPage: React.FC = () => {
+  const [agents, setAgents] = useState<Agent[]>([]);
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t, currentLanguage } = useCmsData()
@@ -18,22 +20,23 @@ export default function AgentPage() {
     window.scrollTo(0, 0)
   }, [])
 
+
   useEffect(() => {
-    const handleLanguageChange = () => {
-      setLanguage(localStorage.getItem('language') || 'sr');
+    const fetchAgents = async () => {
+      try {
+        const data = await getCmsData().getAgentData();
+        setAgents(data.agents); // Assuming 'agents' is a property in your AgentsResponse
+      } catch (err) {
+        //setError("Failed to load agents data.");
+      } finally {
+        //setLoading(false);
+      }
     };
-
-    window.addEventListener('storage', handleLanguageChange);
-    window.addEventListener('languageChange', handleLanguageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleLanguageChange);
-      window.removeEventListener('languageChange', handleLanguageChange);
-    };
+    fetchAgents();
   }, []);
-
+  
   // Find agent by id
-  const agent = agentsData.agents.find(a => a.id === Number(id))
+  const agent = agents.find(a => a.id === Number(id))
 
   // If agent not found, redirect to about page
   if (!agent) {
@@ -43,7 +46,10 @@ export default function AgentPage() {
 
   return (
     <>
-      <Seo title={`${agent.name} - ${agent.title[currentLanguage as keyof typeof agent.title]}`} />
+      <Seo 
+        title={`${agent.name} - ${agent.title[currentLanguage]}`} 
+        />
+
       <Header />
       <main className="pt-24 pb-16">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -71,7 +77,7 @@ export default function AgentPage() {
                 transition={{ duration: 0.5 }}
               >
                 <img 
-                  src={agent.image} 
+                  src={agent.images[1]} 
                   alt={agent.name} 
                   className="h-full w-full object-cover" 
                 />
@@ -107,7 +113,7 @@ export default function AgentPage() {
               >
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold text-primary-blue">{agent.name}</h2>
-                  <p className="text-sm uppercase tracking-widest text-gray-500">{agent.title[currentLanguage]}</p>
+                  <p className="text-sm uppercase tracking-widest text-gray-500">{agent.title[currentLanguage as keyof typeof agent.title]}</p>
                   <div className="space-y-2">
                     <p className="text-sm uppercase tracking-widest">
                       <a href={`tel:${agent.contact.phone}`} className="text-primary-dark-blue hover:text-gold-color">
@@ -143,3 +149,5 @@ export default function AgentPage() {
     </>
   )
 } 
+
+export default AgentPage

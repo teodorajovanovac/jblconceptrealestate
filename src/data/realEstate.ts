@@ -98,9 +98,10 @@ const realEstate = {
     }
   },
 
-  async getRealEstateFeatured(): Promise<ApiResponse<RealEstateDto[]>> {
+  async getRealEstateFeatured(langCode?: string): Promise<RealEstateDto[]> {
     try {
-      const response = await axios.get(ApiRealEstateFeatured);
+      const url = langCode ? `${ApiRealEstateFeatured}?langCode=${langCode}` : `${ApiRealEstateFeatured}`;
+      const response = await axios.get(url);
       return response.data;
     } catch (err) {
       console.error("Error fetching featured data:", err);

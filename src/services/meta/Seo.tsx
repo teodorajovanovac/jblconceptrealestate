@@ -17,7 +17,7 @@ interface CeoProps {
 const defaultCeoProps : Partial<CeoProps> = {
   mastername : " | JBL Concept",
   title: "JBL Concept Real Estate | Nekretnine",
-  description: "Mesto gde jesi",
+  description: "Ekskluzivne nekretnine, izuzetna usluga. Vaša investicija u siguran životni koncept",
   keywords: "Nekretnine",
   url: "https://www.jblconcept.rs",
   type: "website",

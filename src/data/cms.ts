@@ -1,23 +1,16 @@
-// import axios from "axios";
+import axios from "axios";
+import { AgentsResponse } from "./models/agents";
 
-// export interface CmsResponse 
-// {
-//     category: string;
-//     subcategory: string;
-//     caption: string;
-//     link: string;
-//     content: string;
-// }
-// const getCmsData {
-//     async getCmsData(langCode: string): Promise<CmsResponse[]> {
-//         try {
-//             const response = await axios.get('cmsdata.json');
-//             return response;
-//         } catch (err) {
-//             console.error("Error fetching featured data:", err);
-//             throw err;
-//           }
-//     }
-// }
+const getCmsData = () => ({
+    getAgentData: async (): Promise<AgentsResponse> => {
+        try {
+            const response = await axios.get<AgentsResponse>('/cms/agents.json'); 
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching agent data:", error);
+            throw error;  
+        }
+    }
+});
 
-// export default getCmsData;
+export default getCmsData;
