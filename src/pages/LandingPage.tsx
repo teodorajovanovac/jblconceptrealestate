@@ -31,7 +31,7 @@ import { useCmsData } from "../services/CmsProvider"
 import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { motion } from 'framer-motion';
-import Faq from '../components/faq/Faq';
+import Faq from '../components/faq/FAQ';
 
 const tagManagerArgs = {
   dataLayer: {page: 'home'}, dataLayerName: 'PageDataLayer'
@@ -46,10 +46,37 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
   };
 
   const getFeatures = () => {
-    if (!property.spaces) return [];
-    return property.spaces.split(',')
-      .map(feature => feature.trim())
-      .filter(feature => feature.length > 0);
+    // Use spaces for features as this seems to be a string listing features
+    const features = (property.spaces || '').split(',').map(item => item.trim()).filter(Boolean);
+    // Use floorNoString which is string | null instead of floorNo which is a number
+    const floor = property.floorNoString || '';
+    
+    // Split floor string by commas
+    const floors = floor.split(',').map((item: string) => item.trim()).filter(Boolean);
+    
+    return (
+      <div className="flex flex-wrap gap-1 mt-2">
+        {/* Display floor items as separate badges only if floor info exists */}
+        {floors.length > 0 && floors.map((floorItem: string, index: number) => (
+          <span 
+            key={`floor-${index}`} 
+            className="bg-gray-100 px-3 py-1.5 rounded-full text-sm text-gray-600"
+          >
+            {floorItem}
+          </span>
+        ))}
+
+        {/* Display other features only if they exist */}
+        {features.length > 0 && features.slice(0, 2).map((feature: string, index: number) => (
+          <span 
+            key={`feature-${index}`} 
+            className="bg-gray-100 px-3 py-1.5 rounded-full text-sm text-gray-600"
+          >
+            {feature}
+          </span>
+        ))}
+      </div>
+    );
   };
 
   const getLuxuryBadge = () => {
@@ -153,47 +180,43 @@ const PropertyCard = ({ property, index, language }: { property: RealEstateDto; 
               <h3 className="text-xl font-bold text-primary-blue line-clamp-1">
                 {property.portalName || "Portal Name"}
               </h3>
-              <div className="flex items-center text-gray-600 mt-2">
-                <MapPin className="w-5 h-5 mr-2 flex-shrink-0 text-primary-blue" />
-                <span className="text-base font-medium line-clamp-1">
-                  {[
-                    property.locationArea, 
-                    property.locationCityName, 
-                    property.locationCountyName
-                  ].filter(Boolean).join(", ")}
-                </span>
+              {/* Property location display */}
+              <div className="flex items-center text-gray-600">
+                <MapPin className="w-4 h-4 mr-1" />
+                {property.locationArea || property.locationCityName ? (
+                  <span className="text-sm">
+                    {[property.locationArea, property.locationCityName].filter(Boolean).join(", ")}
+                  </span>
+                ) : null}
               </div>
             </div>
 
-            {/* Property Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-4 pb-4 border-y border-gray-100 py-4">
-              <div className="flex items-center gap-2">
-                <Square className="w-5 h-5 text-primary-blue" />
-                <span className="font-semibold">{property.area} m²</span>
-              </div>
-              <div className="flex items-center gap-2 border-x border-gray-100 px-2">
-                <Bed className="w-5 h-5 text-primary-blue" />
-                <span className="font-semibold">{property.roomsNo || "N/A"}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Bath className="w-5 h-5 text-primary-blue" />
-                <span className="font-semibold">{property.bathroomNO || "N/A"}</span>
-              </div>
+            {/* Property Stats - only show if the data exists */}
+            <div className="flex items-center gap-4 text-gray-600 mb-4">
+              {property.area ? (
+                <div className="flex items-center">
+                  <Square className="w-4 h-4 mr-1" />
+                  <span className="text-sm">{property.area} m²</span>
+                </div>
+              ) : null}
+              
+              {property.roomsNo ? (
+                <div className="flex items-center">
+                  <Bed className="w-4 h-4 mr-1" />
+                  <span className="text-sm">{property.roomsNo}</span>
+                </div>
+              ) : null}
+              
+              {property.bathroomNO ? (
+                <div className="flex items-center">
+                  <Bath className="w-4 h-4 mr-1" />
+                  <span className="text-sm">{property.bathroomNO}</span>
+                </div>
+              ) : null}
             </div>
 
             {/* Property Features */}
-            <div className="flex flex-wrap gap-2">
-              {property.floorNoString && (
-                <span className="bg-blue-50 text-primary-blue px-3 py-1.5 rounded-full text-sm font-medium">
-                  {property.floorNoString}
-                </span>
-              )}
-              {getFeatures().slice(0, 3).map((feature, index) => (
-                <span key={index} className="bg-gray-50 text-gray-700 px-3 py-1.5 rounded-full text-sm font-medium">
-                  {feature}
-                </span>
-              ))}
-            </div>
+            {getFeatures()}
           </div>
         </div>
       </Link>
@@ -382,13 +405,14 @@ const LandingPage: React.FC = () => {
                     {t("landing-featured-description")}
                   </p>
                 </div>
-                <Link
-                  to="/properties"
-                  className="cta-button rounded-full"
-                >
-                  <span>{t("landing-view-all-properties")}</span>
-                  <ArrowRight className="icon" />
-                </Link>
+                <div className="text-center mt-8">
+                  <Link
+                    to="/properties"
+                    className="inline-block bg-primary-blue hover:bg-primary-dark-blue text-white font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg"
+                  >
+                    {t("landing-viewAllProperties")}
+                  </Link>
+                </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -69,9 +69,9 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
-                    <ScrollText size={18} />
-                    {t("footer-terms")}
+                  <Link to="/#faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                    <HelpCircle size={18} />
+                    {t("footer-faq")}
                   </Link>
                 </li>
               </ul>
@@ -81,34 +81,34 @@ const Footer = () => {
             <div className="text-center md:text-left">
               <h3 className="text-lg font-semibold mb-4">{t("footer-documents")}</h3>
               <ul className="space-y-3">
+              <li>
+                  <Link to="/terms#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                    <ScrollText size={18} />
+                    {t("footer-terms")}
+                  </Link>
+                </li>
                 <li>
                   <Link to="/privacy-policy#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Shield size={18} />
                     {t("footer-privacy-policy")}
                   </Link>
                 </li>
-                <li>
+                {/*<li>
                   <Link to="/terms-of-use#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
                     {t("footer-terms-of-use")}
                   </Link>
-                </li>
-                <li>
+                </li>*/}
+                {/*<li>
                   <Link to="/info#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Info size={18} />
                     {t("footer-info")}
                   </Link>
-                </li>
-                <li>
-                  <Link to="/#faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
-                    <HelpCircle size={18} />
-                    {t("footer-faq")}
-                  </Link>
-                </li>
+                </li>*/}
                 <li>
                   <a href="/Ugovor o posredovanju_dvojezični_CONCEPT (1).pdf" target="_blank" rel="noopener noreferrer" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <FileText size={18} />
-                    Ugovor o posredovanju
+                    {t("footer-agreement")}
                   </a>
                 </li>
               </ul>
@@ -156,7 +156,7 @@ const Footer = () => {
 
               {/* Social Media Links */}
               <div className="mt-6">
-                <h4 className="text-base font-semibold mb-4">{t("footer-follow-us")}</h4>
+                <h4 className="text-lg font-semibold mb-4">{t("footer-follow-us")}</h4>
                 <div className="flex justify-center md:justify-start space-x-4">
                   <a href="https://www.instagram.com/realestateconcept.jbl/" 
                      target="_blank"

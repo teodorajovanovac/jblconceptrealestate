@@ -19,10 +19,12 @@ import { useCmsData } from "../services/CmsProvider"
 
 const defaultAgent: AgentDto = {
   name: "Agent",
+  surname: "Agent",
   company: "JBL Real Estate Concept",
-  title: "Agent",
+  licence: "1234567890",
   email: "contact@jblconcept.rs",
   phone: "+381 00 0000000",
+  mobile: "+381 00 0000000",
   image: "/placeholder-agent.jpg"
 };
 

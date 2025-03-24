@@ -6,10 +6,12 @@ export interface PhotoDto {
 
 export interface AgentDto {
     name: string;
+    surname: string;
     company: string;
-    title: string;
+    licence: string;
     email: string;
     phone: string;
+    mobile: string;
     image: string;
 }
 
