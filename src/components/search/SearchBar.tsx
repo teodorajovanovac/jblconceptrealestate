@@ -372,7 +372,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full px-6 py-4 text-lg border border-gray-200 rounded-lg focus:outline-none focus:border-primary-blue"
         />
-        <Search className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6" />
+        <Search className="absolute right-6 top-1/2 transform -translate-y-5 text-gray-400 w-6 h-6" />
       </div>
 
       {/* Primary Filters Grid */}

@@ -7,7 +7,7 @@ import { MdOutlineInfo } from "react-icons/md"
 import ReactLogo from "../../assets/jblgold.svg"
 import menuData from "../../assets/data/menu.json"
 import { Link } from "react-router-dom"
-import { Instagram, Facebook, Twitter, Linkedin, Phone } from "lucide-react"
+import { Instagram, Facebook, Twitter, Linkedin, Phone, Search } from "lucide-react"
 import { 
   FileText, 
   Briefcase, 
@@ -19,9 +19,11 @@ import {
   Mail 
 } from "lucide-react"
 import { useCmsData } from "../../services/CmsProvider"
+import PropertySearch from "../property/PropertySearch"
 
 const Footer = () => {
   const { t, currentLanguage } = useCmsData();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleLanguageChange = () => {
@@ -73,6 +75,15 @@ const Footer = () => {
                     <ScrollText size={18} />
                     {t("footer-terms")}
                   </Link>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setIsSearchOpen(true)}
+                    className="w-full hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start"
+                  >
+                    <Search size={18} />
+                    Pretraga po ID-u
+                  </button>
                 </li>
               </ul>
             </div>
@@ -201,6 +212,9 @@ const Footer = () => {
           </div>
         </div>
       </div>
+
+      {/* Property Search Drawer Component */}
+      <PropertySearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </footer>
   )
 }

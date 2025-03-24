@@ -231,8 +231,11 @@
             "question": "What are the advantages of engaging JBL Concept instead of direct buying/selling?",
             "answer": "By engaging JBL Concept, you gain access to our exclusive network of contacts, expertise in negotiating the best terms, detailed knowledge of the real estate market and legal regulations, time savings through efficient process management, and significantly reduced stress through professional management of all administrative and legal aspects of the transaction."
         }
-    ]
+    ],
 
-    
-    
+    "action-buttons-search": "Search by ID",
+    "action-buttons-favorites": "Favorite Properties",
+    "action-buttons-contact": "Contact Us",
+    "action-buttons-open": "Open Options",
+    "action-buttons-close": "Close Options"
 }

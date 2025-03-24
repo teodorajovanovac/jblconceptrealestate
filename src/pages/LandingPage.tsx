@@ -31,8 +31,7 @@ import { useCmsData } from "../services/CmsProvider"
 import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { motion } from 'framer-motion';
-import Faq from '../components/faq/Faq';
-
+import Faq from '../components/faq/FAQ';
 const tagManagerArgs = {
   dataLayer: {page: 'home'}, dataLayerName: 'PageDataLayer'
 }

@@ -1,0 +1,214 @@
+import React, { useState, useEffect } from "react";
+import { Plus, X, Search, Heart, Phone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { useCmsData } from "../../services/CmsProvider";
+import PropertySearch from "../property/PropertySearch";
+import FavoritesDrawer from "../property/FavoritesDrawer";
+import "./ActionButtons.css";
+
+const ActionButtons: React.FC = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isHomePage, setIsHomePage] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const { t } = useCmsData();
+  const navigate = useNavigate();
+
+  // Check screen size for responsive layout
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkScreenSize();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Check if we're on the home page and if we've scrolled
+  useEffect(() => {
+    const isHome = window.location.pathname === '/' || window.location.pathname === '/landing';
+    setIsHomePage(isHome);
+
+    const handleScroll = () => {
+      setHasScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close expanded menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      // Check if click is outside the action buttons area
+      if (isExpanded && !target.closest('.action-buttons-container')) {
+        setIsExpanded(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isExpanded]);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleSearchClick = () => {
+    setIsSearchOpen(true);
+    setIsExpanded(false);
+  };
+
+  const handleFavoritesClick = () => {
+    setIsFavoritesOpen(true);
+    setIsExpanded(false);
+  };
+
+  const handleContactClick = () => {
+    navigate('/contact');
+    // Scroll to top after navigation
+    window.scrollTo(0, 0);
+    // Close the action buttons after navigation
+    setIsExpanded(false);
+  };
+
+  const buttonVariants = {
+    hidden: { 
+      scale: 0, 
+      opacity: 0,
+      y: 0,
+      x: 0
+    },
+    visible: (custom: number) => ({
+      scale: 1,
+      opacity: 1,
+      // Konzistentan razmak između dugmića
+      y: -90 * custom, 
+      x: 0,
+      transition: {
+        delay: custom * 0.1,
+        duration: 0.3,
+        type: "spring",
+        stiffness: 260,
+        damping: 20
+      }
+    })
+  };
+
+  const mainButtonVariants = {
+    initial: { rotate: 0 },
+    expanded: { rotate: 135 }
+  };
+
+  // Adjust position based on screen size
+  const containerPosition = isMobile 
+    ? "fixed bottom-4 left-4 z-50 action-buttons-container"
+    : "fixed bottom-6 left-6 z-50 action-buttons-container";
+
+  // Adjust button sizes based on screen size - Increased by 30%
+  const mainButtonSize = isMobile ? "w-16 h-16" : "w-18 h-18"; // Increased from w-12/w-14
+  const actionButtonSize = isMobile ? "w-12 h-12" : "w-14 h-14"; // Increased from w-10/w-12
+  const iconSize = isMobile ? "w-5 h-5" : "w-6 h-6"; // Increased from w-4/w-5
+  const mainIconSize = isMobile ? "w-6 h-6" : "w-7 h-7"; // Increased from w-5/w-6
+
+  // Glavno dugme će uvek biti tamno plavo kao i ostala dugmad
+  const mainButtonColor = "bg-primary-dark-blue";
+  const mainButtonTextColor = "text-white";
+
+  return (
+    <>
+      {/* Main fixed container for the buttons */}
+      <div className={containerPosition}>
+        {/* Action buttons that appear when expanded */}
+        <AnimatePresence>
+          {isExpanded && (
+            <>
+              {/* Search Button */}
+              <motion.button
+                variants={buttonVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                custom={3}
+                onClick={handleSearchClick}
+                className={`absolute bottom-2 left-[10%] transform -translate-x-1/2 ${actionButtonSize} rounded-full bg-primary-dark-blue text-white flex items-center justify-center shadow-lg hover:bg-primary-dark-blue/90 transition-all duration-300 hover:scale-110 action-button`}
+                aria-label={t("action-buttons-search")}
+                title={t("action-buttons-search")}
+              >
+                <Search className={`${iconSize} mx-auto`} />
+              </motion.button>
+
+              {/* Favorites Button */}
+              <motion.button
+                variants={buttonVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                custom={2}
+                onClick={handleFavoritesClick}
+                className={`absolute bottom-2 left-[10%] transform -translate-x-1/2 ${actionButtonSize} rounded-full bg-primary-dark-blue text-white flex items-center justify-center shadow-lg hover:bg-primary-dark-blue/90 transition-all duration-300 hover:scale-110 action-button`}
+                aria-label={t("action-buttons-favorites")}
+                title={t("action-buttons-favorites")}
+              >
+                <Heart className={`${iconSize} mx-auto`} />
+              </motion.button>
+
+              {/* Contact Button */}
+              <motion.button
+                variants={buttonVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                custom={1}
+                onClick={handleContactClick}
+                className={`absolute bottom-2 left-[10%] transform -translate-x-1 ${actionButtonSize} rounded-full bg-primary-dark-blue text-white flex items-center justify-center shadow-lg hover:bg-primary-dark-blue/90 transition-all duration-300 hover:scale-110 action-button`}
+                aria-label={t("action-buttons-contact")}
+                title={t("action-buttons-contact")}
+              >
+                <Phone className={`${iconSize} mx-auto`} />
+              </motion.button>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Main toggle button */}
+        <motion.button
+          variants={mainButtonVariants}
+          initial="initial"
+          animate={isExpanded ? "expanded" : "initial"}
+          transition={{ duration: 0.3 }}
+          onClick={toggleExpand}
+          className={`${mainButtonSize} rounded-full ${mainButtonColor} ${mainButtonTextColor} flex items-center justify-center shadow-lg hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary-dark-blue focus:ring-offset-2 transition-all duration-300 main-action-button pulsate`}
+        >
+          {isExpanded ? <X className={mainIconSize} /> : <Plus className={mainIconSize} />}
+        </motion.button>
+      </div>
+
+      {/* Property Search Drawer */}
+      <PropertySearch 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
+      />
+
+      {/* Favorites Drawer */}
+      <FavoritesDrawer 
+        isOpen={isFavoritesOpen} 
+        onClose={() => setIsFavoritesOpen(false)} 
+      />
+    </>
+  );
+};
+
+export default ActionButtons; 

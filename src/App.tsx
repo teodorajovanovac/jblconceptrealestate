@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import LoadingScreen from './components/splash/LoadingScreen';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { CmsDataProvider } from './services/CmsProvider';
+import ActionButtons from './components/actionButtons';
 
 const theme = createTheme({
   palette: {
@@ -50,6 +51,7 @@ function App() {
                 <div className="App">
                   {isHomePage && <LoadingScreen loading={isLoading} />}
                   <AppRoutes />
+                  <ActionButtons />
                 </div>
               </Router>
             </HelmetProvider>
