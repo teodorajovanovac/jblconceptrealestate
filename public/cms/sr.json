@@ -238,5 +238,11 @@
       "question": "Koje su prednosti angažovanja JBL Concept-a umesto direktne kupovine/prodaje?",
       "answer": "Angažovanjem JBL Concept-a dobijate pristup našoj ekskluzivnoj mreži kontakata, stručnost u pregovaranju najboljih uslova, detaljno poznavanje tržišta nekretnina i pravnih propisa, uštede vremena kroz efikasno vođenje procesa, i značajno smanjenje stresa kroz profesionalno upravljanje svim administrativnim i pravnim aspektima transakcije."
     }
-  ]
+  ],
+
+  "action-buttons-search": "Pretraga po ID-u",
+  "action-buttons-favorites": "Omiljene nekretnine",
+  "action-buttons-contact": "Kontaktirajte nas",
+  "action-buttons-open": "Otvori opcije",
+  "action-buttons-close": "Zatvori opcije"
 }

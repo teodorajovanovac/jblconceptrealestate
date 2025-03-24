@@ -44,26 +44,10 @@ const ContactPage: React.FC =() => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // useEffect(() => {
-  //   // const handleLanguageChange = () => {
-  //   //   setLanguage(localStorage.getItem('language') || 'sr');
-  //   // };
-
-  //   window.addEventListener('storage', handleLanguageChange);
-  //   window.addEventListener('languageChange', handleLanguageChange);
-
-  //   return () => {
-  //     window.removeEventListener('storage', handleLanguageChange);
-  //     window.removeEventListener('languageChange', handleLanguageChange);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const currentLanguage = localStorage.getItem('language');
-  //   if (currentLanguage) {
-  //     setLanguage(currentLanguage);
-  //   }
-  // }, [localStorage.getItem('language')]);
+  // Додајемо useEffect за скроловање на врх
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -502,24 +486,36 @@ const ContactPage: React.FC =() => {
                         />
                       </div>
 
-                      <motion.button
+                      <button 
                         type="submit"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className={`w-full text-white py-3 rounded-lg text-lg font-medium relative overflow-hidden ${isSubmitting ? 'bg-primary-blue/70' : 'bg-primary-blue hover:bg-secondary-blue'} transition-colors`}
+                        className="send-button w-full"
                         disabled={isSubmitting}
                       >
+                        <div className="svg-wrapper-1">
+                          <div className="svg-wrapper">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              height="24"
+                            >
+                              <path fill="none" d="M0 0h24v24H0z"></path>
+                              <path
+                                fill="currentColor"
+                                d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
+                              ></path>
+                            </svg>
+                          </div>
+                        </div>
                         {isSubmitting ? (
                           <div className="flex items-center justify-center">
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                            {t("form-sending")}
+                            <span>{t("form-sending")}</span>
                           </div>
                         ) : (
-                          <div className="flex items-center justify-center">
-                            {t("form-send-button")}
-                          </div>
+                          <span className="ml-2">{t("form-send-button")}</span>
                         )}
-                      </motion.button>
+                      </button>
                     </form>
                   </>
                 )}
