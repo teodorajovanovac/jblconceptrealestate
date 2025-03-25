@@ -17,24 +17,24 @@ export interface AgentDto {
 
 export interface RealEstateDto {
     id: number;
-    price: number;
-    priceM2: number;
+    price: number | 0;
+    priceM2: number | 0;
     code: string | null;
-    area: number;
-    roomsNo: number;
-    bathroomNO: number;
-    gmapSync: number;
-    approximateLocation: number;
-    inserted: string;
-    edited: string;
-    ownerPermit: number;
-    lux: number;
+    area: number | 0;
+    roomsNo: number | null;
+    bathroomNO: number| null;
+    gmapSync: number| null;
+    approximateLocation: number | null;
+    inserted: string | null;
+    edited: string | null;
+    ownerPermit: number| null;
+    lux: number| null;
     tags: string | null;
     locationCountryName: string | null;
     locationCountyName: string | null;
     locationCityName: string | null;
     locationArea: string | null;
-    floorNo: number;
+    floorNo: number| null;
     floorNoString: string | null;
     description: string | null;
     realEstateDescription: string | null;
@@ -50,7 +50,7 @@ export interface RealEstateDto {
     subTypeName: string | null;
     subTypeShortName: string | null;
     photos: PhotoDto[];
-    agent?: AgentDto;
+    agent?: AgentDto[];
 }
 
 export interface LocationDto {

@@ -110,12 +110,12 @@ export default function ContactForm() {
           >
             <div className="rounded-3xl overflow-hidden shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300 h-72 md:h-80">
               <img 
-                src="/slike od jasne/office jbl full pic.jpg" 
+                src="/images/office_jbl_1.jpg" 
                 alt="Our office" 
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  target.src = '/slike od jasne/office jbl full pic.jpg';
+                  target.src = '/images/office_jbl_1.jpg';
                 }}
               />
             </div>

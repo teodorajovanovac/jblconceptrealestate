@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { X, Search, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
-import { RealEstateDto } from "../../data/models/realEstate";
+import { useNavigate } from "react-router-dom";
+//import { RealEstateDto } from "../../data/models/realEstate";
 import realEstate from "../../data/realEstate";
 import OtpInput from "react-otp-input";
 import { useCmsData } from "../../services/CmsProvider";
@@ -19,19 +19,28 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSearch = async () => {
-    // Ako nije unet kompletan ID (4 cifre), prikaži grešku
-    if (propertyId.length !== 4) {
-      setError("ID nekretnine mora imati 4 cifre");
-      return;
-    }
+  useEffect (() =>{
+    setPropertyId("");
+  }, [isOpen])
 
+  const handleChange = (value: string) => {
+    setPropertyId(value);
+    console.log(propertyId);
+    if (value.length == 4) 
+      {
+        handleSearch(value);
+      } else {
+        setError("")
+      }
+  }
+
+  const handleSearch = async (value: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
       // Pretvaramo string u broj
-      const id = parseInt(propertyId, 10);
+      const id = parseInt(value, 10);
       if (isNaN(id)) {
         throw new Error("ID mora biti broj");
       }
@@ -42,11 +51,11 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
         navigate(`/property/${id}`);
         onClose(); // Zatvaramo drawer
       } else {
-        setError("Nekretnina sa unetim ID-om nije pronađena");
+        setError(t("action-search-property-not-found"));
       }
     } catch (error) {
       console.error("Error searching property:", error);
-      setError("Došlo je do greške prilikom pretrage");
+      setError(t("action-search-property-error"));
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +71,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-custom-black/40 z-40"
+            className="fixed inset-0 bg-custom-black/40 z-30"
           />
           
           {/* Drawer */}
@@ -71,35 +80,36 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-0 left-0 bottom-0 w-full sm:w-96 bg-white shadow-xl z-50 overflow-hidden flex flex-col"
+            className="fixed top-0 left-0 bottom-0 w-full sm:w-96 bg-white shadow-xl z-40 overflow-hidden flex flex-col"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b">
               <div className="flex items-center">
                 <Search className="h-5 w-5 text-primary-blue mr-2" />
-                <h3 className="text-lg font-semibold">Pretraga po ID-u</h3>
+                <h3 className="text-lg font-semibold text-primary-dark-blue" >{t("action-buttons-search")}</h3>
               </div>
               <button 
                 onClick={onClose}
-                className="rounded-full p-1 hover:bg-gray-100 transition-colors"
+                className="rounded-full p-1 hover:bg-gray-100 transition-colors text-primary-dark-blue"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             
             {/* Search Input */}
-            <div className="p-4 border-b">
+            <div className="p-4 border">
               <div className="mb-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Unesite ID nekretnine (4 cifre)
+                  {t("action-search-property-enter")}
                 </label>
-                <div className="flex justify-between gap-2">
+                <div className="w-full flex justify-center mt-6">
                   <OtpInput
                     value={propertyId}
-                    onChange={setPropertyId}
+                    onChange={handleChange}
                     numInputs={4}
                     renderSeparator={<span className="w-2"></span>}
                     renderInput={(props: React.InputHTMLAttributes<HTMLInputElement>) => <input {...props} />}
+
                     inputStyle={{
                       width: "3rem",
                       height: "3rem",
@@ -123,7 +133,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
                 </div>
               )}
               
-              <button
+              {/* <button
                 onClick={handleSearch}
                 disabled={isLoading}
                 className="w-full mt-4 bg-primary-blue hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
@@ -139,7 +149,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
                     <span>Pretraži</span>
                   </div>
                 )}
-              </button>
+              </button> */}
             </div>
             
             {/* Results - sada nam nije potreban prikaz rezultata jer odmah preusmeravamo */}
@@ -151,9 +161,9 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
               ) : !error && (
                 <div className="text-center py-8">
                   <Search className="h-12 w-12 mx-auto text-gray-300 mb-3" />
-                  <p className="text-gray-500">Unesite ID nekretnine za pretragu</p>
+                  <p className="text-gray-500">{t("action-search-property-enter")}</p>
                   <p className="text-sm text-gray-400 mt-1">
-                    Svaka nekretnina ima jedinstveni 4-cifreni ID broj
+                   {t("action-search-property-enter-desc")}
                   </p>
                 </div>
               )}

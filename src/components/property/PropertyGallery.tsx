@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { Heart, Share2, ChevronLeft, ChevronRight } from "lucide-react"
-import { Link, useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css" 
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen"
@@ -25,7 +25,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
-  const location = useLocation();
+  //const location = useLocation();
   const { isFavorite, toggleFavorite } = useFavorites();
   
   // Make sure images is an array and has at least one item
@@ -86,7 +86,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
     if (propertyId) {
       toggleFavorite(propertyId);
       // Refresh the page after toggling favorite status
-      window.location.reload();
+      //window.location.reload();
     }
   };
 

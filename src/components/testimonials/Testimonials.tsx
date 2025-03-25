@@ -1,114 +1,55 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Quote } from "lucide-react"
-
-type Testimonial = {
-  id: number
-  quote: {
-    sr: string
-    en: string
-  }
-  name: string
-  location: {
-    sr: string
-    en: string
-  }
-  imageUrl: string
-}
-
-const testimonials: Testimonial[] = [
-  {
-    id: 1,
-    quote: {
-      sr: "JBL Concept je nadmašio sva moja očekivanja. Njihov tim je bio profesionalan, posvećen i učinio je ceo proces prodaje moje nekretnine potpuno bezbrižnim.",
-      en: "JBL Concept exceeded all my expectations. Their team was professional, dedicated, and made the entire process of selling my property completely carefree."
-    },
-    name: "Marija Petrović",
-    location: {
-      sr: "Novi Beograd, Srbija",
-      en: "New Belgrade, Serbia"
-    },
-    imageUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
-  },
-  {
-    id: 2,
-    quote: {
-      sr: "Zahvaljujući JBL Conceptu, pronašli smo savršenu kuću za našu porodicu. Njihovo duboko razumevanje tržišta i lični pristup napravili su veliku razliku.",
-      en: "Thanks to JBL Concept, we found the perfect home for our family. Their deep understanding of the market and personal approach made a huge difference."
-    },
-    name: "Stefan Jovanović",
-    location: {
-      sr: "Dedinje, Beograd",
-      en: "Dedinje, Belgrade"
-    },
-    imageUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
-  },
-  {
-    id: 3,
-    quote: {
-      sr: "Iz inostranstva smo tražili investicionu nekretninu u Beogradu. JBL tim je bio izuzetno responzivan, detaljan i pružio nam je sigurnost u svakom koraku.",
-      en: "We were looking for an investment property in Belgrade from abroad. The JBL team was extremely responsive, detailed, and provided us with security at every step."
-    },
-    name: "Ana Vuksanović",
-    location: {
-      sr: "London, Velika Britanija",
-      en: "London, Great Britain"
-    },
-    imageUrl: "https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
-  }
-]
+import { useCmsData } from "../../services/CmsProvider"
+import getCmsData from "../../data/cms"
+import { Testimonial } from "../../data/models/Testimonial"
 
 export default function Testimonials() {
+  const { t, currentLanguage } = useCmsData()
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [activeIndex, setActiveIndex] = useState(0)
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
-  const [autoplayEnabled, setAutoplayEnabled] = useState(true)
+  //const [autoplayEnabled, setAutoplayEnabled] = useState(true)
+  
+  
 
   useEffect(() => {
-    const handleLanguageChange = () => {
-      setLanguage(localStorage.getItem('language') || 'sr');
+    const fetchTestimonials = async () => {
+      try {
+        const data = await getCmsData().getTestimonialData();
+        //console.log("Fetched testimonials:", data.testimonials);
+        setTestimonials(data.testimonials); 
+        //console.log("Fetched testimonials:", testimonials);
+      } catch (err) {
+          //setError("Failed to load agents data.");
+      } finally {
+        //setLoading(false);
+      }
     };
-
-    window.addEventListener('storage', handleLanguageChange);
-    window.addEventListener('languageChange', handleLanguageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleLanguageChange);
-      window.removeEventListener('languageChange', handleLanguageChange);
-    };
+    fetchTestimonials();
   }, []);
 
   // Autoplay functionality
-  useEffect(() => {
-    if (!autoplayEnabled) return;
+  // useEffect(() => {
+  //   if (!autoplayEnabled) return;
     
-    const interval = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    }, 5000);
+  //   const interval = setInterval(() => {
+  //     setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+  //   }, 5000);
     
-    return () => clearInterval(interval);
-  }, [autoplayEnabled]);
+  //   return () => clearInterval(interval);
+  // }, [autoplayEnabled]);
 
-  // Pause autoplay when user interacts with testimonials
-  const handleDotClick = (index: number) => {
-    setActiveIndex(index);
-    setAutoplayEnabled(false);
+  // // Pause autoplay when user interacts with testimonials
+  // const handleDotClick = (index: number) => {
+  //   setActiveIndex(index);
+  //   setAutoplayEnabled(false);
     
-    // Resume autoplay after 10 seconds of inactivity
-    setTimeout(() => setAutoplayEnabled(true), 10000);
-  };
+  //   // Resume autoplay after 10 seconds of inactivity
+  //   setTimeout(() => setAutoplayEnabled(true), 10000);
+  // };
 
-  const translations = {
-    sr: {
-      title: "UTISCI KLIJENATA",
-      subtitle: "Šta kažu naši klijenti",
-    },
-    en: {
-      title: "CLIENT TESTIMONIALS",
-      subtitle: "What our clients say",
-    }
-  }
 
-  const t = translations[language as 'sr' | 'en']
 
   return (
     <section className="py-24 bg-white relative overflow-hidden">
@@ -120,13 +61,14 @@ export default function Testimonials() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h3 className="text-lg md:text-xl font-medium tracking-wider text-primary-blue mb-3">{t.title}</h3>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900">{t.subtitle}</h2>
+          <h3 className="text-lg md:text-xl font-medium tracking-wider text-primary-blue mb-3">{t("testimonials-title")}</h3>
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900">{t("testimonials-subtitle")}</h2>
         </motion.div>
         
         <div className="relative">
           {/* Desktop view - show all testimonials */}
           <div className="hidden md:grid md:grid-cols-3 gap-8">
+            
             {testimonials.map((testimonial, idx) => (
               <motion.div
                 key={testimonial.id}
@@ -137,7 +79,7 @@ export default function Testimonials() {
               >
                 <TestimonialCard 
                   testimonial={testimonial} 
-                  language={language as 'sr' | 'en'} 
+                  language={currentLanguage} 
                 />
               </motion.div>
             ))}
@@ -145,7 +87,8 @@ export default function Testimonials() {
           
           {/* Mobile view - show one testimonial at a time */}
           <div className="md:hidden">
-            <motion.div
+            
+           {testimonials.length > 0 && ( <motion.div
               key={testimonials[activeIndex].id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -154,16 +97,16 @@ export default function Testimonials() {
             >
               <TestimonialCard 
                 testimonial={testimonials[activeIndex]} 
-                language={language as 'sr' | 'en'} 
+                language={currentLanguage} 
               />
-            </motion.div>
+            </motion.div>)}
             
             {/* Pagination dots for mobile */}
             <div className="flex justify-center mt-8 space-x-2">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => handleDotClick(index)}
+                  //onClick={() => handleDotClick(index)}
                   className={`transition-all duration-300 rounded-full ${
                     index === activeIndex 
                       ? "w-8 h-2 bg-primary-blue" 
@@ -180,13 +123,12 @@ export default function Testimonials() {
   )
 }
 
-function TestimonialCard({ 
-  testimonial, 
-  language 
-}: { 
+function TestimonialCard({ testimonial, language}: { 
   testimonial: Testimonial
-  language: 'sr' | 'en'
-}) {
+  language: string
+}) 
+
+{
   return (
     <div className="bg-white rounded-3xl p-8 shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300 relative h-full flex flex-col transform hover:-translate-y-1">
       <div className="text-primary-blue opacity-15 absolute top-6 left-6">

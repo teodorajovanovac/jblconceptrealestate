@@ -30,7 +30,7 @@ const ContactPage: React.FC =() => {
   const [formType, setFormType] = useState<ServiceType>('buying')
   const [showServiceModal, setShowServiceModal] = useState(false)
   const serviceButtonRef = useRef<HTMLButtonElement>(null)
-  const { t } = useCmsData();
+  const { t, currentLanguage } = useCmsData();
 
   // Form state
   const [formData, setFormData] = useState<FormData>({
@@ -221,6 +221,7 @@ const ContactPage: React.FC =() => {
       });
     }
   }
+
   
   const validateForm = () => {
     const newErrors: Partial<FormData> = {};
@@ -255,6 +256,9 @@ const ContactPage: React.FC =() => {
     
     setIsSubmitting(true);
     
+
+    
+
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
@@ -275,7 +279,6 @@ const ContactPage: React.FC =() => {
     }, 1000);
   }
 
-  console.log(t("contactform-title"));
   return (
     <div className="min-h-screen w-full bg-gray-50">
       {/* <Seo title={t("contactform-title")f} /> */}
@@ -407,7 +410,7 @@ const ContactPage: React.FC =() => {
                         >
                           <span className="flex items-center gap-2">
                             <ServiceIcon className="h-5 w-5 text-primary-blue" />
-                            {/* <span>{services[formType].title[language as 'sr' | 'en']}</span> */}
+                            <span>{services[formType].title[currentLanguage as 'sr' | 'en']}</span>
                           </span>
                           <span className="text-gray-400">{showServiceModal ? '▲' : '▼'}</span>
                         </button>
@@ -456,10 +459,11 @@ const ContactPage: React.FC =() => {
                                         <ServiceIcon className={`h-4 w-4 flex-shrink-0 ${isOther ? 'text-primary-blue' : 'text-primary-blue'}`} />
                                         <div>
                                           <div className={`text-sm font-medium ${isOther ? 'text-primary-blue font-bold' : ''}`}>
-                                            {/* {service.title[language as 'sr' | 'en']} */}
+                                          
+                                            {service.title[currentLanguage as 'sr' | 'en']}
                                           </div>
                                           <div className="text-xs text-gray-500">
-                                            {/* {service.description[language as current]} */}
+                                            {service.description[currentLanguage as 'sr' | 'en']}
                                           </div>
                                         </div>
                                       </div>
@@ -524,7 +528,7 @@ const ContactPage: React.FC =() => {
               <div className="relative hidden md:block">
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-blue/80 via-black/50 to-black/30 z-10" />
                 <img
-                  src="/slike od jasne/office jbl close up.jpeg"
+                  src="/images/office_jbl_close_up.jpeg"
                   alt="Modern luxury interior"
                   className="h-full w-full object-cover hover:scale-105 transition-transform duration-700"
                 />

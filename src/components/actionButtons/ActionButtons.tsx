@@ -95,14 +95,14 @@ const ActionButtons: React.FC = () => {
       scale: 1,
       opacity: 1,
       // Konzistentan razmak između dugmića
-      y: -90 * custom, 
+      y: -80 * custom, 
       x: 0,
       transition: {
-        delay: custom * 0.1,
-        duration: 0.3,
+        delay: custom * 0.05,
+        duration: 0.15,
         type: "spring",
         stiffness: 260,
-        damping: 20
+        damping: 15
       }
     })
   };
@@ -114,8 +114,8 @@ const ActionButtons: React.FC = () => {
 
   // Adjust position based on screen size
   const containerPosition = isMobile 
-    ? "fixed bottom-4 left-4 z-50 action-buttons-container"
-    : "fixed bottom-6 left-6 z-50 action-buttons-container";
+    ? "fixed bottom-4 left-4 z-150 action-buttons-container"
+    : "fixed bottom-6 left-6 z-150 action-buttons-container";
 
   // Adjust button sizes based on screen size - Increased by 30%
   const mainButtonSize = isMobile ? "w-16 h-16" : "w-18 h-18"; // Increased from w-12/w-14
@@ -189,9 +189,18 @@ const ActionButtons: React.FC = () => {
           initial="initial"
           animate={isExpanded ? "expanded" : "initial"}
           transition={{ duration: 0.3 }}
+          
           onClick={toggleExpand}
-          className={`${mainButtonSize} rounded-full ${mainButtonColor} ${mainButtonTextColor} flex items-center justify-center shadow-lg hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary-dark-blue focus:ring-offset-2 transition-all duration-300 main-action-button pulsate`}
+          className={`${mainButtonSize} 
+            rounded-full ${mainButtonColor} ${mainButtonTextColor} 
+            flex items-center justify-center shadow-lg 
+            opacity-75
+            border-primary-light-blue border-4
+            hover:opacity-100
+            focus:ring-2 focus:ring-primary-dark-blue focus:ring-offset-2 
+            transition-all duration-300 main-action-button `}
         >
+          
           {isExpanded ? <X className={mainIconSize} /> : <Plus className={mainIconSize} />}
         </motion.button>
       </div>

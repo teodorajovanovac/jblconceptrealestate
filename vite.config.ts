@@ -14,7 +14,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://test.jblconcept.rs',
+        //target: 'https://test.jblconcept.rs',
+        target: 'https://sandbox.jblconcept.rs',
+        //target: 'https://core.ajsasoft.rs',
         changeOrigin: true,
         secure: false,
         

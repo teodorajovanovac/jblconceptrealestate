@@ -83,7 +83,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`${getTextColorClass()} fixed top-0 left-0 w-full z-50 transition-colors duration-300`}
+      className={`${getTextColorClass()} fixed top-0 left-0 w-full z-10 transition-colors duration-300`}
     >
       <div className="w-full flex items-center justify-between py-3 md:py-4">
         {/* Лого уз леву ивицу */}

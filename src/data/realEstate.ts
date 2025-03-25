@@ -25,7 +25,7 @@ const realEstate = {
       
       return response.data;
     } catch (err) {
-      console.error(`Error fetching data for page ${options.page}:`, err);
+        console.error(`Error fetching data for page ${options.page}:`, err);
       throw err;
     }
   },
@@ -102,6 +102,7 @@ const realEstate = {
     try {
       const url = langCode ? `${ApiRealEstateFeatured}?langCode=${langCode}` : `${ApiRealEstateFeatured}`;
       const response = await axios.get(url);
+      //console.error("data:", response);
       return response.data;
     } catch (err) {
       console.error("Error fetching featured data:", err);

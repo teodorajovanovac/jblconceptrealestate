@@ -17,10 +17,10 @@
     "contactform-choose-service": "Izaberite uslugu",
   "contactform-other-inquiries": "Drugi upiti:",
   "contact-header": "Kontaktirajte nas",
-  "form-enter-name": "Unesite vaše ime",
-  "form-enter-lastname": "Unesite vaše prezime",
-  "form-enter-email": "Unesite vašu email adresu",
-  "form-enter-phone": "Unesite vašu telefonnu adresu",
+  "form-enter-name": "Unesite Vaše ime",
+  "form-enter-lastname": "Unesite Vaše prezime",
+  "form-enter-email": "Unesite Vašu email adresu",
+  "form-enter-phone": "Unesite Vaš telefon",
   "form-enter-message": "Unesite vašu poruku",
   "contactform-choose-service": "Izaberite uslugu",
   "form-request-placeholder": "Opišite vaš zahtev...",
@@ -161,15 +161,7 @@
 
   "testimonials-title": "UTISCI KLIJENATA",
   "testimonials-subtitle": "Šta kažu naši klijenti",
-  "testimonial1-quote": "JBL Concept je nadmašio sva moja očekivanja. Njihov tim je bio profesionalan, posvećen i učinio je ceo proces prodaje moje nekretnine potpuno bezbrižnim.",
-  "testimonial1-name": "Marija Petrović",
-  "testimonial1-location": "Novi Beograd, Srbija",
-  "testimonial2-quote": "Zahvaljujući JBL Conceptu, pronašli smo savršenu kuću za našu porodicu. Njihovo duboko razumevanje tržišta i lični pristup napravili su veliku razliku.",
-  "testimonial2-name": "Stefan Jovanović",
-  "testimonial2-location": "Dedinje, Beograd",
-  "testimonial3-quote": "Iz inostranstva smo tražili investicionu nekretninu u Beogradu. JBL tim je bio izuzetno responzivan, detaljan i pružio nam je sigurnost u svakom koraku.",
-  "testimonial3-name": "Ana Vuksanović",
-  "testimonial3-location": "London, Velika Britanija",
+  
 
   "menu-home": "Početna",
   "menu-properties": "Nekretnine",
@@ -244,5 +236,12 @@
   "action-buttons-favorites": "Omiljene nekretnine",
   "action-buttons-contact": "Kontaktirajte nas",
   "action-buttons-open": "Otvori opcije",
-  "action-buttons-close": "Zatvori opcije"
+  "action-buttons-close": "Zatvori opcije",
+
+  "action-search-property-enter":"Enter Property ID (4 digits)",
+  "action-search-property-enter-desc":"Each property has a unique 4-digit ID number",
+  "action-search-property-not-found": "The property with the entered ID was not found",
+  "action-search-property-error": "An error occurred while searching"
+    
+    
 }

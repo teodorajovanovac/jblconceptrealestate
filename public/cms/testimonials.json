@@ -1,0 +1,42 @@
+{"testimonials":[
+  {
+    "id": "1",
+    "quote": {
+      "sr": "JBL Concept je nadmašio sva moja očekivanja. Njihov tim je bio profesionalan, posvećen i učinio je ceo proces prodaje moje nekretnine potpuno bezbrižnim.",
+      "en": "JBL Concept exceeded all my expectations. Their team was professional, dedicated, and made the entire process of selling my property completely carefree."
+    },
+    "name": "Marija Petrović",
+    "location": {
+      "sr": "Novi Beograd, Srbija",
+      "en": "New Belgrade, Serbia"
+    },
+    "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
+  },
+  {
+    "id": "2",
+    "quote": {
+      "sr": "Zahvaljujući JBL Conceptu, pronašli smo savršenu kuću za našu porodicu. Njihovo duboko razumevanje tržišta i lični pristup napravili su veliku razliku.",
+      "en": "Thanks to JBL Concept, we found the perfect home for our family. Their deep understanding of the market and personal approach made a huge difference."
+    },
+    "name": "Stefan Jovanović",
+    "location": {
+      "sr": "Dedinje, Beograd",
+      "en": "Dedinje, Belgrade"
+    },
+    "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
+  },
+  {
+    "id": "3",
+    "quote": {
+      "sr": "Iz inostranstva smo tražili investicionu nekretninu u Beogradu. JBL tim je bio izuzetno responzivan, detaljan i pružio nam je sigurnost u svakom koraku.",
+      "en": "We were looking for an investment property in Belgrade from abroad. The JBL team was extremely responsive, detailed, and provided us with security at every step."
+    },
+    "name": "Ana Vuksanović",
+    "location": {
+      "sr": "London, Velika Britanija",
+      "en": "London, Great Britain"
+    },
+    "imageUrl": "https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
+  }
+]
+}

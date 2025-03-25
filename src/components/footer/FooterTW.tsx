@@ -25,14 +25,14 @@ const Footer = () => {
   const { t, currentLanguage } = useCmsData();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  useEffect(() => {
-    const handleLanguageChange = () => {
-      // Ova funkcija se poziva kad se promeni jezik
-    };
+  // useEffect(() => {
+  //   const handleLanguageChange = () => {
+  //     // Ova funkcija se poziva kad se promeni jezik
+  //   };
 
-    window.addEventListener('languageChange', handleLanguageChange);
-    return () => window.removeEventListener('languageChange', handleLanguageChange);
-  }, []);
+  //   window.addEventListener('languageChange', handleLanguageChange);
+  //   return () => window.removeEventListener('languageChange', handleLanguageChange);
+  // }, []);
 
   const footerLinks = menuData
     .filter((item) => item.lang === currentLanguage && item.category === "footer")
@@ -59,30 +59,27 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">{t("footer-quick-links")}</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/pricing#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
-                    <FileText size={18} />
-                    {t("footer-pricing")}
-                  </Link>
+                  
                 </li>
                 <li>
-                  <Link to="/service#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/service" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Briefcase size={18} />
                     {t("footer-services")}
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/#faq" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <HelpCircle size={18} />
                     {t("footer-faq")}
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <button 
                     onClick={() => setIsSearchOpen(true)}
-                    className="w-full hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start"
+                    className="w-full hover:text-gold flex gap-2 text-base  md:justify-start text-left"
                   >
                     <Search size={18} />
-                    Pretraga po ID-u
+                    {t("action-buttons-search")}
                   </button>
                 </li>
               </ul>
@@ -93,16 +90,22 @@ const Footer = () => {
               <h3 className="text-lg font-semibold mb-4">{t("footer-documents")}</h3>
               <ul className="space-y-3">
               <li>
-                  <Link to="/terms#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  <Link to="/pricing" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                    <FileText size={18} />
+                    {t("footer-pricing")}
+                  </Link>
+            </li>
+            <li>
+                  <Link to="/terms" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <ScrollText size={18} />
                     {t("footer-terms")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/privacy-policy#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                  {/* <Link to="/privacy-policy" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <Shield size={18} />
                     {t("footer-privacy-policy")}
-                  </Link>
+                  </Link> */}
                 </li>
                 {/*<li>
                   <Link to="/terms-of-use#top" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">

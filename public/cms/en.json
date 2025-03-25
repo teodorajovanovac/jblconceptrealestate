@@ -162,15 +162,6 @@
     
     "testimonials-title": "CLIENT TESTIMONIALS",
     "testimonials-subtitle": "What our clients say",
-    "testimonial1-quote": "JBL Concept exceeded all my expectations. Their team was professional, dedicated, and made the entire process of selling my property completely carefree.",
-    "testimonial1-name": "Maria Petrovic",
-    "testimonial1-location": "New Belgrade, Serbia",
-    "testimonial2-quote": "Thanks to JBL Concept, we found the perfect house for our family. Their deep understanding of the market and personal approach made a huge difference.",
-    "testimonial2-name": "Stefan Jovanovic",
-    "testimonial2-location": "Dedinje, Belgrade",
-    "testimonial3-quote": "We were looking for an investment property in Belgrade from abroad. The JBL team was extremely responsive, detailed, and provided us with security at every step.",
-    "testimonial3-name": "Ana Vuksanovic",
-    "testimonial3-location": "London, United Kingdom",
     
     "menu-home": "Home",
     "menu-properties": "Properties",
@@ -238,5 +229,12 @@
     "action-buttons-favorites": "Favorite Properties",
     "action-buttons-contact": "Contact Us",
     "action-buttons-open": "Open Options",
-    "action-buttons-close": "Close Options"
+    "action-buttons-close": "Close Options",
+    
+    "action-search-property-enter":"Enter Property ID (4 digits)",
+    "action-search-property-enter-desc":"Each property has a unique 4-digit ID number",
+    "action-search-property-not-found": "The property with the entered ID was not found",
+    "action-search-property-error": "An error occurred while searching"
+    
+      
 }
