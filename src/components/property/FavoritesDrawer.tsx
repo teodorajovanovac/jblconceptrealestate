@@ -157,11 +157,11 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
                             <img 
                               src={property.thumbnail != null  
                                 ? `https://jblconcept.rs/photos/${property.thumbnail}` 
-                                : "/placeholder.svg"}
+                                : "images/placeholder.svg"}
                               alt={property.typeName || "Property"}
                               className="w-full h-full object-cover"
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src = "/placeholder.svg";
+                                (e.target as HTMLImageElement).src = "images/placeholder.svg";
                               }}
                             />
                           </Link>

@@ -130,7 +130,7 @@ export default function PropertyPage() {
 
   const formatGalleryImages = () => {
     if (!property?.photos || property.photos.length === 0) {
-      return ['/placeholder.svg'];
+      return ['/images/placeholder.svg'];
     }
     return property.photos.map(photo => `https://jblconcept.rs/photos/${photo.name}`);
   };

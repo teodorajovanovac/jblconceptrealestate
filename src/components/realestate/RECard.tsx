@@ -22,7 +22,7 @@ export default function RECard({ property }: RECardProps) {
       <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
         <div className="relative h-[300px]">
           <img 
-            src={property.image || "/placeholder.svg"} 
+            src={property.image || "/images/placeholder.svg"} 
             alt={property.title} 
             className="w-full h-full object-cover"
           />
