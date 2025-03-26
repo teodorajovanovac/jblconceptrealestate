@@ -22,7 +22,7 @@ import { useCmsData } from "../services/CmsProvider"
 import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { motion } from 'framer-motion';
-import Faq from '../components/faq/Faq';
+import Faq from '../components/faq/FAQ';
 import PropertyCard from '../components/property/ProperyCard';
 
 const tagManagerArgs = {
