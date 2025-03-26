@@ -37,6 +37,45 @@
       "en": "London, Great Britain"
     },
     "imageUrl": "https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
+  },
+  {
+    "id": "4",
+    "quote": {
+      "sr": "Kupovina prvog stana je uvek stresna, ali JBL Concept je učinio sve jednostavnim. Njihova stručnost i strpljenje su me vodili kroz ceo proces sa lakoćom.",
+      "en": "Buying my first apartment was supposed to be stressful, but JBL Concept made everything straightforward. Their expertise and patience guided me through the entire process with ease."
+    },
+    "name": "Nikola Đorđević",
+    "location": {
+      "sr": "Vračar, Beograd",
+      "en": "Vračar, Belgrade"
+    },
+    "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
+  },
+  {
+    "id": "5",
+    "quote": {
+      "sr": "Kao strani investitor, trebao mi je partner kojem mogu verovati. JBL Concept nije samo pronašao savršene nekretnine, već je pružio neprocenjiv uvid u lokalno tržište.",
+      "en": "As a foreign investor, I needed a trustworthy partner. JBL Concept not only found perfect properties but provided invaluable insight into the local market."
+    },
+    "name": "Michael Johnson",
+    "location": {
+      "sr": "Njujork, SAD",
+      "en": "New York, USA"
+    },
+    "imageUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
+  },
+  {
+    "id": "6",
+    "quote": {
+      "sr": "Prodala sam više nekretnina preko različitih agencija, ali JBL Concept je jedini koji je shvatio pravu vrednost moje vile. Njihov marketinški pristup je privukao prave kupce i postigli smo odličnu cenu.",
+      "en": "I've sold several properties through different agencies, but JBL Concept was the only one who understood the true value of my villa. Their marketing approach attracted the right buyers and we achieved an excellent price."
+    },
+    "name": "Jelena Milić",
+    "location": {
+      "sr": "Senjak, Beograd",
+      "en": "Senjak, Belgrade"
+    },
+    "imageUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
   }
 ]
 }

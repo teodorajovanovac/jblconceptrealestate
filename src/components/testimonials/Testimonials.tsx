@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Quote } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Quote, ChevronLeft, ChevronRight } from "lucide-react"
 import { useCmsData } from "../../services/CmsProvider"
 import getCmsData from "../../data/cms"
 import { Testimonial } from "../../data/models/Testimonial"
@@ -9,47 +9,93 @@ export default function Testimonials() {
   const { t, currentLanguage } = useCmsData()
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [activeIndex, setActiveIndex] = useState(0)
-  //const [autoplayEnabled, setAutoplayEnabled] = useState(true)
+  const [autoplayEnabled, setAutoplayEnabled] = useState(true)
+  const touchStartXRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   
-  
+  // Visible testimonials za desktop prikaz (uvek 3)
+  const getVisibleTestimonials = () => {
+    if (testimonials.length <= 3) return testimonials;
+    return [
+      testimonials[activeIndex % testimonials.length],
+      testimonials[(activeIndex + 1) % testimonials.length],
+      testimonials[(activeIndex + 2) % testimonials.length]
+    ];
+  };
 
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
         const data = await getCmsData().getTestimonialData();
-        //console.log("Fetched testimonials:", data.testimonials);
         setTestimonials(data.testimonials); 
-        //console.log("Fetched testimonials:", testimonials);
       } catch (err) {
-          //setError("Failed to load agents data.");
-      } finally {
-        //setLoading(false);
+        console.error("Failed to load testimonials data:", err);
       }
     };
     fetchTestimonials();
   }, []);
 
-  // Autoplay functionality
-  // useEffect(() => {
-  //   if (!autoplayEnabled) return;
+  // Autoplay funkcionalnost za oba prikaza (mobile i desktop)
+  useEffect(() => {
+    if (!autoplayEnabled || testimonials.length <= 1) return;
     
-  //   const interval = setInterval(() => {
-  //     setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-  //   }, 5000);
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+    }, 5000);
     
-  //   return () => clearInterval(interval);
-  // }, [autoplayEnabled]);
+    return () => clearInterval(interval);
+  }, [autoplayEnabled, testimonials.length]);
 
-  // // Pause autoplay when user interacts with testimonials
-  // const handleDotClick = (index: number) => {
-  //   setActiveIndex(index);
-  //   setAutoplayEnabled(false);
+  // Hendlovanje klika na tačkice
+  const handleDotClick = (index: number) => {
+    setActiveIndex(index);
+    setAutoplayEnabled(false);
     
-  //   // Resume autoplay after 10 seconds of inactivity
-  //   setTimeout(() => setAutoplayEnabled(true), 10000);
-  // };
+    // Nastavak autoplay-a nakon 10 sekundi neaktivnosti
+    setTimeout(() => setAutoplayEnabled(true), 10000);
+  };
 
+  // Navigacija kroz testimoniale
+  const goToPrevious = () => {
+    setActiveIndex((prevIndex) => 
+      (prevIndex - 1 + testimonials.length) % testimonials.length
+    );
+    setAutoplayEnabled(false);
+    setTimeout(() => setAutoplayEnabled(true), 10000);
+  };
 
+  const goToNext = () => {
+    setActiveIndex((prevIndex) => 
+      (prevIndex + 1) % testimonials.length
+    );
+    setAutoplayEnabled(false);
+    setTimeout(() => setAutoplayEnabled(true), 10000);
+  };
+
+  // Touch gestures za mobilni prikaz
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const diffX = touchStartXRef.current - touchEndX;
+    
+    // Swipe threshold
+    if (Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        // Swipe levo, idi na sledeći
+        goToNext();
+      } else {
+        // Swipe desno, idi na prethodni
+        goToPrevious();
+      }
+    }
+    
+    touchStartXRef.current = null;
+  };
 
   return (
     <section className="py-24 bg-white relative overflow-hidden">
@@ -61,61 +107,131 @@ export default function Testimonials() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h3 className="text-lg md:text-xl font-medium tracking-wider text-primary-blue mb-3">{t("testimonials-title")}</h3>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900">{t("testimonials-subtitle")}</h2>
+          <h3 className="text-lg md:text-xl font-medium tracking-wider text-primary-blue mb-3">
+            {t("testimonials-title")}
+          </h3>
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
+            {t("testimonials-subtitle")}
+          </h2>
         </motion.div>
         
-        <div className="relative">
-          {/* Desktop view - show all testimonials */}
-          <div className="hidden md:grid md:grid-cols-3 gap-8">
-            
-            {testimonials.map((testimonial, idx) => (
-              <motion.div
-                key={testimonial.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-              >
-                <TestimonialCard 
-                  testimonial={testimonial} 
-                  language={currentLanguage} 
-                />
-              </motion.div>
-            ))}
+        {/* Desktop View - 3 testimonials sa bočnom animacijom */}
+        <div 
+          className="hidden md:block relative" 
+          ref={containerRef}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="grid grid-cols-3 gap-8">
+            <AnimatePresence initial={false} mode="popLayout">
+              {testimonials.length > 0 && getVisibleTestimonials().map((testimonial, idx) => (
+                <motion.div
+                  key={`desktop-${testimonial.id}-${idx}`}
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <TestimonialCard 
+                    testimonial={testimonial} 
+                    language={currentLanguage} 
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
           
-          {/* Mobile view - show one testimonial at a time */}
-          <div className="md:hidden">
-            
-           {testimonials.length > 0 && ( <motion.div
-              key={testimonials[activeIndex].id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
+          {/* Desktop navigacija */}
+          <div className="mt-10 flex justify-center items-center space-x-4">
+            <button 
+              onClick={goToPrevious}
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-primary-blue transition-colors"
+              aria-label="Previous testimonial"
             >
-              <TestimonialCard 
-                testimonial={testimonials[activeIndex]} 
-                language={currentLanguage} 
-              />
-            </motion.div>)}
+              <ChevronLeft size={24} />
+            </button>
             
-            {/* Pagination dots for mobile */}
-            <div className="flex justify-center mt-8 space-x-2">
+            <div className="flex space-x-2">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
-                  //onClick={() => handleDotClick(index)}
+                  onClick={() => handleDotClick(index)}
                   className={`transition-all duration-300 rounded-full ${
-                    index === activeIndex 
+                    index === activeIndex % testimonials.length 
                       ? "w-8 h-2 bg-primary-blue" 
                       : "w-2 h-2 bg-gray-300 hover:bg-gray-400"
                   }`}
-                  aria-label={`View testimonial ${index + 1}`}
+                  aria-label={`Go to testimonial ${index + 1}`}
                 />
               ))}
             </div>
+            
+            <button 
+              onClick={goToNext}
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-primary-blue transition-colors"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
+        </div>
+        
+        {/* Mobile View */}
+        <div 
+          className="md:hidden relative" 
+          ref={containerRef}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {testimonials.length > 0 && (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`mobile-${testimonials[activeIndex % testimonials.length].id}`}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.5 }}
+              >
+                <TestimonialCard 
+                  testimonial={testimonials[activeIndex % testimonials.length]} 
+                  language={currentLanguage} 
+                />
+              </motion.div>
+            </AnimatePresence>
+          )}
+          
+          {/* Mobile navigacija */}
+          <div className="mt-10 flex justify-center items-center space-x-4">
+            <button 
+              onClick={goToPrevious}
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-primary-blue transition-colors"
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            
+            <div className="flex space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleDotClick(index)}
+                  className={`transition-all duration-300 rounded-full ${
+                    index === activeIndex % testimonials.length 
+                      ? "w-8 h-2 bg-primary-blue" 
+                      : "w-2 h-2 bg-gray-300 hover:bg-gray-400"
+                  }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                />
+              ))}
+            </div>
+            
+            <button 
+              onClick={goToNext}
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-primary-blue transition-colors"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight size={24} />
+            </button>
           </div>
         </div>
       </div>
@@ -126,9 +242,7 @@ export default function Testimonials() {
 function TestimonialCard({ testimonial, language}: { 
   testimonial: Testimonial
   language: string
-}) 
-
-{
+}) {
   return (
     <div className="bg-white rounded-3xl p-8 shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300 relative h-full flex flex-col transform hover:-translate-y-1">
       <div className="text-primary-blue opacity-15 absolute top-6 left-6">
