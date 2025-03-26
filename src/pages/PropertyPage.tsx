@@ -41,6 +41,7 @@ export default function PropertyPage() {
   const agentCardRef = useRef<HTMLDivElement>(null);
   const agentCardWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
+  const [showContactForm, setShowContactForm] = useState(false);
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -468,14 +469,7 @@ export default function PropertyPage() {
                     </div>
                   </div>
                   <div ref={agentCardRef} className="w-full z-20">
-                    <ContactAgentCard agent={{
-                      name: "Agent",
-                      company: "JBL Real Estate Concept",
-                      title: "Agent",
-                      email: "contact@jblconcept.rs",
-                      phone: "+381 00 0000000",
-                      image: "/placeholder-agent.jpg"
-                    }} />
+                    <ContactAgentCard fullWidth={true} />
                   </div>
                 </div>
               </div>
@@ -494,6 +488,40 @@ export default function PropertyPage() {
             </button>
           </div>
         </div>
+
+        {/* Fiksno dugme za kontakt agenta na mobilnom prikazu */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 p-3 shadow-lg">
+          <button 
+            className="w-full cta-button"
+            onClick={() => setShowContactForm(true)}
+          >
+            <span>{t("agent-contact-agent")}</span>
+            <svg className="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 18H4V8L12 13L20 8V18ZM12 11L4 6H20L12 11Z" fill="white"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Modal za prikaz kontakt forme preko celog ekrana na mobilnom prikazu */}
+        {showContactForm && (
+          <div className="md:hidden fixed inset-0 z-[9999] bg-white flex flex-col">
+            <div className="bg-primary-blue text-white px-4 py-3 flex justify-between items-center">
+              <h3 className="text-lg font-semibold">{t("agent-contact-agent")}</h3>
+              <button 
+                onClick={() => setShowContactForm(false)}
+                className="p-2 rounded-full hover:bg-primary-dark-blue/20"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x">
+                  <path d="M18 6 6 18"/>
+                  <path d="m6 6 12 12"/>
+                </svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto p-4">
+              <ContactAgentCard fullWidth={true} />
+            </div>
+          </div>
+        )}
       </div>
       
       <div ref={footerRef}>
