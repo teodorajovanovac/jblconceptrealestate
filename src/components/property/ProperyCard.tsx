@@ -115,7 +115,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
                 alt={property.typeName || "Property"}
                 className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-110"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = "/placeholder.svg";
+                  (e.target as HTMLImageElement).src = "/images/placeholder.svg";
                 }}
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent h-24" />
