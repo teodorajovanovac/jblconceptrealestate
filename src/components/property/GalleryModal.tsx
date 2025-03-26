@@ -46,7 +46,7 @@ export default function GalleryModal({ images, isOpen, onClose, initialIndex = 0
       {/* Main Image */}
       <div className="flex-1 relative">
         <img
-          src={images[currentIndex] || "/placeholder.svg"}
+          src={images[currentIndex] || "images/placeholder.svg"}
           alt={`Property image ${currentIndex + 1}`}
           className="object-contain w-full h-full"
         />
@@ -80,7 +80,7 @@ export default function GalleryModal({ images, isOpen, onClose, initialIndex = 0
               }`}
             >
               <img 
-                src={image || "/placeholder.svg"} 
+                src={image || "images/placeholder.svg"} 
                 alt={`Thumbnail ${index + 1}`} 
                 className="object-cover w-full h-full" 
               />

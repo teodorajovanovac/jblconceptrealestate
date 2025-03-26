@@ -1,3 +1,5 @@
 {
-    "availableLanguages": ["sr", "en"]
+    "availableLanguages": ["sr", "en"],
+    "photoPath" : "",
+    "thumbnailPath" : ""
 }

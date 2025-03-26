@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ApiActionName, ApiLocation, ApiPropertyType, ApiRealEstate, ApiRealEstateFeatured } from "./api";
+import { ApiActionName, ApiLocation, ApiPropertyType, ApiRealEstate, ApiRealEstateFeatured, ApiRealEstateFromList } from "./api";
 import { LocationDto, RealEstateDto, ShortListDto } from "./models/realEstate";
 import { ApiResponse } from "./models/apiResponse";
 
@@ -102,6 +102,18 @@ const realEstate = {
     try {
       const url = langCode ? `${ApiRealEstateFeatured}?langCode=${langCode}` : `${ApiRealEstateFeatured}`;
       const response = await axios.get(url);
+      //console.error("data:", response);
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching featured data:", err);
+      throw err;
+    }
+  },
+
+  async getRealEstateList(langCode?: string, listRe?: number[]): Promise<RealEstateDto[]> {
+    try {
+      const url = langCode ? `${ApiRealEstateFromList}?langCode=${langCode}` : `${ApiRealEstateFromList}`;
+      const response = await axios.post(url, listRe );
       //console.error("data:", response);
       return response.data;
     } catch (err) {

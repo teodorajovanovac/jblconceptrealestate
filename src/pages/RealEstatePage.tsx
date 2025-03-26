@@ -12,7 +12,9 @@ import { IoOptions } from 'react-icons/io5';
 import Spinner from '../components/ui/Spinner';
 import { PRICE_RANGES, AREA_RANGE, TransactionType } from '../utils/constants';
 import FavoritesDrawer from '../components/property/FavoritesDrawer';
-import useFavorites from '../hooks/useFavorites';
+import { useFavorites } from "../hooks/FavoritesContext";
+import PropertyCard from '../components/property/ProperyCard';
+import { useCmsData } from '../services/CmsProvider';
 
 interface SearchFilters {
   transactionType: 'buy' | 'rent';
@@ -28,196 +30,6 @@ interface SearchFilters {
   heating: string[];
   parking: string[];
 }
-
-// Kreiranje PropertyCard komponente unutar RealEstatePage
-const PropertyCard = ({ property, index, language }: { property: RealEstateDto; index: number; language: string; }) => {
-  const { isFavorite, toggleFavorite } = useFavorites();
-  
-  const formatPrice = (price: number) => {
-    return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
-
-  const getFeatures = () => {
-    // Use spaces for features as this seems to be a string listing features
-    const features = (property.spaces || '').split(',').map(item => item.trim()).filter(Boolean);
-    // Use floorNoString which is string | null instead of floorNo which is a number
-    const floor = property.floorNoString || '';
-    
-    // Split floor string by commas
-    const floors = floor.split(',').map((item: string) => item.trim()).filter(Boolean);
-    
-    return (
-      <div className="flex flex-wrap gap-1 mt-2">
-        {/* Display floor items as separate badges only if floor info exists */}
-        {floors.length > 0 && floors.map((floorItem: string, index: number) => (
-          <span 
-            key={`floor-${index}`} 
-            className="bg-gray-100 px-3 py-1.5 rounded-full text-sm text-gray-600"
-          >
-            {floorItem}
-          </span>
-        ))}
-
-        {/* Display other features only if they exist */}
-        {features.length > 0 && features.slice(0, 2).map((feature: string, index: number) => (
-          <span 
-            key={`feature-${index}`} 
-            className="bg-gray-100 px-3 py-1.5 rounded-full text-sm text-gray-600"
-          >
-            {feature}
-          </span>
-        ))}
-      </div>
-    );
-  };
-
-  const getLuxuryBadge = () => {
-    if (property.lux === 1) {
-      return (
-        <div className="absolute top-4 left-4 z-10">
-          <span className="bg-primary-blue text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
-            Premium
-          </span>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const getPropertyTypeBadge = () => {
-    if (property.typeName) {
-      return (
-        <div className="absolute bottom-4 left-4 z-10">
-          <span className="bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-medium shadow-lg">
-            {property.typeName}
-          </span>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const isRental = property.actionName?.toLowerCase().includes('izdavanje') || 
-                   property.actionName?.toLowerCase().includes('rent');
-
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // Save the current scroll position
-    const scrollPosition = window.scrollY;
-    
-    // Toggle the favorite
-    toggleFavorite(property.id);
-    // Refresh the page after toggling favorite status
-    window.location.reload();
-  };
-
-  return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
-      whileHover={{ y: -5, scale: 1.02 }}
-      className="h-full"
-    >
-      <Link to={`/property/${property.id}`} className="block h-full">
-        <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full relative">
-          {/* Property Image with Overlays */}
-          <div className="relative h-[280px] overflow-hidden">
-            <img 
-              src={property.photos && property.photos.length > 0 
-                ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
-                : "/placeholder.svg"}
-              alt={property.typeName || "Property"}
-              className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-110"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "/placeholder.svg";
-              }}
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent h-24" />
-            
-            {/* Action Badge - Top Left */}
-            <div className="absolute top-4 left-4 z-20">
-              <span className={`${isRental ? 'bg-primary-gold' : 'bg-primary-blue'} text-white px-4 py-2 rounded-full text-base font-semibold shadow-lg`}>
-                {property.actionName || (language === 'sr' ? "Prodaja" : "For Sale")}
-              </span>
-            </div>
-            
-            {/* Property Type Badge - Bottom Left */}
-            {getPropertyTypeBadge()}
-            
-            {/* Price - Bottom Right */}
-            <div className="absolute bottom-4 right-4">
-              <span className="text-white text-[1.8rem] font-bold shadow-lg px-3 py-1 bg-custom-black/50 rounded-lg">
-                {formatPrice(property.price)} €
-              </span>
-            </div>
-          </div>
-
-          {/* Favorite Button - Top Right, outside the image container for clear position */}
-          <button 
-            className="absolute top-4 right-4 z-20 p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-300"
-            onClick={handleFavoriteClick}
-            aria-label={isFavorite(property.id) ? "Remove from favorites" : "Add to favorites"}
-          >
-            <Heart 
-              className={`h-5 w-5 transition-colors duration-300 ${
-                isFavorite(property.id) 
-                  ? 'text-red-500 fill-red-500' 
-                  : 'hover:text-red-500'
-              }`} 
-            />
-          </button>
-
-          <div className="p-6">
-            {/* Portal Name instead of Property Title */}
-            <div className="mb-4">
-              <h3 className="text-xl font-bold text-primary-blue line-clamp-1">
-                {property.portalName || "Portal Name"}
-              </h3>
-              <div className="flex items-center text-gray-600">
-                <MapPin className="w-4 h-4 mr-1" />
-                {property.locationArea || property.locationCityName ? (
-                  <span className="text-sm">
-                    {[property.locationArea, property.locationCityName].filter(Boolean).join(", ")}
-                  </span>
-                ) : null}
-              </div>
-            </div>
-
-            {/* Property Stats */}
-            <div className="flex items-center gap-4 text-gray-600 mb-4">
-              {property.area ? (
-                <div className="flex items-center">
-                  <Square className="w-4 h-4 mr-1" />
-                  <span className="text-sm">{property.area} m²</span>
-                </div>
-              ) : null}
-              {property.roomsNo ? (
-                <div className="flex items-center">
-                  <Bed className="w-4 h-4 mr-1" />
-                  <span className="text-sm">{property.roomsNo}</span>
-                </div>
-              ) : null}
-              
-              {property.bathroomNO ? (
-                <div className="flex items-center">
-                  <Bath className="w-4 h-4 mr-1" />
-                  <span className="text-sm">{property.bathroomNO}</span>
-                </div>
-              ) : null}
-              
-            </div>
-
-            {/* Property Features */}
-            {getFeatures()}
-          </div>
-        </div>
-      </Link>
-    </motion.div>
-  );
-};
 
 // Dodajemo funkciju za kreiranje search query parametara
 const buildSearchQuery = (filters: SearchFilters) => {
@@ -316,18 +128,24 @@ const buildSearchQuery = (filters: SearchFilters) => {
 };
 
 const RealEstatePage: React.FC = () => {
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr');
   const [properties, setProperties] = useState<RealEstateDto[]>([]);
-  const [filteredProperties, setFilteredProperties] = useState<RealEstateDto[]>([]);
-  const [displayedProperties, setDisplayedProperties] = useState<RealEstateDto[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const observerRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { t, currentLanguage } = useCmsData();
+  
+  const { favoritesCount, favorites, isFavorite } = useFavorites();
+  
   const [error, setError] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(true);
+  
   const [isFavoritesDrawerOpen, setIsFavoritesDrawerOpen] = useState(false);
   const loaderRef = useRef<HTMLDivElement>(null);
-  const { getFavoritesCount } = useFavorites();
-  const [favoritesCount, setFavoritesCount] = useState(0);
-  const propertiesPerLoad = 12;
+
+  const pageSize = 6;
+
+  const propertiesPerLoad = 6;
   const additionalPropertiesPerScroll = 6;
 
   // Create a state for search filters with default values
@@ -362,127 +180,85 @@ const RealEstatePage: React.FC = () => {
     parking: []
   });
 
-  // Update favorites count
   useEffect(() => {
-    setFavoritesCount(getFavoritesCount());
-    
-    const handleFavoritesUpdate = () => {
-      setFavoritesCount(getFavoritesCount());
-    };
-    
-    window.addEventListener('favoritesUpdated', handleFavoritesUpdate);
-    
-    return () => {
-      window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
-    };
-  }, [getFavoritesCount]);
-
-  // Funkcija za učitavanje više nekretnina
-  const loadMoreProperties = useCallback(() => {
-    if (isLoading || !hasMore) return;
-    
-    const currentLength = displayedProperties.length;
-    const nextBatch = filteredProperties.slice(
-      currentLength, 
-      currentLength + additionalPropertiesPerScroll
-    );
-    
-    if (nextBatch.length > 0) {
-      setDisplayedProperties(prev => [...prev, ...nextBatch]);
-      setHasMore(currentLength + nextBatch.length < filteredProperties.length);
-    } else {
-      setHasMore(false);
-    }
-  }, [displayedProperties, filteredProperties, isLoading, hasMore]);
-
-  // Učitavanje SVIH nekretnina sa API-ja
-  useEffect(() => {
-    const fetchAllProperties = async () => {
+    const fetchProperties = async () => {
       try {
+        // Uklanjamo ovu proveru jer sprečava prikazivanje spinnera
+        // if (isLoading) return;
+        
         setIsLoading(true);
         setError(null);
         
-        const response = await realEstate.getAllData();
+        const searchParams = {
+          //searchQuery: searchQuery,
+          pageNumber: currentPage,
+          pageSize: pageSize
+        };
+
+        const response = await realEstate.getAllData(searchParams);
         
         if (response.isSuccess && response.data && response.data.length > 0) {
-          // Log unique property types for debugging
-          const uniqueTypes = new Set<string>();
-          response.data.forEach(prop => {
-            if (prop.typeName) uniqueTypes.add(prop.typeName);
-            if (prop.subTypeName) uniqueTypes.add(prop.subTypeName);
-          });
-          console.log('Unique property types from API:', Array.from(uniqueTypes));
-          
-          setProperties(response.data);
-          
-          // Apply default 'buy' filter when page loads
-          const defaultFilters: SearchFilters = {
-            transactionType: 'buy',
-            searchTerm: '',
-            propertyTypes: [],
-            rooms: [],
-            locations: [],
-            priceRange: [0, 1000000], 
-            areaRange: [0, 500],
-            features: [],
-            bathrooms: [],
-            floor: [],
-            heating: [],
-            parking: []
-          };
-          
-          // Filter properties for 'buy' transaction type
-          const buyProperties = response.data.filter(property => 
-            property.actionShortName === 'P'
+          setTotalPages(response.totalPages!);
+          setProperties(prevProperties => 
+            currentPage === 1 
+              ? response.data || [] 
+              : [...prevProperties, ...(response.data || [])]
           );
-          
-          setFilteredProperties(buyProperties);
-          setDisplayedProperties(buyProperties.slice(0, propertiesPerLoad));
-          setHasMore(buyProperties.length > propertiesPerLoad);
-          
-          if (buyProperties.length === 0) {
-            setError(language === 'sr' ? 'Nema pronađenih nekretnina' : 'No properties found');
-          }
         } else {
-          setError(language === 'sr' ? 'Nema pronađenih nekretnina' : 'No properties found');
+          setError(currentLanguage === 'sr' ? 'Nema pronađenih nekretnina' : 'No properties found');
         }
       } catch (err) {
         console.error('Error loading properties:', err);
-        setError(language === 'sr' ? 'Greška prilikom učitavanja nekretnina' : 'Error loading properties');
+        setError(currentLanguage === 'sr' ? 'Greška prilikom učitavanja nekretnina' : 'Error loading properties');
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchAllProperties();
-  }, [language, propertiesPerLoad]);
+    fetchProperties();
+  }, [currentPage, currentLanguage]);
 
   // Intersection Observer za infinite scroll
   useEffect(() => {
-    if (!loaderRef.current || isLoading) return;
+   // if (!loaderRef.current || isLoading) return;
+   console.log("4 - observer - isLoading " + isLoading)
+    if (isLoading || currentPage > totalPages) return;
+    // const options = {
+    //   root: null,
+    //   rootMargin: '200px',
+    //   threshold: 0.1
+    // };
     
-    const options = {
-      root: null,
-      rootMargin: '200px',
-      threshold: 0.1
-    };
+    // const observer = new IntersectionObserver((entries) => {
+    //   const [entry] = entries;
+    //   if (entry.isIntersecting && hasMore) {
+    //     loadMoreProperties();
+    //   }
+    // }, options);
     
-    const observer = new IntersectionObserver((entries) => {
-      const [entry] = entries;
-      if (entry.isIntersecting && hasMore) {
-        loadMoreProperties();
-      }
-    }, options);
-    
-    observer.observe(loaderRef.current);
-    
+    // observer.observe(loaderRef.current);
+    console.log("5 - observer -" + isLoading)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const firstEntry = entries[0];
+        if (firstEntry.isIntersecting && !isLoading && currentPage < totalPages) {
+          setCurrentPage(prev => prev + 1);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentObserverRef = observerRef.current;
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
+    }
+
     return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
       }
-      observer.disconnect();
     };
-  }, [hasMore, isLoading, loadMoreProperties]);
+  }, [isLoading, currentPage, totalPages]);
 
   // Updated handleSearch function to properly use the API parameters
   const handleSearch = async (filters: SearchFilters) => {
@@ -729,39 +505,21 @@ const RealEstatePage: React.FC = () => {
         
         return allMatches;
       });
-
-      // Update log filter success rates
-      console.log('Filter results summary:', {
-        total: properties.length,
-        transactionMatches: transactionMatchCount,
-        typeMatches: typeMatchCount,
-        roomMatches: roomMatchCount,
-        locationMatches: locationMatchCount,
-        featureMatches: featureMatchCount,
-        bathroomMatches: bathroomMatchCount,
-        floorMatches: floorMatchCount,
-        heatingMatches: heatingMatchCount,
-        priceMatches: priceMatchCount,
-        areaMatches: areaMatchCount,
-        finalMatches: totalMatchCount
-      });
       
-      console.log('Filtered properties count:', filteredProperties.length);
-
       // Update state with filtered results
-      setFilteredProperties(filteredProperties);
-      setDisplayedProperties(filteredProperties.slice(0, propertiesPerLoad));
-      setHasMore(filteredProperties.length > propertiesPerLoad);
+      // setFilteredProperties(filteredProperties);
+      // setDisplayedProperties(filteredProperties.slice(0, propertiesPerLoad));
+      // setHasMore(filteredProperties.length > propertiesPerLoad);
 
       // Set error message if no properties found
       if (filteredProperties.length === 0) {
-        setError(language === 'sr' 
+        setError(currentLanguage === 'sr' 
           ? 'Nema pronađenih nekretnina koje odgovaraju vašim kriterijumima' 
           : 'No properties found matching your criteria');
       }
     } catch (err) {
       console.error('Error during search:', err);
-      setError(language === 'sr' 
+      setError(currentLanguage === 'sr' 
         ? 'Došlo je do greške prilikom pretrage'
         : 'An error occurred during search');
     } finally {
@@ -779,29 +537,32 @@ const RealEstatePage: React.FC = () => {
     }
   };
 
+  console.log('RealEstatePage render - full state:', {
+    favoritesCount,
+    favoritesLength: favorites?.length,
+    hasHook: !!useFavorites
+  });
+
   useEffect(() => {
-    const handleLanguageChange = () => {
-      setLanguage(localStorage.getItem('language') || 'sr');
-    };
+    console.log('Favorites array changed:', favorites?.length);
+  }, [favorites]);
 
-    window.addEventListener('storage', handleLanguageChange);
-    window.addEventListener('languageChange', handleLanguageChange);
+  useEffect(() => {
+    console.log('FavoritesCount changed:', favoritesCount);
+  }, [favoritesCount]);
 
-    return () => {
-      window.removeEventListener('storage', handleLanguageChange);
-      window.removeEventListener('languageChange', handleLanguageChange);
-    };
-  }, []);
+  // Додајемо лог при сваком рендеровању
+  console.log('RealEstatePage rendering with favoritesCount:', favoritesCount);
 
   return (
     <div className="min-h-screen w-full bg-gray-50">
       <Seo 
-        title={language === 'sr' ? "Nekretnine" : "Properties"} 
-        description={language === 'sr' ? "Pronađite savršenu nekretninu" : "Find your perfect property"}
+        title={currentLanguage === 'sr' ? "Nekretnine" : "Properties"} 
+        description={currentLanguage === 'sr' ? "Pronađite savršenu nekretninu" : "Find your perfect property"}
       />
       <Header />
       
-      <main className="pt-24 pb-16">
+      <main className="pt-24 pb-16 relative">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -810,85 +571,106 @@ const RealEstatePage: React.FC = () => {
             className="text-center mb-8"
           >
             <h1 className="text-3xl md:text-4xl font-bold text-primary-blue mb-2">
-              {language === 'sr' ? "Pronađite svoju idealnu nekretninu" : "Find your ideal property"}
+              {currentLanguage === 'sr' ? "Pronađite svoju idealnu nekretninu" : "Find your ideal property"}
             </h1>
             <p className="text-gray-600 max-w-3xl mx-auto">
-              {language === 'sr' 
+              {currentLanguage === 'sr' 
                 ? "Istražite našu ekskluzivnu kolekciju premium nekretnina i pronađite savršen dom ili investiciju." 
                 : "Explore our exclusive collection of premium properties and find the perfect home or investment."}
             </p>
           </motion.div>
 
           {/* Favorites Button */}
-          {favoritesCount > 0 && (
-          <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="fixed left-4 top-28 z-30"
-            >
-              <button
-                onClick={() => setIsFavoritesDrawerOpen(true)}
-                className="flex items-center space-x-2 bg-white rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-shadow"
+          {console.log('Before rendering favorites button:', favoritesCount)}
+          <div className="fixed left-4 top-28 z-30">
+            {favoritesCount > 0 ? (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
               >
-                <Heart className="h-5 w-5 text-red-500 fill-red-500" />
-                <span className="font-medium text-gray-800">
-                  {favoritesCount} {language === 'sr' ? 'omiljene' : 'favorites'}
-                </span>
-              </button>
-          </motion.div>
-          )}
+                <button
+                  onClick={() => setIsFavoritesDrawerOpen(true)}
+                  className="flex items-center space-x-2 bg-white rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <Heart className="h-5 w-5 text-red-500 fill-red-500" />
+                  <span className="font-medium text-gray-800">
+                    {favoritesCount} {currentLanguage === 'sr' ? 'omiljene' : 'favorites'}
+                  </span>
+                </button>
+              </motion.div>
+            ) : (
+              <div>{console.log('FavoritesCount is 0 or undefined:', favoritesCount)}</div>
+            )}
+          </div>
 
           {/* Search Bar Component */}
           <SearchBar onSearch={handleSearch} />
           
+          {/* Loader */}
+          {isLoading && (
+            <div className="flex justify-center py-4">
+              {/* PRVO UČITANJE SPINNER */}
+              <Spinner size="sm" />
+            </div>
+          )}
+
           {/* Results Section */}
           <div className="mt-8">
-            {isLoading && (
-              <Spinner size="lg" />
-            )}
-            
+            {/* Prikazujemo error ako postoji */}
             {error && (
               <div className="text-center text-red-500 py-10">
                 {error}
               </div>
             )}
             
-            {!isLoading && !error && filteredProperties.length === 0 && (
+            {/* Prikazujemo poruku ako nema rezultata */}
+            {!error && properties.length === 0 && !isLoading && (
               <div className="text-center text-gray-500 py-10">
-                {language === 'sr' 
+                {currentLanguage === 'sr' 
                   ? 'Nema pronađenih nekretnina koje odgovaraju vašoj pretrazi.' 
                   : 'No properties found matching your search criteria.'
                 }
               </div>
             )}
             
-            {!isLoading && !error && filteredProperties.length > 0 && (
-              <>
-          <motion.div
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-                >
-                  {displayedProperties.map((property, index) => (
-                    <PropertyCard 
-                      key={`${property.id}-${index}`} 
-                      property={property} 
-                      index={index} 
-                      language={language} 
-                    />
-            ))}
-          </motion.div>
-
-                {/* Loader for infinite scroll */}
-                {hasMore && (
-                  <div ref={loaderRef}>
-                    <Spinner size="sm" />
-                  </div>
-                )}
-              </>
+            {/* Grid sa nekretninama */}
+            {properties.length > 0 && (
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-0"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {properties.map((property, index) => (
+                  <PropertyCard 
+                    key={`${property.id}-${index}`} 
+                    property={property} 
+                    index={index} 
+                    language={currentLanguage} 
+                  />
+                ))}
+              </motion.div>
             )}
+            
+            {/* Loader za infinite scroll */}
+            <div ref={observerRef} className="flex justify-center py-4 mt-4">
+              {isLoading && 
+                
+                <>
+                
+                <h1>naknadno uČitavanje podataka</h1>
+                <Spinner size="sm" />
+                </>
+                
+              
+              }
+              {!isLoading && currentPage >= totalPages && (
+                <p className="text-gray-500">
+                  {currentLanguage === 'sr' ? 'Nema više nekretnina' : 'No more properties'}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </main>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { X, Heart } from "lucide-react";
+import { X, Heart, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { RealEstateDto } from "../../data/models/realEstate";
 import realEstate from "../../data/realEstate";
+import { useCmsData } from "../../services/CmsProvider";
+import { useFavorites } from "../../hooks/FavoritesContext";
 
 interface FavoritesDrawerProps {
   isOpen: boolean;
@@ -13,6 +15,8 @@ interface FavoritesDrawerProps {
 const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) => {
   const [favorites, setFavorites] = useState<RealEstateDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { currentLanguage } = useCmsData();
+  const { clearAllFavorites } = useFavorites();
 
   useEffect(() => {
     if (isOpen) {
@@ -33,14 +37,16 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
       }
       
       // Fetch all properties to filter favorites
-      const result = await realEstate.getAllData();
+      //const result = await realEstate.getAllData();
+      const result = await realEstate.getRealEstateList(currentLanguage, favoritesIds);
       
-      if (result.isSuccess && result.data) {
+      if (result) {
         // Filter only favorites
-        const favoriteProperties = result.data.filter((property: RealEstateDto) => 
-          favoritesIds.includes(property.id)
-        );
-        setFavorites(favoriteProperties);
+        // const favoriteProperties = result.data.filter((property: RealEstateDto) => 
+        //   favoritesIds.includes(property.id)
+        // );
+        //const favoriteProperties = result
+        setFavorites(result);
       } else {
         setFavorites([]);
       }
@@ -103,6 +109,18 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
                 <Heart className="h-5 w-5 text-red-500 mr-2 fill-current" />
                 <h3 className="text-lg font-semibold">Omiljene nekretnine</h3>
               </div>
+              {favorites.length > 0 && (
+                <button
+                  onClick={() => {
+                    clearAllFavorites();
+                    setFavorites([]);
+                  }}
+                  className="rounded-full p-2 hover:bg-red-50 text-red-500 hover:text-red-600 transition-colors"
+                  //title="Обриши све"
+                >
+                  <Trash2 className="h-5 w-5" />
+                </button>
+              )}
               <button 
                 onClick={onClose}
                 className="rounded-full p-1 hover:bg-gray-100 transition-colors"
@@ -137,13 +155,13 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
                         <div className="w-1/3 h-24 overflow-hidden">
                           <Link to={`/property/${property.id}`} onClick={onClose}>
                             <img 
-                              src={property.photos && property.photos.length > 0 
-                                ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
-                                : "/placeholder.svg"}
+                              src={property.thumbnail != null  
+                                ? `https://jblconcept.rs/photos/${property.thumbnail}` 
+                                : "images/placeholder.svg"}
                               alt={property.typeName || "Property"}
                               className="w-full h-full object-cover"
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src = "/placeholder.svg";
+                                (e.target as HTMLImageElement).src = "images/placeholder.svg";
                               }}
                             />
                           </Link>

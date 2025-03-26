@@ -10,6 +10,7 @@ import LoadingScreen from './components/splash/LoadingScreen';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { CmsDataProvider } from './services/CmsProvider';
 import ActionButtons from './components/actionButtons';
+import { FavoritesProvider } from './hooks/FavoritesContext';
 
 const theme = createTheme({
   palette: {
@@ -45,6 +46,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <FavoritesProvider>
           <CmsDataProvider defaultLang = "sr">
             <HelmetProvider context={helmetContext}>
               <Router>
@@ -56,6 +58,7 @@ function App() {
               </Router>
             </HelmetProvider>
           </CmsDataProvider>
+        </FavoritesProvider>
       </ThemeProvider>
     </ErrorBoundary>
   )
