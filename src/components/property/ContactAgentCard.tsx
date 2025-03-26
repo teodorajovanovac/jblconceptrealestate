@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Phone, Mail, X } from "lucide-react"
 import { useCmsData } from "../../services/CmsProvider"
+import { RealEstateDto } from "../../data/models/realEstate"
 
 interface Agent {
   name: string
@@ -12,10 +13,12 @@ interface Agent {
 }
 
 interface ContactAgentCardProps {
-  agent: Agent
+  agent?: Agent
+  property?: RealEstateDto
+  fullWidth?: boolean
 }
 
-export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
+export default function ContactAgentCard({ agent, property, fullWidth = false }: ContactAgentCardProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,6 +28,16 @@ export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
     message: "",
   });
   const { t } = useCmsData();
+
+  // Podrazumevane informacije za kontakt
+  const contactInfo = {
+    phone: "+381 66 80 27 377",
+    email: "office@jblconcept.rs"
+  };
+
+  // Odredi kontakt informacije na osnovu prosledjenih parametara
+  const agentPhone = agent?.phone || contactInfo.phone;
+  const agentEmail = agent?.email || contactInfo.email;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +49,7 @@ export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg">
+    <div className={`bg-white rounded-lg shadow-lg overflow-hidden ${fullWidth ? 'w-full' : ''}`}>
       {!isFormOpen ? (
         // Početni prikaz
         <div className="p-5 space-y-4">
@@ -47,7 +60,7 @@ export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
               <Phone className="h-5 w-5 text-gray-600" />
               <div>
                 <div className="text-sm text-gray-500">{t("agent-phone")}</div>
-                <div className="text-base font-semibold">{agent.phone}</div>
+                <div className="text-base font-semibold">{agentPhone}</div>
               </div>
             </div>
             
@@ -55,7 +68,7 @@ export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
               <Mail className="h-5 w-5 text-gray-600" />
               <div>
                 <div className="text-sm text-gray-500">{t("agent-email")}</div>
-                <div className="text-base font-semibold">{agent.email}</div>
+                <div className="text-base font-semibold">{agentEmail}</div>
               </div>
             </div>
           </div>
@@ -70,7 +83,7 @@ export default function ContactAgentCard({ agent }: ContactAgentCardProps) {
         </div>
       ) : (
         // Otvorena forma
-        <div className="p-5">
+        <div className={`p-6 ${fullWidth ? 'max-h-[calc(100vh-70px)]' : ''}`}>
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">{t("agent-contact-agent")}</h3>
             <button 

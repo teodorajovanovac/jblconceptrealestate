@@ -22,7 +22,7 @@ import { useCmsData } from "../services/CmsProvider"
 import realEstate from '../data/realEstate';
 import { RealEstateDto } from '../data/models/realEstate';
 import { motion } from 'framer-motion';
-import Faq from '../components/faq/Faq';
+import Faq from '../components/faq/FAQ';
 import PropertyCard from '../components/property/ProperyCard';
 
 const tagManagerArgs = {
@@ -215,9 +215,10 @@ const LandingPage: React.FC = () => {
                 <div className="text-center mt-8">
                   <Link
                     to="/properties"
-                    className="inline-block bg-primary-blue hover:bg-primary-dark-blue text-white font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg"
+                    className="cta-button rounded-full"
                   >
-                    {t("landing-viewAllProperties")}
+                    <span>{t("landing-viewAllProperties")}</span>
+                    <ArrowRight className="icon" />
                   </Link>
                 </div>
               </div>
@@ -247,7 +248,7 @@ const LandingPage: React.FC = () => {
 
           {/* About Team Section */}
           <div className="w-full bg-gray-50 py-2">
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-4 pb-24">
               <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-primary-blue mb-6">{t("landing-aboutUs")}</h2>
                 <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto">

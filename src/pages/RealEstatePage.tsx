@@ -591,9 +591,9 @@ const RealEstatePage: React.FC = () => {
               >
                 <button
                   onClick={() => setIsFavoritesDrawerOpen(true)}
-                  className="flex items-center space-x-2 bg-white rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-shadow"
+                  className="flex items-center space-x-2 bg-white rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-shadow hidden md:flex"
                 >
-                  <Heart className="h-5 w-5 text-red-500 fill-red-500" />
+                  <Heart className={`h-5 w-5 ${favoritesCount > 0 ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
                   <span className="font-medium text-gray-800">
                     {favoritesCount} {currentLanguage === 'sr' ? 'omiljene' : 'favorites'}
                   </span>

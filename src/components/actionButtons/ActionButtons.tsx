@@ -88,23 +88,17 @@ const ActionButtons: React.FC = () => {
 
   const buttonVariants = {
     hidden: { 
-      scale: 0, 
+      scale: 0,
       opacity: 0,
-      y: 0,
-      x: 0
+      y: 0
     },
     visible: (custom: number) => ({
       scale: 1,
       opacity: 1,
-      // Konzistentan razmak između dugmića
-      y: -80 * custom, 
-      x: 0,
+      y: -80 * custom,
       transition: {
-        delay: custom * 0.05,
-        duration: 0.15,
-        type: "spring",
-        stiffness: 260,
-        damping: 15
+        duration: 0.2,
+        ease: "easeOut"
       }
     })
   };
@@ -142,12 +136,18 @@ const ActionButtons: React.FC = () => {
                 variants={buttonVariants}
                 initial="hidden"
                 animate="visible"
-                exit="hidden"
+                exit={{ 
+                  scale: 0,
+                  opacity: 0,
+                  transition: { duration: 0.1 }
+                }}
                 custom={3}
                 onClick={handleSearchClick}
-                className={`absolute bottom-2 left-[10%] transform -translate-x-1/2 ${actionButtonSize} rounded-full bg-primary-dark-blue text-white flex items-center justify-center shadow-lg hover:bg-primary-dark-blue/90 transition-all duration-300 hover:scale-110 action-button`}
+                className={`absolute bottom-2 left-[10%] transform -translate-x-1/2 ${actionButtonSize} 
+                  rounded-full bg-primary-dark-blue text-white 
+                  flex items-center justify-center shadow-lg 
+                  hover:bg-primary-dark-blue/90 transition-colors`}
                 aria-label={t("action-buttons-search")}
-                title={t("action-buttons-search")}
               >
                 <Search className={`${iconSize} mx-auto`} />
               </motion.button>
@@ -157,20 +157,22 @@ const ActionButtons: React.FC = () => {
                 variants={buttonVariants}
                 initial="hidden"
                 animate="visible"
-                exit="hidden"
+                exit={{ 
+                  scale: 0,
+                  opacity: 0,
+                  transition: { duration: 0.1 }
+                }}
                 custom={2}
                 onClick={handleFavoritesClick}
-                className={`absolute bottom-2 left-[10%] transform -translate-x-1/2 ${actionButtonSize} rounded-full bg-primary-dark-blue text-white flex items-center justify-center shadow-lg hover:bg-primary-dark-blue/90 transition-all duration-300 hover:scale-110 action-button`}
+                className={`absolute bottom-2 left-[10%] transform -translate-x-1/2 ${actionButtonSize} 
+                  rounded-full bg-primary-dark-blue text-white 
+                  flex items-center justify-center shadow-lg 
+                  hover:bg-primary-dark-blue/90 transition-colors`}
                 aria-label={t("action-buttons-favorites")}
-                title={t("action-buttons-favorites")}
               >
-                <Heart 
-                  className={`${iconSize} mx-auto ${
-                    favoritesCount > 0 ? 'text-red-500 fill-red-500' : ''
-                  }`} 
-                />
+                <Heart className={`${iconSize} mx-auto ${favoritesCount > 0 ? 'text-red-500 fill-red-500' : ''}`} />
                 {favoritesCount > 0 && (
-                  <span className="absolute text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center z-50 ">
+                  <span className="absolute text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center z-50">
                     {favoritesCount}
                   </span>
                 )}
@@ -181,12 +183,18 @@ const ActionButtons: React.FC = () => {
                 variants={buttonVariants}
                 initial="hidden"
                 animate="visible"
-                exit="hidden"
+                exit={{ 
+                  scale: 0,
+                  opacity: 0,
+                  transition: { duration: 0.1 }
+                }}
                 custom={1}
                 onClick={handleContactClick}
-                className={`absolute bottom-2 left-[10%] transform -translate-x-1 ${actionButtonSize} rounded-full bg-primary-dark-blue text-white flex items-center justify-center shadow-lg hover:bg-primary-dark-blue/90 transition-all duration-300 hover:scale-110 action-button`}
+                className={`absolute bottom-2 left-[10%] transform -translate-x-1/2 ${actionButtonSize} 
+                  rounded-full bg-primary-dark-blue text-white 
+                  flex items-center justify-center shadow-lg 
+                  hover:bg-primary-dark-blue/90 transition-colors`}
                 aria-label={t("action-buttons-contact")}
-                title={t("action-buttons-contact")}
               >
                 <Phone className={`${iconSize} mx-auto`} />
               </motion.button>
@@ -209,7 +217,7 @@ const ActionButtons: React.FC = () => {
             border-primary-light-blue border-4
             hover:opacity-100
             focus:ring-2 focus:ring-primary-dark-blue focus:ring-offset-2 
-            transition-all duration-300 main-action-button `}
+            transition-all duration-300 main-action-button ${!isExpanded ? 'animate-soft-pulse' : ''}`}
         >
           
           {isExpanded ? <X className={mainIconSize} /> : <Plus className={mainIconSize} />}
