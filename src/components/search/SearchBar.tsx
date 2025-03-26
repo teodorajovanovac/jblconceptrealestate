@@ -165,7 +165,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   const formatPrice = (value: number) => {
     if (transactionType === 'buy') {
-      return `${value / 1000}k €`
+      return `${value / 1000} €`
     }
     return `${value} €`
   }

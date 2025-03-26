@@ -51,6 +51,7 @@ export interface RealEstateDto {
     subTypeShortName: string | null;
     photos: PhotoDto[];
     agent?: AgentDto[];
+    thumbnail: string | null;
 }
 
 export interface LocationDto {

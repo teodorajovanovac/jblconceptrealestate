@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCmsData } from "../../services/CmsProvider";
 import PropertySearch from "../property/PropertySearch";
 import FavoritesDrawer from "../property/FavoritesDrawer";
+import { useFavorites } from "../../hooks/FavoritesContext";
 import "./ActionButtons.css";
 
 const ActionButtons: React.FC = () => {
@@ -16,6 +17,7 @@ const ActionButtons: React.FC = () => {
   const [hasScrolled, setHasScrolled] = useState(false);
   const { t } = useCmsData();
   const navigate = useNavigate();
+  const { favoritesCount } = useFavorites();
 
   // Check screen size for responsive layout
   useEffect(() => {
@@ -162,7 +164,16 @@ const ActionButtons: React.FC = () => {
                 aria-label={t("action-buttons-favorites")}
                 title={t("action-buttons-favorites")}
               >
-                <Heart className={`${iconSize} mx-auto`} />
+                <Heart 
+                  className={`${iconSize} mx-auto ${
+                    favoritesCount > 0 ? 'text-red-500 fill-red-500' : ''
+                  }`} 
+                />
+                {favoritesCount > 0 && (
+                  <span className="absolute text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center z-50 ">
+                    {favoritesCount}
+                  </span>
+                )}
               </motion.button>
 
               {/* Contact Button */}

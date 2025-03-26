@@ -88,22 +88,22 @@ const LandingPage: React.FC = () => {
     }, []);
 
     // Helper function to format property data
-    const formatPropertyForDisplay = (property: RealEstateDto) => {
-      return {
-        id: property.id,
-        title: property.locationArea || currentLanguage === 'sr' ? "Premium nekretnina" : "Premium Property",
-        price: property.price,
-        location: `${property.locationCityName}${property.locationArea ? `, ${property.locationArea}` : ''}`,
-        bedrooms: property.roomsNo,
-        bathrooms: property.bathroomNO,
-        area: property.area,
-        image: property.photos && property.photos.length > 0 
-          ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
-          : "/placeholder.svg",
-        features: property.spaces ? property.spaces.split(',').map(s => s.trim()) : [],
-        type: property.typeName || "Property"
-      };
-    };
+    // const formatPropertyForDisplay = (property: RealEstateDto) => {
+    //   return {
+    //     id: property.id,
+    //     title: property.locationArea || currentLanguage === 'sr' ? "Premium nekretnina" : "Premium Property",
+    //     price: property.price,
+    //     location: `${property.locationCityName}${property.locationArea ? `, ${property.locationArea}` : ''}`,
+    //     bedrooms: property.roomsNo,
+    //     bathrooms: property.bathroomNO,
+    //     area: property.area,
+    //     image: property.photos && property.photos.length > 0 
+    //       ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
+    //       : "/placeholder.svg",
+    //     features: property.spaces ? property.spaces.split(',').map(s => s.trim()) : [],
+    //     type: property.typeName || "Property"
+    //   };
+    // };
 
 
     //Read - faqData 

@@ -2,13 +2,14 @@ import { motion } from "framer-motion";
 import { Bath, Bed, Heart, MapPin, Square } from "lucide-react";
 import { Link } from "react-router-dom";
 import { RealEstateDto } from "../../data/models/realEstate";
-import useFavorites from "../../hooks/useFavorites";
+import { useFavorites } from "../../hooks/FavoritesContext";
+import { useEffect } from "react";
 
 interface PropertyCardProps {
     property: RealEstateDto;
     index: number; 
     language: string;
-  }
+}
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }) => {
     const { isFavorite, toggleFavorite } = useFavorites();
@@ -77,6 +78,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
       return null;
     };
   
+
+    
+
     const isRental = property.actionShortName?.toLowerCase().includes('i') || 
                      property.actionShortName?.toLowerCase().includes('k');
   
@@ -84,9 +88,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
     const handleFavoriteClick = (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      console.log('Favorite button clicked for property:', property.id);
       toggleFavorite(property.id);
-      // Refresh the page after toggling favorite status
-      //window.location.reload();
     };
   
     return (
@@ -102,9 +105,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
             {/* Property Image with Overlays */}
             <div className="relative h-[280px] overflow-hidden">
               <img 
-                src={property.photos && property.photos.length > 0 
-                  ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
-                  : "/placeholder.svg"}
+                // src={property.photos && property.photos.length > 0 
+                //   ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
+                //   : "/placeholder.svg"}
+                
+                src={property.thumbnail != null  
+                  ? `https://jblconcept.rs/photos${property.thumbnail}` 
+                  : "/images/placeholder.svg"}
                 alt={property.typeName || "Property"}
                 className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-110"
                 onError={(e) => {
