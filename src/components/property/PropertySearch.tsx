@@ -107,9 +107,11 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
                     value={propertyId}
                     onChange={handleChange}
                     numInputs={4}
+                    inputType={"tel"}
                     renderSeparator={<span className="w-2"></span>}
-                    renderInput={(props: React.InputHTMLAttributes<HTMLInputElement>) => <input {...props} />}
-
+                    renderInput={(props: React.InputHTMLAttributes<HTMLInputElement>) => (
+                      <input {...props} inputMode="numeric" pattern="[0-9]*" type="tel" />
+                    )}
                     inputStyle={{
                       width: "3rem",
                       height: "3rem",
