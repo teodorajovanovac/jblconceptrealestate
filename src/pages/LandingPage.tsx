@@ -203,22 +203,34 @@ const LandingPage: React.FC = () => {
           {/* Featured Properties Section */}
           <section id="featured-properties" className="py-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-start mb-12">
-                <div className="max-w-2xl">
-                  <h2 className="text-3xl font-bold text-primary-blue mb-4">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-12">
+                <div className="max-w-2xl mb-6 md:mb-0">
+                  <h2 className="text-3xl font-bold text-primary-blue mb-4 text-center md:text-left">
                     {t("landing-featuredProperties")}
                   </h2>
-                  <p className="text-gray-600 text-lg">
+                  <p className="text-gray-600 text-lg text-center md:text-left">
                     {t("landing-featured-description")}
                   </p>
                 </div>
-                <div className="text-center mt-8">
+                <div className="text-center md:mt-0 flex justify-center md:justify-end">
                   <Link
                     to="/properties"
-                    className="cta-button rounded-full"
+                    className="hidden md:inline-flex cta-button rounded-full"
                   >
                     <span>{t("landing-viewAllProperties")}</span>
                     <ArrowRight className="icon" />
+                  </Link>
+                  
+                  {/* Mobilno kružno dugme sa lupom */}
+                  <Link
+                    to="/properties"
+                    className="md:hidden inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary-dark-blue text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+                    aria-label={t("landing-viewAllProperties")}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <path d="m21 21-4.3-4.3"></path>
+                    </svg>
                   </Link>
                 </div>
               </div>
