@@ -293,8 +293,8 @@ const RealEstatePage: React.FC = () => {
         if (filters.propertyTypes.length > 0) {
           typeMatches = filters.propertyTypes.some(selectedType => {
             // Convert property type names to lowercase for comparison
-            const propertyType = (property.typesName || '').toLowerCase();
-            const subType = (property.subTypesName || '').toLowerCase();
+            const propertyType = (property.typeName || '').toLowerCase();
+            const subType = (property.subTypeName || '').toLowerCase();
             
             let typeMatches = false;
             
@@ -580,7 +580,7 @@ const RealEstatePage: React.FC = () => {
             </p>
           </motion.div>
 
-          {console.log('Before rendering favorites button:', favoritesCount)}
+          
           <div className="fixed left-4 top-28 z-30">
             {favoritesCount > 0 ? (
               <motion.div
@@ -599,7 +599,7 @@ const RealEstatePage: React.FC = () => {
                 </button>
               </motion.div>
             ) : (
-              <div>{console.log('FavoritesCount is 0 or undefined:', favoritesCount)}</div>
+              <div></div>
             )}
           </div>
 

@@ -8,3 +8,6 @@ export const ApiPropertyType = `${ApiEndPointBase}/PropertyType`
 export const ApiActionName = `${ApiEndPointBase}/ActionNames`
 export const ApiValueRanges = `${ApiEndPointBase}/ValueRanges`
 export const ApiRealEstateFromList= `${ApiEndPointBase}/GetFromList`
+
+export const ApiAgents = `${ApiEndPointBase}/Agents`
+export const ApiAgentById = (id: number) => `${ApiEndPointBase}/Agents/${id}`

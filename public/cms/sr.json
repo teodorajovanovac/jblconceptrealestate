@@ -1,20 +1,20 @@
 {
-    "home": "Home",
-    "about": "About Us",
-    "contact": "Contact Us",
+  "home": "Home",
+  "about": "About Us",
+  "contact": "Contact Us",
   "validate-form-required": "Ovo polje je obavezno",
-    "validate-form-fillme": "Popunite ovo polje",
-    "form-enter-name": "Unesite vaše ime",
-    "contactform-title": "Kontakt",
-    "message-send-success": "Vaša poruka je uspešno poslata!",
-    "message-send-postinfo": "Hvala na kontaktiranju. Naš tim će vas uskoro kontaktirati. Obično odgovaramo u roku od nekoliko sati.",
+  "validate-form-fillme": "Popunite ovo polje",
+  "form-enter-name": "Unesite vaše ime",
+  "contactform-title": "Kontakt",
+  "message-send-success": "Vaša poruka je uspešno poslata!",
+  "message-send-postinfo": "Hvala na kontaktiranju. Naš tim će vas uskoro kontaktirati. Obično odgovaramo u roku od nekoliko sati.",
   "contact-header": "Kontaktirajte nas",
   "contact-text": "JBL Concept je vaš pouzdan partner za sve vrste usluga vezanih za nekretnine. Pružamo kompletnu podršku - od posredovanja i konsaltinga do menadžmenta nekretnina i pravne pomoći. Naš tim stručnjaka je tu da vam pomogne da ostvarite svoje ciljeve na tržištu nekretnina.",
   "form-message-placeholder": "Vaša poruka",
-    "form-request-placeholder": "Opišite vaš zahtev...",
-    "form-sending": "Slanje poruke...",
-    "form-send-button": "Pošaljite poruku",
-    "contactform-choose-service": "Izaberite uslugu",
+  "form-request-placeholder": "Opišite vaš zahtev...",
+  "form-sending": "Slanje poruke...",
+  "form-send-button": "Pošaljite poruku",
+  "contactform-choose-service": "Izaberite uslugu",
   "contactform-other-inquiries": "Drugi upiti:",
   "contact-header": "Kontaktirajte nas",
   "form-enter-name": "Unesite Vaše ime",
@@ -121,7 +121,8 @@
   "contactform-trust-badge3": "Dostupni 24/7",
   "contactform-cta": "Posetite našu kancelariju",
   "contactform-prefer-phone": "Radije biste telefonirali?",
-  "contactform-phone-number": "+381 61 2299988",
+  "contactform-phone-number": "+381 66 802 7377",
+  "contactform-phone-number-alt": "+381 61 229 9988",
   "contactform-email": "office@jblconcept.rs",
   "contactform-email-label": "Email:",
 
@@ -238,10 +239,10 @@
   "action-buttons-open": "Otvori opcije",
   "action-buttons-close": "Zatvori opcije",
 
-  "action-search-property-enter":"Enter Property ID (4 digits)",
-  "action-search-property-enter-desc":"Each property has a unique 4-digit ID number",
-  "action-search-property-not-found": "The property with the entered ID was not found",
-  "action-search-property-error": "An error occurred while searching",
+  "action-search-property-enter":"Unesite 4-cifren ID broj",
+  "action-search-property-enter-desc":"Svaka nekretnina ima jedinstveni 4-cifren ID broj",
+  "action-search-property-not-found": "Nekretnina sa unetim ID-jem nije pronađena",
+  "action-search-property-error": "Došlo je do greške prilikom pretrage",
 
   "terms-sections": {
     "general": {
@@ -371,5 +372,13 @@
       "title": "Savetovanje u cilju što boljeg plasmana nepokretnosti",
       "price": "Cena radnog sata savetovanja iznosi 12.000,00 dinara."
     }
-  }
+  },
+
+  "agent-default-name": "Agencijski agent",
+  "agent-licence": "Licenca",
+  "agent-contact-property-info": "Kontaktirate našeg agenta u vezi sledećeg oglasa:",
+  "agent-property-generic": "Nekretnina",
+  "agent-message-sent": "Poruka uspešno poslata!",
+  "agent-message-confirmation": "Naš agent će vas kontaktirati u najkraćem mogućem roku.",
+  "agent-privacy-notice": "Vaši lični podaci biće korišćeni samo u svrhu odgovora na vaš upit i neće biti deljeni sa trećim licima."
 }

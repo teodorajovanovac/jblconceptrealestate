@@ -6,14 +6,14 @@ export interface PhotoDto {
 }
 
 export interface AgentDto {
-    name: string;
-    surname: string;
-    company: string;
-    licence: string;
-    email: string;
-    phone: string;
-    mobile: string;
-    image: string;
+    name: string | 0;
+    surname: string | 0;
+    company: string | 0;
+    licence: string | 0;
+    email: string | 0;
+    phone: string | 0;
+    mobile: string | 0;
+    image: string | 0;
 }
 
 export interface RealEstateDto {
