@@ -207,7 +207,7 @@ const Footer = () => {
             </p>
             <p className="text-sm text-gray-500 opacity-60">
               {t("footer-design-by")} <a 
-                href="https://ajsasoft.com" 
+                href="https://ajsasoft.rs" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="hover:text-white transition-colors"
