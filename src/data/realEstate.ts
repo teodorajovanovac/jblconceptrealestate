@@ -133,9 +133,10 @@ const realEstate = {
     }
   },
 
-  async getActionName(): Promise<ApiResponse<string[]>> {
+  async getActionName(langCode?: string): Promise<ShortListDto[]> {
     try {
-      const response = await axios.get(ApiActionName);
+      const url = langCode ? `${ApiActionName}?langCode=${langCode}` : `${ApiActionName}`;
+      const response = await axios.get(url);
       return response.data;
     } catch (err) {
       console.error("Error fetching action names:", err);
@@ -143,9 +144,10 @@ const realEstate = {
     }
   },
 
-  async getPropertyType(): Promise<ApiResponse<string[]>> {
+  async getPropertyType(langCode?: string): Promise<ShortListDto[]> {
     try {
-      const response = await axios.get(ApiPropertyType);
+      const url = langCode ? `${ApiPropertyType}?langCode=${langCode}` : `${ApiPropertyType}`;
+      const response = await axios.get(url);
       return response.data;
     } catch (err) {
       console.error("Error fetching property types:", err);
@@ -153,9 +155,10 @@ const realEstate = {
     }
   },
 
-  async getLocation(): Promise<ApiResponse<string[]>> {
+  async getLocation(langCode?: string): Promise<ShortListDto[]> {
     try {
-      const response = await axios.get(ApiLocation);
+      const url = langCode ? `${ApiLocation}?langCode=${langCode}` : `${ApiLocation}`;
+      const response = await axios.get(url);
       return response.data;
     } catch (err) {
       console.error("Error fetching locations:", err);

@@ -4,6 +4,10 @@ import Slider from '@mui/material/Slider'
 import { styled } from '@mui/material/styles'
 import { PRICE_RANGES, AREA_RANGE, TransactionType } from '../../utils/constants'
 
+import realEstate from "../../data/realEstate"
+import { ShortListDto } from "../../data/models/realEstate"
+import { useCmsData } from '../../services/CmsProvider';
+
 // Custom styled slider
 const CustomSlider = styled(Slider)(({ theme }) => ({
   color: '#0A142F',
@@ -135,7 +139,13 @@ const Dropdown = ({ title, options, selected, onChange, isOpen, onToggle }: Drop
   );
 };
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
+const SearchBar: React.FC<SearchBarProps> = (onSearch) => {
+  const { t, currentLanguage } = useCmsData();
+  const [error, setError] = useState<string | null>(null);
+  const [actionNames, setActionNames] = useState<ShortListDto[]>([])
+  const [propertyType, setPropertyType] = useState<ShortListDto[]>([])
+  const [location, setLocation] = useState<ShortListDto[]>([])
+
   const [searchTerm, setSearchTerm] = useState('')
   const [priceRange, setPriceRange] = useState<number[]>([PRICE_RANGES.buy.min, PRICE_RANGES.buy.max])
   const [areaRange, setAreaRange] = useState<number[]>([AREA_RANGE.min, AREA_RANGE.max])
@@ -152,8 +162,16 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   const [selectedHeating, setSelectedHeating] = useState<string[]>([])
   const [selectedParking, setSelectedParking] = useState<string[]>([])
 
+  
   // Dropdown visibility states
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+
+  useEffect(() => {
+    fetchActionName()
+    fetchTypesName()
+    fetchLocation()
+  },[currentLanguage])
 
   // Reset price range when transaction type changes
   useEffect(() => {
@@ -163,6 +181,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     ])
   }, [transactionType])
 
+
   const formatPrice = (value: number) => {
     if (transactionType === 'buy') {
       return `${value / 1000} €`
@@ -171,15 +190,63 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   }
   
   const formatArea = (value: number) => `${value} m²`
+  
+  
+//#region "API CALLS"
+const fetchActionName = async () => {
+  try{
+    const result = await realEstate.getActionName(currentLanguage);
+    if (result) 
+      {
+        setActionNames(result);
+      } else {
+        //blokada * error nema podataka
+        setError("Failed to fetch property action name data");
+      }
+    } catch (err) {
+    setError("Failed to fetch property action name data");
+  }
+}
+const fetchTypesName = async () => {
+  try {
+    
+    const result = await realEstate.getPropertyType(currentLanguage);
+    console.log("lang",currentLanguage)
+    if (result) 
+      {
+        setPropertyType(result);
+        console.log("789",result);
+      } else {
+        //blokada * error nema podataka
+        setError("Failed to fetch property type data");
+      }
+  } catch (err) {
+    setError("Failed to fetch property type data");
+  }
+}
+const fetchLocation = async () => {
+  try {
+    const result = await realEstate.getLocation(currentLanguage);
+    if (result) 
+      {
+        setLocation(result);
+      } else {
+        //blokada * error nema podataka
+        setError("Failed to fetch location data");
+      }
+  } catch (err) {
+    setError("Failed to fetch location data");
+  }
+}
+  
+
+
+
+//#endregion
+
 
   // Define more accurate options based on the API data
-  const propertyTypeOptions = [
-    { label: 'Stan', value: 'stan' },
-    { label: 'Kuća', value: 'kuca' },
-    { label: 'Poslovni prostor', value: 'poslovni' },
-    { label: 'Zemljište', value: 'zemljiste' },
-    { label: 'Garaža', value: 'garaza' }
-  ];
+
   
   const roomOptions = [
     { label: 'Garsonjera', value: '0' },
@@ -191,12 +258,6 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     { label: '3.5 sobe', value: '3.5' },
     { label: '4 sobe', value: '4' },
     { label: '4+ sobe', value: '5' }
-  ];
-  
-  const locationOptions = [
-    'Stari Grad', 'Vračar', 'Savski Venac', 'Novi Beograd', 
-    'Zemun', 'Dedinje', 'Voždovac', 'Zvezdara', 'Čukarica', 
-    'Rakovica', 'Palilula', 'Banovo brdo'
   ];
   
   const featureOptions = [
@@ -266,7 +327,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       console.log('Sending search filters:', filters);
       
       // Call onSearch with the updated filters
-      onSearch(filters);
+      //onSearch(filters);
     }, 100); // Small delay to ensure state is updated
   }
 
@@ -298,7 +359,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     };
     
     // Immediately trigger search with the new filters
-    onSearch(filters);
+    //onSearch(filters);
   };
 
   // Update the clear filters function
@@ -317,20 +378,20 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     setSelectedParking([]);
     
     // Trigger a search with cleared filters
-    onSearch({
-      transactionType,
-      searchTerm: '',
-      propertyTypes: [],
-      rooms: [],
-      locations: [],
-      priceRange: [PRICE_RANGES[transactionType].min, PRICE_RANGES[transactionType].max],
-      areaRange: [AREA_RANGE.min, AREA_RANGE.max],
-      features: [],
-      bathrooms: [],
-      floor: [],
-      heating: [],
-      parking: []
-    });
+    // onSearch({
+    //   transactionType,
+    //   searchTerm: '',
+    //   propertyTypes: [],
+    //   rooms: [],
+    //   locations: [],
+    //   priceRange: [PRICE_RANGES[transactionType].min, PRICE_RANGES[transactionType].max],
+    //   areaRange: [AREA_RANGE.min, AREA_RANGE.max],
+    //   features: [],
+    //   bathrooms: [],
+    //   floor: [],
+    //   heating: [],
+    //   parking: []
+    // });
   }
 
   const toggleDropdown = (name: string) => {
@@ -340,6 +401,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   return (
     <div className="w-full max-w-7xl mx-auto px-4">
       {/* Transaction Type Toggle - Larger buttons */}
+
       <div className="flex justify-center gap-3 mb-6">
         <button
           onClick={() => handleTransactionTypeChange('buy')}
@@ -378,22 +440,22 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       {/* Primary Filters Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Dropdown
-          title="Tip nekretnine"
-          options={propertyTypeOptions.map(option => option.label)}
+          title={t("property-type")}
+          options={propertyType.map(option => option.name)}
           selected={selectedPropertyTypes.map(value => 
-            propertyTypeOptions.find(opt => opt.value === value)?.label || value
+            propertyType.find(opt => opt.short === value)?.name || value
           )}
           onChange={(label) => {
-            const option = propertyTypeOptions.find(opt => opt.label === label);
+            const option = propertyType.find(opt => opt.name === label);
             if (option) {
-              handleCheckboxChange(option.value, selectedPropertyTypes, setSelectedPropertyTypes);
+              handleCheckboxChange(option.short, selectedPropertyTypes, setSelectedPropertyTypes);
             }
           }}
           isOpen={openDropdown === 'propertyType'}
           onToggle={() => toggleDropdown('propertyType')}
         />
 
-        <Dropdown
+        {/* <Dropdown
           title="Broj soba"
           options={roomOptions.map(option => option.label)}
           selected={selectedRooms.map(value => {
@@ -413,12 +475,15 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           }}
           isOpen={openDropdown === 'rooms'}
           onToggle={() => toggleDropdown('rooms')}
-        />
+        /> */}
 
         <Dropdown
-          title="Lokacija"
-          options={locationOptions}
-          selected={selectedLocations}
+          title={t("property-location")}
+          options={location.map(option => option.name)}
+          selected={selectedLocations.map(value => 
+            location.find(opt => opt.short === value)?.name || value
+          )}
+          
           onChange={(value) => handleCheckboxChange(value, selectedLocations, setSelectedLocations)}
           isOpen={openDropdown === 'location'}
           onToggle={() => toggleDropdown('location')}
@@ -467,7 +532,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       </div>
 
       {/* Additional Filters */}
-      {showMoreFilters && (
+      {/* {showMoreFilters && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Dropdown
             title="Broj kupatila"
@@ -505,17 +570,17 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             onToggle={() => toggleDropdown('features')}
           />
         </div>
-      )}
+      )} */}
 
       {/* Active Filter Pills */}
       {(selectedPropertyTypes.length > 0 || selectedRooms.length > 0 || 
         selectedLocations.length > 0 || selectedFeatures.length > 0) && (
         <div className="flex flex-wrap gap-2 mt-3 mb-6">
           {selectedPropertyTypes.map(value => {
-            const option = propertyTypeOptions.find(opt => opt.value === value);
+            const option = propertyType.find(opt => opt.short === value);
             return (
               <div key={`type-${value}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
-                {option?.label || value}
+                {option?.name || value}
                 <button 
                   onClick={() => handleCheckboxChange(value, selectedPropertyTypes, setSelectedPropertyTypes)}
                   className="ml-1 text-blue-500 hover:text-blue-700"
@@ -614,7 +679,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             console.log("Applying search filters:", filters);
             
             // Call onSearch with all filters
-            onSearch(filters);
+          //  onSearch(filters);
             
             // Reset button after a short delay
             setTimeout(() => {
@@ -629,3 +694,5 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     </div>
   )
 } 
+
+export default SearchBar;
