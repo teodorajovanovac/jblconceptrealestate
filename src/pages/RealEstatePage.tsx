@@ -580,7 +580,7 @@ const RealEstatePage: React.FC = () => {
             </p>
           </motion.div>
 
-          {console.log('Before rendering favorites button:', favoritesCount)}
+          
           <div className="fixed left-4 top-28 z-30">
             {favoritesCount > 0 ? (
               <motion.div
@@ -599,7 +599,7 @@ const RealEstatePage: React.FC = () => {
                 </button>
               </motion.div>
             ) : (
-              <div>{console.log('FavoritesCount is 0 or undefined:', favoritesCount)}</div>
+              <div></div>
             )}
           </div>
 

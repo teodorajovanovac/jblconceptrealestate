@@ -469,7 +469,10 @@ export default function PropertyPage() {
                     </div>
                   </div>
                   <div ref={agentCardRef} className="w-full z-20">
-                    <ContactAgentCard fullWidth={true} />
+                    <ContactAgentCard 
+                      property={property} 
+                      fullWidth={true} 
+                    />
                   </div>
                 </div>
               </div>
@@ -518,7 +521,10 @@ export default function PropertyPage() {
               </button>
             </div>
             <div className="flex-1 overflow-auto p-4">
-              <ContactAgentCard fullWidth={true} />
+              <ContactAgentCard 
+                property={property} 
+                fullWidth={true} 
+              />
             </div>
           </div>
         )}

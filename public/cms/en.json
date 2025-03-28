@@ -121,7 +121,8 @@
     "contactform-trust-badge3": "Available 24/7",
     "contactform-cta": "Visit our office",
     "contactform-prefer-phone": "Prefer to call?",
-    "contactform-phone-number": "+381 61 2299988",
+    "contactform-phone-number": "+381 66 802 7377",
+    "contactform-phone-number-alt": "+381 61 229 9988",
     "contactform-email": "office@jblconcept.rs",
     "contactform-email-label": "Email:",
     
@@ -364,5 +365,13 @@
             "title": "Consulting for Optimal Property Placement",
             "price": "The price for a working hour of consulting is RSD 12,000.00"
         }
-    }
+    },
+
+    "agent-default-name": "Agency agent",
+    "agent-licence": "License",
+    "agent-contact-property-info": "You are contacting our agent about the following listing:",
+    "agent-property-generic": "Property",
+    "agent-message-sent": "Message successfully sent!",
+    "agent-message-confirmation": "Our agent will contact you as soon as possible.",
+    "agent-privacy-notice": "Your personal data will be used only for the purpose of responding to your inquiry and will not be shared with third parties."
 }

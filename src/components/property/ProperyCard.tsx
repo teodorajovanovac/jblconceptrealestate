@@ -85,11 +85,21 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
                      property.actionShortName?.toLowerCase().includes('k');
   
     
-    const handleFavoriteClick = (e: React.MouseEvent) => {
+    const handleToggleFavorite = (e: React.MouseEvent, propertyId: number) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log('Favorite button clicked for property:', property.id);
-      toggleFavorite(property.id);
+      
+      // Dodajemo klasu za animaciju na srce
+      const heartIcon = e.currentTarget.querySelector('svg');
+      if (heartIcon) {
+        heartIcon.classList.add('favorite-animation');
+        // Uklanjamo klasu nakon što se animacija završi
+        setTimeout(() => {
+          heartIcon.classList.remove('favorite-animation');
+        }, 600);
+      }
+      
+      toggleFavorite(propertyId);
     };
   
     return (
@@ -139,17 +149,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
             </div>
   
             {/* Favorite Button - Top Right */}
-            <button 
-              className="absolute top-4 right-4 z-20 p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-300"
-              onClick={handleFavoriteClick}
-              aria-label={isFavorite(property.id) ? "Remove from favorites" : "Add to favorites"}
+            <button
+              onClick={(e) => handleToggleFavorite(e, property.id)}
+              className="absolute top-2 right-2 z-10 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
             >
               <Heart 
-                className={`h-5 w-5 transition-colors duration-300 ${
-                  isFavorite(property.id) 
-                    ? 'text-red-500 fill-red-500' 
-                    : 'hover:text-red-500'
-                }`} 
+                className={`h-5 w-5 transition-colors ${isFavorite(property.id) ? 'text-red-500 fill-red-500' : 'text-gray-500'}`} 
               />
             </button>
   
