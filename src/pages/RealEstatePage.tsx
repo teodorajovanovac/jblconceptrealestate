@@ -293,8 +293,8 @@ const RealEstatePage: React.FC = () => {
         if (filters.propertyTypes.length > 0) {
           typeMatches = filters.propertyTypes.some(selectedType => {
             // Convert property type names to lowercase for comparison
-            const propertyType = (property.typesName || '').toLowerCase();
-            const subType = (property.subTypesName || '').toLowerCase();
+            const propertyType = (property.typeName || '').toLowerCase();
+            const subType = (property.subTypeName || '').toLowerCase();
             
             let typeMatches = false;
             

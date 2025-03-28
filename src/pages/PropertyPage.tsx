@@ -146,7 +146,7 @@ export default function PropertyPage() {
         : property.typeName || 'N/A',
       [t("property-area")]: property.area ? `${property.area} m²` : 'N/A',
       [t("property-rooms")]: property.roomsNo || 'N/A',
-      [t("property-bathrooms")]: property.bathroomNO || 'N/A',
+      [t("property-bathrooms")]: property.bathroomNo || 'N/A',
       [t("property-floor")]: property.floorNoString || 'N/A',
       [t("property-additional-rooms")]: property.spaces || 'N/A',
       [t("property-characteristics")]: property.description || 'N/A',
@@ -356,7 +356,7 @@ export default function PropertyPage() {
                         <Bath className="h-5 w-5" />
                       </span>
                       <span>
-                        <span className="font-medium">{property.bathroomNO}</span>{" "}
+                        <span className="font-medium">{property.bathroomNo}</span>{" "}
                         <span className="text-gray-600">{t("property-bathrooms")}</span>
                       </span>
                     </div>

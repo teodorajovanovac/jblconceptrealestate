@@ -23,7 +23,7 @@ export interface RealEstateDto {
     //code: string | null;
     area: number | null;
     roomsNo: number | null;
-    bathroomNO: number| null;
+    bathroomNo: number| null;
     movingIn: string | null;
     gmapSync: number| null;
     approximateLocation: number | null;
@@ -42,7 +42,6 @@ export interface RealEstateDto {
     actionShortName: string | null;
     spaces: string | null;
     spacesValue: string | null;
-    descriptions: string | null;
     spacesNumber: string | null;
     statusName: string | null;
     portalName: string | null;
