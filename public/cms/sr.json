@@ -1,20 +1,20 @@
 {
-    "home": "Home",
-    "about": "About Us",
-    "contact": "Contact Us",
+  "home": "Home",
+  "about": "About Us",
+  "contact": "Contact Us",
   "validate-form-required": "Ovo polje je obavezno",
-    "validate-form-fillme": "Popunite ovo polje",
-    "form-enter-name": "Unesite vaše ime",
-    "contactform-title": "Kontakt",
-    "message-send-success": "Vaša poruka je uspešno poslata!",
-    "message-send-postinfo": "Hvala na kontaktiranju. Naš tim će vas uskoro kontaktirati. Obično odgovaramo u roku od nekoliko sati.",
+  "validate-form-fillme": "Popunite ovo polje",
+  "form-enter-name": "Unesite vaše ime",
+  "contactform-title": "Kontakt",
+  "message-send-success": "Vaša poruka je uspešno poslata!",
+  "message-send-postinfo": "Hvala na kontaktiranju. Naš tim će vas uskoro kontaktirati. Obično odgovaramo u roku od nekoliko sati.",
   "contact-header": "Kontaktirajte nas",
   "contact-text": "JBL Concept je vaš pouzdan partner za sve vrste usluga vezanih za nekretnine. Pružamo kompletnu podršku - od posredovanja i konsaltinga do menadžmenta nekretnina i pravne pomoći. Naš tim stručnjaka je tu da vam pomogne da ostvarite svoje ciljeve na tržištu nekretnina.",
   "form-message-placeholder": "Vaša poruka",
-    "form-request-placeholder": "Opišite vaš zahtev...",
-    "form-sending": "Slanje poruke...",
-    "form-send-button": "Pošaljite poruku",
-    "contactform-choose-service": "Izaberite uslugu",
+  "form-request-placeholder": "Opišite vaš zahtev...",
+  "form-sending": "Slanje poruke...",
+  "form-send-button": "Pošaljite poruku",
+  "contactform-choose-service": "Izaberite uslugu",
   "contactform-other-inquiries": "Drugi upiti:",
   "contact-header": "Kontaktirajte nas",
   "form-enter-name": "Unesite Vaše ime",
@@ -121,7 +121,8 @@
   "contactform-trust-badge3": "Dostupni 24/7",
   "contactform-cta": "Posetite našu kancelariju",
   "contactform-prefer-phone": "Radije biste telefonirali?",
-  "contactform-phone-number": "+381 61 2299988",
+  "contactform-phone-number": "+381 66 802 7377",
+  "contactform-phone-number-alt": "+381 61 229 9988",
   "contactform-email": "office@jblconcept.rs",
   "contactform-email-label": "Email:",
 
@@ -238,10 +239,146 @@
   "action-buttons-open": "Otvori opcije",
   "action-buttons-close": "Zatvori opcije",
 
-  "action-search-property-enter":"Enter Property ID (4 digits)",
-  "action-search-property-enter-desc":"Each property has a unique 4-digit ID number",
-  "action-search-property-not-found": "The property with the entered ID was not found",
-  "action-search-property-error": "An error occurred while searching"
-    
-    
+  "action-search-property-enter":"Unesite 4-cifren ID broj",
+  "action-search-property-enter-desc":"Svaka nekretnina ima jedinstveni 4-cifren ID broj",
+  "action-search-property-not-found": "Nekretnina sa unetim ID-jem nije pronađena",
+  "action-search-property-error": "Došlo je do greške prilikom pretrage",
+
+  "terms-sections": {
+    "general": {
+      "title": "I OPŠTE ODREDBE",
+      "content": "Opštim uslovima poslovanja privrednog društva \"Concept Real Estate doo Beograd\" matični broj: 22047825, PIB: 114618627, koje je upisano u Registar posrednika u prometu i zakupu nepokretnosti pod br. 1910 Rešenjem Ministarstva unutrašnje i spoljne trgovine br. 002871127 2024 (u daljem tekstu: Posrednik) uređuju se međusobni odnosi Posrednika u prometu nepokretnosti i fizičkog ili pravnog lica, koji sa Posrednikom zaključuje Ugovor o posredovanju u cilju zaključenja određenog pravnog posla koji se tiče prometa ili zakupa nepokretnosti (u daljem tekstu: Nalogodavac)."
+    },
+    "offer": {
+      "title": "II PONUDA NEPOKRETNOSTI",
+      "content1": "2.1 Ponuda nepokretnosti Posrednika zasniva se na podacima koje je Posrednik dobio od Nalogodavca ili neposrednim opažanjem prilikom pregleda nepokretnosti.",
+      "content2": "2.2 Nalogodavac pod punom krivičnom i materijalnom odgovornošću potpisom na ugovoru o posredovanju u prometu ili zakupu nepokretnosti garantuje da su podaci koje je dao Posredniku, a koji se odnose na predmetnu nepokretnost i stvarna prava na istoj, u potpunosti istiniti."
+    },
+    "agreement": {
+      "title": "III UGOVOR O POSREDOVANJU",
+      "content": "3.1 Posredovanje se vrši na osnovu Ugovora o posredovanju u prodaji, odnosno zakupu nepokretnosti (u daljem tekstu: Ugovor o posredovanju), zaključenog u pisanoj formi između Nalogodavca i Posrednika kojim ugovorom se uređuju njihova međusobna prava i obaveze."
+    },
+    "broker-obligations": {
+      "title": "IV OBAVEZE POSREDNIKA",
+      "content1": "4.1 POSREDNIK, kao Preduzeće specijalizovano za posredovanje u zakupu i prometu nepokretnosti, se obavezuje da sa pažnjom dobrog privrednika preduzeti sve potrebne radnje u cilju što efikasnijeg zakupa nepokretnosti koja je u vlasništvu NALOGODAVCA, pod uslovima koje je on postavio.",
+      "content2": "4.2 POSREDNIK se posebno obavezuje da u ime NALOGODAVCA:",
+      "obligations": [
+        "nastojati da nađe i dovede u vezu s NALOGODAVCEM lice radi zaključivanja posla koji je predmet ugovora o posredovanju i zakazuje prezentaciju predmetne nepokretnosti",
+        "dati nalogodavcu objektivno mišljenje o ceni nepokretnosti ili iznosu zakupnine nepokretnosti u skladu sa njenim karakteristikama, prilikama na tržištu, kao i drugim relevantnim okolnostima",
+        "učestvuje u pregovorima u ime NALOGODAVCA uz nastojanje da dođe do zaključenja posla",
+        "redovno obaveštava NALOGODAVCA o svim preduzetim aktivnostima",
+        "kao poslovnu tajnu čuva sve podatke koji su mu povereni",
+        "svu dokumentaciju koju je preuzeo od NALOGODAVCA čuva do završetka posla",
+        "pruža punu pravnu sigurnost u realizaciji Ugovora o zakupu"
+      ]
+    },
+    "principal-obligations": {
+      "title": "V OBAVEZE NALOGODAVCA",
+      "content": "5.1 NALOGODAVAC zaključenjem ovog Posredničkog ugovora poverava izdavanje svoje nepokretnosti POSREDNIKU i preuzima sledeće obaveze:",
+      "obligations": [
+        "da POSREDNIKU prezentuje svu dokumentaciju kojom dokazuje svoje vlasništvo na predmetnoj nepokretnosti",
+        "da jasno i nedvosmisleno saopšti POSREDNIKU svoje uslove izdavanja/prodaje nepokretnosti",
+        "da omogući POSREDNIKU da u prisustvu NALOGODAVCA ili sa njegove strane ovlašćenog lica, licima zainteresovanim za eventualni zakup, predmetnu nepokretnost pokaže",
+        "obavestiti posrednika o svim promenama u vezi sa posredovanim poslom",
+        "da ne menja uslove zakupa, ako su uslovi već predočeni potencijalnom zakupcu"
+      ]
+    },
+    "final": {
+      "title": "VI ZAVRŠNE ODREDBE",
+      "content": "Na odnose Posrednika i Nalogodavca koji nisu regulisani Opštim uslovima poslovanja, drugim opštim aktom Preduzeća Posrednika ili Ugovorom o posredovanju, primenjivaće se odredbe Zakona o posredovanju u prometu i zakupu nepokretnosti, Zakona o prometu nepokretnosti, Zakona o obligacionim odnosima, kao i drugih propisa Republike Srbije."
+    }
+  },
+
+  "pricing-sections": {
+    "services": {
+      "title": "Vrste usluga",
+      "description": "Vrste usluga koje agencija \"Concept Real Estate doo Beograd\" obavlja po nalogu klijenata (u daljem tekstu NALOGODAVCA):",
+      "list": [
+        "Posredovanje u poslovima zakupa nepokretnosti",
+        "Posredovanje u poslovima kupoprodaje nepokretnosti",
+        "Procena tržišne vrednosti nepokretnosti",
+        "Menadžment nepokretnosti",
+        "Savetovanje u cilju što boljeg plasmana nepokretnosti na tržištu nekretnina",
+        "Savetovanje u cilju što bolje kupovine nepokretnosti na tržištu nekretnine"
+      ]
+    },
+    "lease-brokerage": {
+      "title": "Posredovanje u poslovima zakupa nepokretnosti",
+      "subtitle": "Cenovnik za izvršene usluge posredovanja u zakupu nepokretnosti",
+      "description": "Iznos posredničke nadoknade se naplaćuje po realizaciji posla/sklapanju Ugovora o zakupu i zavisi od:",
+      "factors": [
+        "Iznosa mesečne zakupnine nekretnine i ugovorenog trajanja zakupa",
+        "Ugovorenog roka trajanja zakupa"
+      ],
+      "price-ranges": [
+        {
+          "range": "od 550 do 1200 eur-a",
+          "fee": "50% od iznosa mesečnog zakupa"
+        },
+        {
+          "range": "od 1250 eur-a i više",
+          "fee": "100% od iznosa mesečnog zakupa"
+        }
+      ],
+      "lease-periods": [
+        {
+          "period": "od 13 do 20 meseci",
+          "fee": "70%"
+        },
+        {
+          "period": "23 meseca i duže",
+          "fee": "100%"
+        }
+      ]
+    },
+    "purchase-brokerage": {
+      "title": "Posredovanje u poslovima kupoprodaje nepokretnosti",
+      "subtitle": "Cenovnik za izvršene usluge posredovanja u kupoprodaji nepokretnosti",
+      "min-fee": "Minimalna posrednička nadoknada za poslove posredovanja prilikom kupoprodaje nepokretnosti iznosi 750 eura u dinarskoj protivvrednosti, obračunato po srednjem kursu NBS-a na dan plaćanja usluge posredovanja.",
+      "percentage": "U skladu sa Zakonom o posredovanju procenat za naplaćeni posrednički posao prilikom kupoprodaje nepokretnosti je varijabilan i iznosi od 1 do 99% od ugovorene kupoprodajne cene."
+    },
+    "property-valuation": {
+      "title": "Procena tržišne vrednosti nepokretnosti u zakupu",
+      "prices": [
+        {
+          "type": "Stan, kuća od 20 do 110 m²",
+          "price": "€ 150"
+        },
+        {
+          "type": "Stan, kuća više od 110 m²",
+          "price": "€ 250"
+        },
+        {
+          "type": "Poslovni prostor - po upitu",
+          "price": "od € 250 do € 1000"
+        }
+      ]
+    },
+    "property-management": {
+      "title": "Menadžment nepokretnosti",
+      "subtitle": "Cena usluge mesečno",
+      "prices": [
+        {
+          "type": "Stan, kuća, poslovni prostor od 200 m² do 1500 m²",
+          "fee": "12% mesečne zakupnine (u din. protivvrednosti)"
+        },
+        {
+          "type": "Stan, kuća, poslovni prostor preko 1500 m²",
+          "fee": "€ 200 do € 300 (u din. protivvrednosti)"
+        }
+      ]
+    },
+    "consulting": {
+      "title": "Savetovanje u cilju što boljeg plasmana nepokretnosti",
+      "price": "Cena radnog sata savetovanja iznosi 12.000,00 dinara."
+    }
+  },
+
+  "agent-default-name": "Agencijski agent",
+  "agent-licence": "Licenca",
+  "agent-contact-property-info": "Kontaktirate našeg agenta u vezi sledećeg oglasa:",
+  "agent-property-generic": "Nekretnina",
+  "agent-message-sent": "Poruka uspešno poslata!",
+  "agent-message-confirmation": "Naš agent će vas kontaktirati u najkraćem mogućem roku.",
+  "agent-privacy-notice": "Vaši lični podaci biće korišćeni samo u svrhu odgovora na vaš upit i neće biti deljeni sa trećim licima."
 }

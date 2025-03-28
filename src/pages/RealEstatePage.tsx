@@ -581,7 +581,6 @@ const RealEstatePage: React.FC = () => {
           </motion.div>
 
           
-          
           <div className="fixed left-4 top-28 z-30">
             {favoritesCount > 0 ? (
               <motion.div

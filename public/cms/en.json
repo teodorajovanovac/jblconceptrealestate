@@ -121,7 +121,8 @@
     "contactform-trust-badge3": "Available 24/7",
     "contactform-cta": "Visit our office",
     "contactform-prefer-phone": "Prefer to call?",
-    "contactform-phone-number": "+381 61 2299988",
+    "contactform-phone-number": "+381 66 802 7377",
+    "contactform-phone-number-alt": "+381 61 229 9988",
     "contactform-email": "office@jblconcept.rs",
     "contactform-email-label": "Email:",
     
@@ -234,7 +235,143 @@
     "action-search-property-enter":"Enter Property ID (4 digits)",
     "action-search-property-enter-desc":"Each property has a unique 4-digit ID number",
     "action-search-property-not-found": "The property with the entered ID was not found",
-    "action-search-property-error": "An error occurred while searching"
-    
-      
+    "action-search-property-error": "An error occurred while searching",
+
+    "terms-sections": {
+        "general": {
+            "title": "I GENERAL PROVISIONS",
+            "content": "The General Terms and Conditions regulate the business relationship between Concept Real Estate doo Belgrade, registration number: 22047825, TIN: 114618627, registered in the Register of Real Estate Brokers under no. 1910 by Decision of the Ministry of Internal and Foreign Trade no. 002871127 2024 (hereinafter: the Broker) and any natural or legal person who enters into a Brokerage Agreement with the Broker for the purpose of concluding a specific legal transaction concerning the sale or lease of real estate (hereinafter: the Principal)."
+        },
+        "offer": {
+            "title": "II REAL ESTATE OFFER",
+            "content1": "2.1 The Broker's real estate offer is based on data received from the Principal or direct observation during property inspection.",
+            "content2": "2.2 The Principal, under full criminal and material liability, guarantees by signing the brokerage agreement that all data provided to the Broker regarding the property and real rights thereon are completely truthful."
+        },
+        "agreement": {
+            "title": "III BROKERAGE AGREEMENT",
+            "content": "3.1 Brokerage is performed based on a Brokerage Agreement in sale or lease of real estate (hereinafter: Brokerage Agreement), concluded in written form between the Principal and the Broker, which regulates their mutual rights and obligations."
+        },
+        "broker-obligations": {
+            "title": "IV BROKER OBLIGATIONS",
+            "content1": "4.1 The BROKER, as a Company specialized in real estate brokerage, commits to undertake all necessary actions with due diligence to efficiently lease the property owned by the PRINCIPAL, under the conditions set by them.",
+            "content2": "4.2 The BROKER specifically commits to, on behalf of the PRINCIPAL:",
+            "obligations": [
+                "endeavor to find and connect with the PRINCIPAL a person for concluding the business that is the subject of the brokerage agreement and schedule property presentations",
+                "provide the principal with an objective opinion on the property price or rental amount in accordance with its characteristics, market conditions, and other relevant circumstances",
+                "participate in negotiations on behalf of the PRINCIPAL with the aim of concluding the business",
+                "regularly inform the PRINCIPAL about all undertaken activities",
+                "keep all entrusted data as a business secret",
+                "keep all documentation received from the PRINCIPAL until the completion of business",
+                "provide full legal security in the realization of the Lease Agreement"
+            ]
+        },
+        "principal-obligations": {
+            "title": "V PRINCIPAL OBLIGATIONS",
+            "content": "5.1 By concluding this Brokerage Agreement, the PRINCIPAL entrusts the leasing of their property to the BROKER and assumes the following obligations:",
+            "obligations": [
+                "present to the BROKER all documentation proving ownership of the property",
+                "clearly and unambiguously communicate to the BROKER their conditions for leasing/selling the property",
+                "enable the BROKER to show the property to interested parties in the presence of the PRINCIPAL or their authorized representative",
+                "inform the broker about all changes related to the brokered business",
+                "not change the lease conditions if they have already been presented to a potential tenant"
+            ]
+        },
+        "final": {
+            "title": "VI FINAL PROVISIONS",
+            "content": "For relations between the Broker and the Principal not regulated by these General Terms and Conditions, other general acts of the Broker's Company, or the Brokerage Agreement, the provisions of the Law on Real Estate Brokerage, Law on Real Estate Trade, Law on Obligations, and other regulations of the Republic of Serbia shall apply."
+        }
+    },
+
+    "pricing-sections": {
+        "services": {
+            "title": "Types of Services",
+            "description": "Types of services provided by Concept Real Estate doo Belgrade on behalf of clients (hereinafter the PRINCIPAL):",
+            "list": [
+                "Brokerage in real estate leasing",
+                "Brokerage in real estate purchase and sale",
+                "Real estate market value assessment",
+                "Property management",
+                "Consulting for optimal property placement in the real estate market",
+                "Consulting for optimal property purchase in the real estate market"
+            ]
+        },
+        "lease-brokerage": {
+            "title": "Brokerage in Real Estate Leasing",
+            "subtitle": "Price list for brokerage services in real estate leasing",
+            "description": "The broker's fee is charged upon completion of the transaction/execution of the Lease Agreement and depends on:",
+            "factors": [
+                "The amount of the monthly rent and agreed lease duration",
+                "The agreed lease period"
+            ],
+            "price-ranges": [
+                {
+                    "range": "from € 550 to € 1,200",
+                    "fee": "50% of monthly rent"
+                },
+                {
+                    "range": "from € 1,250 and above",
+                    "fee": "100% of monthly rent"
+                }
+            ],
+            "lease-periods": [
+                {
+                    "period": "from 13 to 20 months",
+                    "fee": "70%"
+                },
+                {
+                    "period": "23 months and longer",
+                    "fee": "100%"
+                }
+            ]
+        },
+        "purchase-brokerage": {
+            "title": "Brokerage in Real Estate Purchase and Sale",
+            "subtitle": "Price list for brokerage services in real estate purchase and sale",
+            "min-fee": "The minimum broker's fee for brokerage activities when buying and selling real estate is EUR 750 in dinar equivalent, calculated at the middle exchange rate of the NBS on the day of payment for the brokerage service.",
+            "percentage": "In accordance with the Law on Brokerage, the percentage for the brokerage service for the real estate transaction is variable and amounts to 1 to 99% of the agreed purchase price."
+        },
+        "property-valuation": {
+            "title": "Real Estate Market Value Assessment",
+            "prices": [
+                {
+                    "type": "Apartment, house from 20 to 110 m²",
+                    "price": "€ 150"
+                },
+                {
+                    "type": "Apartment, house more than 110 m²",
+                    "price": "€ 250"
+                },
+                {
+                    "type": "Business space - upon request",
+                    "price": "from € 250 to € 1,000"
+                }
+            ]
+        },
+        "property-management": {
+            "title": "Property Management",
+            "subtitle": "Monthly service fee",
+            "prices": [
+                {
+                    "type": "Apartment, house, office space from 200 to 1,500 m²",
+                    "fee": "12% of monthly rent (in RSD equivalent)"
+                },
+                {
+                    "type": "Apartment, house, office space over 1,500 m²",
+                    "fee": "€ 200 to € 300 (in RSD equivalent)"
+                }
+            ]
+        },
+        "consulting": {
+            "title": "Consulting for Optimal Property Placement",
+            "price": "The price for a working hour of consulting is RSD 12,000.00"
+        }
+    },
+
+    "agent-default-name": "Agency agent",
+    "agent-licence": "License",
+    "agent-contact-property-info": "You are contacting our agent about the following listing:",
+    "agent-property-generic": "Property",
+    "agent-message-sent": "Message successfully sent!",
+    "agent-message-confirmation": "Our agent will contact you as soon as possible.",
+    "agent-privacy-notice": "Your personal data will be used only for the purpose of responding to your inquiry and will not be shared with third parties."
 }

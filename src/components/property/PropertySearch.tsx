@@ -71,7 +71,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-custom-black/40 z-30"
+            className="fixed inset-0 bg-custom-black/40 z-[30]"
           />
           
           {/* Drawer */}

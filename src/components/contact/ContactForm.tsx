@@ -87,14 +87,14 @@ export default function ContactForm() {
               <p className="text-gray-500 mb-2 text-sm font-medium">{t("contactform-prefer-phone")}</p>
               <div className="flex items-center mb-2">
                 <Phone className="h-5 w-5 text-primary-dark-blue mr-2" />
-                <a href="tel:+381612299988" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
+                <a href="tel:+381668027377" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
                   {t("contactform-phone-number")}
                 </a>
               </div>
               <div className="flex items-center mb-4">
                 <Phone className="h-5 w-5 text-primary-dark-blue mr-2" />
                 <a href="tel:+381612299988" className="text-lg font-bold text-primary-dark-blue hover:text-gold-color transition-colors">
-                  {t("contactform-phone-number")}
+                  {t("contactform-phone-number-alt")}
                 </a>
               </div>
             </div>

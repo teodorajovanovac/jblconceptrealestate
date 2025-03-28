@@ -18,6 +18,7 @@ const ActionButtons: React.FC = () => {
   const { t } = useCmsData();
   const navigate = useNavigate();
   const { favoritesCount } = useFavorites();
+  const [showFloatingHearts, setShowFloatingHearts] = useState(false);
 
   // Check screen size for responsive layout
   useEffect(() => {
@@ -63,6 +64,48 @@ const ActionButtons: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isExpanded]);
+
+  useEffect(() => {
+    // Pratimo promene favoritesCount
+    if (favoritesCount > 0) {
+      // Pokreni animaciju srca
+      setShowFloatingHearts(true);
+      
+      // Zaustavi animaciju nakon 5 sekundi
+      const timer = setTimeout(() => {
+        setShowFloatingHearts(false);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [favoritesCount]);
+
+  // Dodatna funkcija za praćenje promene favoritesCount
+  useEffect(() => {
+    let previousCount = 0;
+    
+    // Funkcija koja će se pozvati kada se ažurira favoritesCount
+    const handleFavoritesUpdate = () => {
+      // Ako je novi broj favorita veći od prethodnog, korisnik je upravo lajkovao novu nekretninu
+      if (favoritesCount > previousCount) {
+        setShowFloatingHearts(true);
+        
+        // Zaustavi animaciju nakon 5 sekundi
+        setTimeout(() => {
+          setShowFloatingHearts(false);
+        }, 5000);
+      }
+      
+      previousCount = favoritesCount;
+    };
+    
+    // Slušaj događaj za ažuriranje favorita
+    window.addEventListener('favoritesUpdated', handleFavoritesUpdate);
+    
+    return () => {
+      window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
+    };
+  }, [favoritesCount]);
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -170,7 +213,7 @@ const ActionButtons: React.FC = () => {
                   hover:bg-primary-dark-blue/90 transition-colors`}
                 aria-label={t("action-buttons-favorites")}
               >
-                <Heart className={`${iconSize} mx-auto ${favoritesCount > 0 ? 'text-red-500 fill-red-500' : ''}`} />
+                <Heart className={`${favoritesCount > 0 ? 'w-7 h-7' : iconSize} mx-auto ${favoritesCount > 0 ? 'text-red-500 fill-red-500' : ''}`} />
                 {favoritesCount > 0 && (
                   <span className="absolute text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center z-50">
                     {favoritesCount}
@@ -217,8 +260,17 @@ const ActionButtons: React.FC = () => {
             border-primary-light-blue border-4
             hover:opacity-100
             focus:ring-2 focus:ring-primary-dark-blue focus:ring-offset-2 
-            transition-all duration-300 main-action-button ${!isExpanded ? 'animate-soft-pulse' : ''}`}
+            transition-all duration-300 main-action-button ${!isExpanded ? (favoritesCount > 0 ? 'favorite-pulse' : 'animate-soft-pulse') : ''}`}
         >
+          {/* Mala srca koja se pojavljuju samo kada ima omiljenih nekretnina i kada je showFloatingHearts true */}
+          {favoritesCount > 0 && showFloatingHearts && !isExpanded && (
+            <>
+              <Heart className="floating-heart w-4 h-4" />
+              <Heart className="floating-heart w-3 h-3" />
+              <Heart className="floating-heart w-4 h-4" />
+              <Heart className="floating-heart w-3 h-3" />
+            </>
+          )}
           
           {isExpanded ? <X className={mainIconSize} /> : <Plus className={mainIconSize} />}
         </motion.button>
