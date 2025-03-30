@@ -259,7 +259,17 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
         )}
 
         {/* Share and Like buttons - desktop */}
+        <div className="hidden md:flex absolute top-4 left-4 space-x-2">
+          <Link 
+            to="/properties" 
+            className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+            aria-label="Back to properties"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Link>
+        </div>
         <div className="hidden md:flex absolute top-4 right-4 space-x-2">
+          
           <button 
             className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors"
             onClick={handleShareClick}

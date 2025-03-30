@@ -1,6 +1,6 @@
 import { Calculator, Clipboard, Home, LineChart, ShoppingBag, Users } from 'lucide-react';
 import Header from '../components/header/Header';
-import FooterTW from '../components/footer/FooterTW';
+import FooterTW from '../components/footer/Footer';
 import Seo from '../services/meta/Seo';
 import { Link } from 'react-router-dom';
 import { useCmsData } from "../services/CmsProvider"

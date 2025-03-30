@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { Building2, User, Mail, Phone, Home, FileText, Settings, HelpCircle, X, Key, Calculator, Shield, Search, ClipboardCheck, Users, CheckCircle, AlertCircle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Header from '../components/header/Header'
-import FooterTW from '../components/footer/FooterTW'
+import FooterTW from '../components/footer/Footer'
 import Seo from '../services/meta/Seo'
 import { useCmsData } from "../services/CmsProvider"
 

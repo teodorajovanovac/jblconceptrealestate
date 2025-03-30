@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 import { Phone, Mail, X, User } from "lucide-react"
 import { useCmsData } from "../../services/CmsProvider"
-import { RealEstateDto } from "../../data/models/realEstate"
-import agentService from "../../data/agents"
+import { RealEstateDto } from "../../data/models/RealEstate"
+import agentService from "../../data/Agents"
 import { Agent } from "../../data/models/agents"
 
 interface ContactAgentCardProps {
@@ -298,8 +298,9 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
 }
 
 // Dodatne komponente za UX enhancements
+// strokeWidth="2"
 const CheckCircle2 = (props: any) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"  strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
     <polyline points="22 4 12 14.01 9 11.01"></polyline>
   </svg>

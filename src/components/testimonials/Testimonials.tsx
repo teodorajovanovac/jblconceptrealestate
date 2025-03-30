@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Quote, ChevronLeft, ChevronRight } from "lucide-react"
 import { useCmsData } from "../../services/CmsProvider"
-import getCmsData from "../../data/cms"
+import getCmsData from "../../data/Cms"
 import { Testimonial } from "../../data/models/Testimonial"
 
 export default function Testimonials() {

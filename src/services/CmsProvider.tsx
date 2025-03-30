@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { Console } from "console";
 
 interface CmsContextType {
   t: {
@@ -25,13 +26,14 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
   const [staticCmsData, setStaticCmsData] = useState<Record<string, string>>({});
   const [currentLanguage, setCurrentLanguage] = useState<string>(defaultLang);
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
-
+  const [settings, setSettings] = useState<any>({});
   
   useEffect(() => {
     const loadStaticData = async () => {
       try {
         const response = await axios.get("/cms/cmsdata.json");
         setStaticCmsData(response.data); // Static data loaded
+        console.log("cmsdata:", response.data)
       } catch (error) {
         console.error("Error loading static CMS data:", error);
       }
@@ -45,6 +47,7 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
     const loadSettings = async () => {
       try {
         const response = await axios.get("/cms/settings.json");
+        setSettings(response.data);
         setAvailableLanguages(response.data.availableLanguages);
         //console.log("availableLanguages - ok");
       } catch (error) {
@@ -122,6 +125,7 @@ function t(key: string, returnType?: "object"): string | object {
   const result = key.split(".").reduce((obj: any, i) => (obj ? obj[i] : key), {
     ...staticCmsData, // Merge static data for easier access
     ...cmsData, // Dynamic data
+    ...settings // Settings
   });
 
   if (returnType === "object" && typeof result === "object") {

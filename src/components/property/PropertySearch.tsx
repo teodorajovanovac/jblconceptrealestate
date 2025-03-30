@@ -3,7 +3,7 @@ import { X, Search, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 //import { RealEstateDto } from "../../data/models/realEstate";
-import realEstate from "../../data/realEstate";
+import realEstate from "../../data/RealEstateData";
 import OtpInput from "react-otp-input";
 import { useCmsData } from "../../services/CmsProvider";
 

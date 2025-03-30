@@ -8,13 +8,12 @@ import ContactAgentCard from "../components/property/ContactAgentCard"
 import PropertyFeatures from "../components/property/PropertyFeatures"
 import PropertyMap from "../components/property/PropertyMap"
 import Header from "../components/header/Header"
-import FooterTW from "../components/footer/FooterTW"
+import FooterTW from "../components/footer/Footer"
 import Seo from "../services/meta/Seo"
 import { useParams, Link } from "react-router-dom"
-import realEstate from "../data/realEstate"
-import { RealEstateDto, AgentDto } from "../data/models/realEstate"
+import realEstate from "../data/RealEstateData"
+import { RealEstateDto, AgentDto } from "../data/models/RealEstate"
 import Spinner from '../components/ui/Spinner'
-import { OpenStreetMapProvider } from 'leaflet-geosearch'
 import { useCmsData } from "../services/CmsProvider"
 
 const defaultAgent: AgentDto = {
@@ -199,7 +198,7 @@ export default function PropertyPage() {
       <Header />
       <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-16">
         {/* Property Gallery */}
-        <div className="relative z-0">
+        <div className="relative">
           <PropertyGallery 
             images={formatGalleryImages()} 
             propertyId={property.id}
@@ -208,7 +207,7 @@ export default function PropertyPage() {
         </div>
 
         {/* Main Content */}
-        <div className="relative z-10 bg-gray-50">
+        <div className="relative bg-gray-50">
           {/* Mobile Tabs Navigation */}
           <div className="md:hidden">
             <Tabs defaultValue="description" className="w-full">
@@ -227,7 +226,7 @@ export default function PropertyPage() {
                       : 'bg-primary-blue'
                   } rounded-lg p-5 inline-block shadow-lg relative w-full`}>
                     {/* Card content */}
-                    <div className="relative z-20">
+                    <div className="relative ">
                       {/* Transaction Type Tag */}
                       <div className="flex items-center mb-1">
                         <Tag className={`w-4 h-4 mr-1 ${
@@ -412,7 +411,7 @@ export default function PropertyPage() {
                         : 'bg-primary-blue'
                     } rounded-lg p-6 shadow-lg relative`}>
                       {/* Card content */}
-                      <div className="relative z-20">
+                      <div className="relative">
                         {/* Transaction Type Tag */}
                         <div className="flex items-center mb-2">
                           <Tag className={`w-5 h-5 mr-2 ${
@@ -514,7 +513,8 @@ export default function PropertyPage() {
                 onClick={() => setShowContactForm(false)}
                 className="p-2 rounded-full hover:bg-primary-dark-blue/20"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x">
+                {/* strokeWidth="2" */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"  strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x">
                   <path d="M18 6 6 18"/>
                   <path d="m6 6 12 12"/>
                 </svg>

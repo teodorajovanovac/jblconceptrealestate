@@ -119,3 +119,4 @@ export interface ShortListDto {
     name: string;
     short: string;
 }
+

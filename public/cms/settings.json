@@ -1,5 +1,6 @@
 {
     "availableLanguages": ["sr", "en"],
-    "photoPath" : "",
-    "thumbnailPath" : ""
+    "property-image-path" : "https://jblconcept.rs/photos",
+    "property-image-placeholder" : "images/placeholder.svg",
+    "property-thumb-path" : "https://jblconcept.rs/photos"
 }

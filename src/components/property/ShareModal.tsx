@@ -7,17 +7,19 @@ import { useCmsData } from "../../services/CmsProvider";
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
+  sendUrl?: string;
+  title: string;
+  description: string;
 }
 
-const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
-  const { id } = useParams<{ id: string }>();
+const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title, description }) => {
   const [copied, setCopied] = useState(false);
   const [url, setUrl] = useState('');
   const { t } = useCmsData();
 
   useEffect(() => {
-    setUrl(window.location.href);
-  }, []);
+    setUrl(sendUrl || window.location.href);
+  }, [sendUrl]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(url);
@@ -27,17 +29,16 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
 
   const handleShare = (platform: string) => {
     let shareUrl = '';
-    const text = `${t('share-instagram-text')} ${url}`;
-
+    
     switch (platform) {
       case 'facebook':
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
         break;
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${title}`;
         break;
       case 'email':
-        shareUrl = `mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`;
+        shareUrl = `mailto:?subject=${title}&body=${makeEmailBody()} `;  
         break;
       case 'instagram':
         // Instagram nema direktan URL za deljenje, pa ćemo kopirati link
@@ -51,6 +52,10 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
 
     window.open(shareUrl, '_blank');
   };
+
+  const makeEmailBody = () => {
+    return `<p>Pogledajte ovu nekretninu na linku:</p><a href=${url}> ${title}</a><p> ${description} </p>`;
+  };  
 
   return (
     <AnimatePresence>
@@ -109,8 +114,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
             
             {/* Share buttons */}
             <div>
-              <p className="text-sm text-gray-600 mb-3">{t('share-on')}</p>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex justify-between px-6">
                 <button
                   onClick={() => handleShare('facebook')}
                   className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 text-white hover:bg-blue-700 transition-transform hover:-translate-y-1"

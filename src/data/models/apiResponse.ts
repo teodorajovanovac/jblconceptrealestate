@@ -1,13 +1,3 @@
-export interface ApiReturn<T> {
-    ok: boolean;
-    data?: T;
-    error?: unknown;
-    pageNumber?: number;
-    pageSize?: number;
-    totalRecords?: number;
-    totalPages?: number;
-  }
-
   export interface ApiResponse<T> {
     isSuccess: boolean;
     data?: T;
@@ -17,4 +7,13 @@ export interface ApiReturn<T> {
     totalRecords?: number;
     totalPages?: number;
   }
+
+  export interface ApiRequest<T> {
+    data?: T;
+    queryString?: string;
+    pageNumber?: number;
+    pageSize?: number;
+  }
+
+
   

@@ -1,7 +1,7 @@
 import React from 'react';
 import { LoginForm } from "../components/admin/LoginForm";
 import Header from '../components/header/Header';
-import FooterTW from '../components/footer/FooterTW';
+import FooterTW from '../components/footer/Footer';
 import Seo from '../services/meta/Seo';
 
 const LoginPage: React.FC = () => {

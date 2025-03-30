@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus, X, Search, Heart, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCmsData } from "../../services/CmsProvider";
 import PropertySearch from "../property/PropertySearch";
 import FavoritesDrawer from "../property/FavoritesDrawer";

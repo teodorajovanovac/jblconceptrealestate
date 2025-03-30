@@ -28,7 +28,7 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }, []);
 
   useEffect(() => {
-    console.log('Favorites changed, updating count:', favorites.length);
+   // console.log('Favorites changed, updating count:', favorites.length);
     setFavoritesCount(favorites.length);
   }, [favorites]);
 

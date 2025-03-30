@@ -12,17 +12,17 @@ import TagManager from 'react-gtm-module'
 // Otkomentarišem import za video fajl
 import videoBackground from '../assets/video/video.mp4'
 import Header from '../components/header/Header'
-import FooterTW from '../components/footer/FooterTW'
+import FooterTW from '../components/footer/Footer'
 import ContactForm from '../components/contact/ContactForm'
 import Testimonials from '../components/testimonials/Testimonials'
 import JBLGoldLogo from '../assets/jblgold.svg';  
 import Spinner from '../components/ui/Spinner';
 import useFavorites from '../hooks/useFavorites';
 import { useCmsData } from "../services/CmsProvider"
-import realEstate from '../data/realEstate';
-import { RealEstateDto } from '../data/models/realEstate';
+import realEstate from '../data/RealEstateData';
+import { RealEstateDto } from '../data/models/RealEstate';
 import { motion } from 'framer-motion';
-import Faq from '../components/faq/FAQ';
+import Faq from '../components/faq/Faq';
 import PropertyCard from '../components/property/ProperyCard';
 
 const tagManagerArgs = {
@@ -95,7 +95,7 @@ const LandingPage: React.FC = () => {
         price: property.price,
         location: `${property.locationCityName}${property.locationArea ? `, ${property.locationArea}` : ''}`,
         bedrooms: property.roomsNo,
-        bathrooms: property.bathroomNO,
+        //bathrooms: property.bathroomNO,
         area: property.area,
         image: property.photos && property.photos.length > 0 
           ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
@@ -190,7 +190,7 @@ const LandingPage: React.FC = () => {
                 <path 
                   strokeLinecap="round" 
                   strokeLinejoin="round" 
-                  strokeWidth={2} 
+                  //strokeWidth={2} 
                   d="M19 14l-7 7m0 0l-7-7m7 7V3" 
                 />
               </svg>

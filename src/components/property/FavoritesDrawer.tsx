@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { X, Heart, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { RealEstateDto } from "../../data/models/realEstate";
-import realEstate from "../../data/realEstate";
+import { RealEstateDto } from "../../data/models/RealEstate";
+import realEstate from "../../data/RealEstateData";
 import { useCmsData } from "../../services/CmsProvider";
 import { useFavorites } from "../../hooks/FavoritesContext";
 
@@ -15,7 +15,7 @@ interface FavoritesDrawerProps {
 const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) => {
   const [favorites, setFavorites] = useState<RealEstateDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { currentLanguage } = useCmsData();
+  const { t, currentLanguage } = useCmsData();
   const { clearAllFavorites } = useFavorites();
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
             <div className="flex items-center justify-between p-4 border-b">
               <div className="flex items-center">
                 <Heart className="h-5 w-5 text-red-500 mr-2 fill-current" />
-                <h3 className="text-lg font-semibold">Omiljene nekretnine</h3>
+                <h3 className="text-lg font-semibold">{t("favorites-title")}</h3>
               </div>
               {favorites.length > 0 && (
                 <button
@@ -116,7 +116,7 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
                     setFavorites([]);
                   }}
                   className="rounded-full p-2 hover:bg-red-50 text-red-500 hover:text-red-600 transition-colors"
-                  //title="Обриши све"
+                  title={t("favorites-clear")}
                 >
                   <Trash2 className="h-5 w-5" />
                 </button>
@@ -138,9 +138,9 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
               ) : favorites.length === 0 ? (
                 <div className="text-center py-8">
                   <Heart className="h-12 w-12 mx-auto text-gray-300 mb-3" />
-                  <p className="text-gray-500">Još uvek nemate omiljene nekretnine</p>
+                  <p className="text-gray-500">{t("favorites-empty")}</p>
                   <p className="text-sm text-gray-400 mt-1">
-                    Kada pronađete nekretninu koja vam se sviđa, kliknite na ikonicu srca
+                    {t("favorites-empty-description")}
                   </p>
                 </div>
               ) : (
@@ -156,12 +156,12 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
                           <Link to={`/property/${property.id}`} onClick={onClose}>
                             <img 
                               src={property.thumbnail != null  
-                                ? `https://jblconcept.rs/photos/${property.thumbnail}` 
-                                : "images/placeholder.svg"}
+                                ? `${t("property-thumb-path")}/${property.thumbnail}` 
+                                : `${t("property-thumb-placeholder")}`}
                               alt={property.typeName || "Property"}
                               className="w-full h-full object-cover"
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src = "images/placeholder.svg";
+                                (e.target as HTMLImageElement).src = `${t("property-thumb-placeholder")}`;
                               }}
                             />
                           </Link>
@@ -194,7 +194,7 @@ const FavoritesDrawer: React.FC<FavoritesDrawerProps> = ({ isOpen, onClose }) =>
                             <button 
                               onClick={() => removeFavorite(property.id)}
                               className="text-red-500 hover:text-red-600 p-1"
-                              title="Ukloni iz omiljenih"
+                              title={t("favorites-remove")}
                             >
                               <Heart className="h-4 w-4 fill-current" />
                             </button>

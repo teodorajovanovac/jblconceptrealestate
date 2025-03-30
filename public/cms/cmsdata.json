@@ -1,8 +1,22 @@
 {
-  "contact-phones": [
-    { "phone": "+381 66 80 27 377" },
-    { "phone": "+381 61 22 999 88" }
-  ],
+  "company-name": "Real Estate Concept",
+  "company-email": "office@jblconcept.rs",
+  "company-socials": 
+    { "instagram": "https://www.instagram.com/realestateconcept.jbl/" ,
+      "facebook": "" ,
+      "youtube": "" ,
+      "linkedin": "https://www.linkedin.com/in/jasna-baji%C4%87-ljubi%C4%8Di%C4%87-5176b534/" ,
+      "tiktok": "https://www.tiktok.com/@realestate_concept" ,
+      "twitter": "" ,
+      "pinterest": "" ,
+      "googlelocation": "https://www.google.com/maps/place/Мајке+Јевросиме+47,+Београд/@44.8146524,20.4641472,20.02z/data=!4m6!3m5!1s0x475a7ab1c9677c5f:0xea099311df32f4ce!8m2!3d44.8145671!4d20.4644988!16s%2Fg%2F11dzpqhx8p?hl=sr&entry=ttu&g_ep=EgoyMDI1MDMxNi4wIKXMDSoASAFQAw%3D%3D" 
+    },
+  
+  "company-phones": {
+      "phone": [
+         "+381 66 80 27 377" ,
+         "+381 61 22 999 88"
+        ]},
   "team-members": [
     {
       "name": "Jasna Bajić-Ljubičić",
@@ -13,6 +27,28 @@
       "name": "Jasna Bajić-Ljubičić",
       "image": "/images/jasna_smile.jpg",
       "license": "01499736"
+    }
+  ],
+  "range-steps" : [
+    {
+      "category": "I",
+      "name": "price",
+      "steps": 50
+    },
+    {
+      "category": "P",
+      "name": "price",
+      "steps": 1000
+    },
+    {
+      "category": "I",
+      "name": "area",
+      "steps": 5
+    },
+    {
+      "category": "P",
+      "name": "area",
+      "steps": 5
     }
   ]
 }

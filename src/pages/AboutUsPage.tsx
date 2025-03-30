@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import Header from "../components/header/Header"
-import FooterTW from "../components/footer/FooterTW"
+import FooterTW from "../components/footer/Footer"
 import Seo from '../services/meta/Seo'
 import { useCmsData } from "../services/CmsProvider"
 import getCmsData from "../data/cms"

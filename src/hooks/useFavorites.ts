@@ -23,7 +23,7 @@ export function useFavorites() {
 
   // Додајемо нови useEffect за праћење промена у favorites низу
   useEffect(() => {
-    console.log('Favorites changed, updating count:', favorites.length);
+    //console.log('Favorites changed, updating count:', favorites.length);
     // Форсирамо ажурирање favoritesCount чак и ако је иста вредност
     setFavoritesCount(prev => {
       const newCount = favorites.length;

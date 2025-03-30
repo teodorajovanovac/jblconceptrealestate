@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Building2, Key, Shield, Calculator, FileText, Search, Star, Phone, CheckCircle2, ClipboardCheck, Home, Users } from "lucide-react"
 import Header from '../components/header/Header'
-import FooterTW from '../components/footer/FooterTW'
+import FooterTW from '../components/footer/Footer'
 import Seo from '../services/meta/Seo'
 import { Link } from "react-router-dom"
 

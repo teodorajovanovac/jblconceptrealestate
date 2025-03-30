@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useNavigate, Link } from 'react-router-dom'
 import { Home, Search, FileText, ArrowLeft } from 'lucide-react'
 import Header from '../components/header/Header'
-import FooterTW from '../components/footer/FooterTW'
+import FooterTW from '../components/footer/Footer'
 import { useCmsData } from "../services/CmsProvider"
 
 const ErrorPage: React.FC = () => {

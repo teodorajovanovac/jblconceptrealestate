@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 import { motion } from "framer-motion"
 import Header from "../components/header/Header"
-import FooterTW from "../components/footer/FooterTW"
+import FooterTW from "../components/footer/Footer"
 import Seo from '../services/meta/Seo'
 import { useCmsData } from "../services/CmsProvider"
 import getCmsData from "../data/cms"

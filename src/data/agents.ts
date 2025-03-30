@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ApiAgents, ApiAgentById } from './api';
 import { ApiResponse } from './models/apiResponse';
-import { AgentDto } from './models/realEstate';
+import { AgentDto } from './models/RealEstate';
 import { Agent } from './models/agents';
 
 class AgentService {

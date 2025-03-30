@@ -1,7 +1,7 @@
 import React from 'react';
 import { AdminDashboard } from '../components/admin/AdminDashboard';
 import Header from '../components/header/Header';
-import FooterTW from '../components/footer/FooterTW';
+import FooterTW from '../components/footer/Footer';
 import Seo from '../services/meta/Seo';
 import { AuthGuard } from '../components/admin/AuthGuard';
 

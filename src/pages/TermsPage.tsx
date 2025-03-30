@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FileText, Scale, Users, Shield, Briefcase, ClipboardCheck } from 'lucide-react';
 import Header from '../components/header/Header';
-import FooterTW from '../components/footer/FooterTW';
+import FooterTW from '../components/footer/Footer';
 import Seo from '../services/meta/Seo';
 import { Link } from 'react-router-dom';
 import { useCmsData } from "../services/CmsProvider";

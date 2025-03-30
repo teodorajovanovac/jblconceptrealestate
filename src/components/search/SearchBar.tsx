@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { Search, ChevronDown, X } from 'lucide-react'
 import Slider from '@mui/material/Slider'
 import { styled } from '@mui/material/styles'
-import { PRICE_RANGES, AREA_RANGE, TransactionType } from '../../utils/constants'
-
-import realEstate from "../../data/realEstate"
-import { ShortListDto } from "../../data/models/realEstate"
+import realEstate from "../../data/RealEstateData"
 import { useCmsData } from '../../services/CmsProvider';
+import { ComboBoxDto } from '../../data/models/ComboBoxDto'
+import Dropdown from '../common/Dropdown'
+import { ValueRangesDto } from '../../data/models/ValueRangesDto'
+import { SearchFilters } from '../../data/models/SearchFilters';
+import Switch from '../common/switch/Switch'
 
 // Custom styled slider
 const CustomSlider = styled(Slider)(({ theme }) => ({
@@ -31,128 +33,31 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
   },
 }))
 
+interface RangeStep {
+  category: string
+  name: string
+  steps: number
+}
+
 interface SearchBarProps {
   onSearch: (filters: SearchFilters) => void;
+  defaultFilters?: SearchFilters;
+  onReady?: () => void;
 }
 
-interface SearchFilters {
-  transactionType: 'buy' | 'rent';
-  searchTerm: string;
-  propertyTypes: string[];
-  rooms: string[];
-  locations: string[];
-  priceRange: number[];
-  areaRange: number[];
-  features: string[];
-  bathrooms: string[];
-  floor: string[];
-  heating: string[];
-  parking: string[];
-}
-
-interface DropdownProps {
-  title: string;
-  options: string[];
-  selected: string[];
-  onChange: (value: string) => void;
-  isOpen: boolean;
-  onToggle: () => void;
-}
-
-// Dropdown komponenta sa checkboxovima
-const Dropdown = ({ title, options, selected, onChange, isOpen, onToggle }: DropdownProps) => {
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Zatvori dropdown kada se klikne van njega
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        if (isOpen) onToggle();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, onToggle]);
-
-  const handleChange = (option: string) => {
-    console.log(`Dropdown selected: ${option} in ${title}`);
-    console.log(`Current selected items in ${title}:`, selected);
-    onChange(option);
-  };
-
-  return (
-    <div ref={dropdownRef} className="relative">
-      <button
-        onClick={onToggle}
-        className="w-full px-4 py-2 text-left bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent hover:border-primary-blue transition-colors"
-      >
-        <div className="flex justify-between items-center">
-          <span className="text-gray-700">
-            {selected.length > 0 ? `${title} (${selected.length})` : title}
-          </span>
-          <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-        </div>
-      </button>
-      
-      {isOpen && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-          <div className="p-2 space-y-1">
-            {options.map((option, index) => (
-              <div 
-                key={`${title}-${option}-${index}`}
-                className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer"
-                onClick={() => handleChange(option)}
-                role="checkbox"
-                aria-checked={selected.includes(option)}
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleChange(option);
-                  }
-                }}
-              >
-                <input
-                  type="checkbox"
-                  id={`${title}-${option}-${index}`}
-                  checked={selected.includes(option)}
-                  onChange={(e) => {
-                    e.stopPropagation();
-                    handleChange(option);
-                  }}
-                  className="rounded border-gray-300 text-primary-blue focus:ring-primary-blue mr-2"
-                  aria-label={option}
-                />
-                <label 
-                  htmlFor={`${title}-${option}-${index}`}
-                  className="text-sm text-gray-700 cursor-pointer flex-grow"
-                >
-                  {option}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const SearchBar: React.FC<SearchBarProps> = (onSearch) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, defaultFilters, onReady }) => {
+  const [selectedAction, setAction] = useState<string>("P")
   const { t, currentLanguage } = useCmsData();
   const [error, setError] = useState<string | null>(null);
-  const [actionNames, setActionNames] = useState<ShortListDto[]>([])
-  const [propertyType, setPropertyType] = useState<ShortListDto[]>([])
-  const [location, setLocation] = useState<ShortListDto[]>([])
 
+  const [actionNames, setActionNames] = useState<ComboBoxDto[]>([])
+  const [propertyType, setPropertyType] = useState<ComboBoxDto[]>([])
+  const [location, setLocation] = useState<ComboBoxDto[]>([])
+  const [roomsNo, setRoomsNo] = useState<ComboBoxDto[]>([])
+  const [valueRanges, setValueRanges] = useState<ValueRangesDto[]>([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [priceRange, setPriceRange] = useState<number[]>([PRICE_RANGES.buy.min, PRICE_RANGES.buy.max])
-  const [areaRange, setAreaRange] = useState<number[]>([AREA_RANGE.min, AREA_RANGE.max])
   const [showMoreFilters, setShowMoreFilters] = useState(false)
-  const [transactionType, setTransactionType] = useState<'buy' | 'rent'>('buy')
-  
-  // Dropdown states
+  //action  
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([])
   const [selectedRooms, setSelectedRooms] = useState<string[]>([])
   const [selectedLocations, setSelectedLocations] = useState<string[]>([])
@@ -162,36 +67,145 @@ const SearchBar: React.FC<SearchBarProps> = (onSearch) => {
   const [selectedHeating, setSelectedHeating] = useState<string[]>([])
   const [selectedParking, setSelectedParking] = useState<string[]>([])
 
+  const [selectedPriceRange, setPriceRange] = useState<number[]>([])
+  const [selectedAreaRange, setAreaRange] = useState<number[]>([])
+
+  const [selectedNewBuilding, setSelectedNewBuilding] = useState<number>(0)
   
   // Dropdown visibility states
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
 
-
+  // Add useEffect to initialize ranges when valueRanges are loaded
   useEffect(() => {
-    fetchActionName()
-    fetchTypesName()
-    fetchLocation()
-  },[currentLanguage])
-
-  // Reset price range when transaction type changes
-  useEffect(() => {
-    setPriceRange([
-      PRICE_RANGES[transactionType].min,
-      PRICE_RANGES[transactionType].max
-    ])
-  }, [transactionType])
-
-
-  const formatPrice = (value: number) => {
-    if (transactionType === 'buy') {
-      return `${value / 1000} €`
+    if (valueRanges.length > 0 && selectedAction && t("range-steps", "object")) {
+      setPriceRange([
+        getMinMaxValue(selectedAction, 'price', true),
+        getMinMaxValue(selectedAction, 'price', false),
+      ]);
+      
+      setAreaRange([
+        getMinMaxValue(selectedAction, 'area', true),
+        getMinMaxValue(selectedAction, 'area', false)
+      ]);
     }
-    return `${value} €`
+  }, [valueRanges, selectedAction]);
+
+  // Separate useEffect for initial data loading
+  useEffect(() => {
+    const initializeData = async () => {
+      try {
+        setIsLoading(true);
+        // First fetch action names
+        await fetchActionName();
+        
+        // Then fetch other basic data in parallel
+        await Promise.all([
+          fetchTypesName(),
+          fetchLocation(),
+          fetchRoomsNo(),
+          fetchValueRanges()
+        ]);
+
+        // Set initial action (either from defaultFilters or default "P")
+        const initialAction = defaultFilters?.actionName || "P";
+        //setMaunualValueRanges(initialAction);
+        setAction(initialAction);
+        
+        // Fetch value ranges after action is set
+        
+        
+        setIsLoading(false);
+        onReady?.();
+      } catch (err) {
+        console.error('Error initializing SearchBar:', err);
+        setError("Failed to initialize search");
+        setIsLoading(false);
+      }
+    };
+
+    initializeData();
+  }, [currentLanguage]); // Only run on language change
+
+  // Add useEffect to handle search when ranges change
+  useEffect(() => {
+    if (!isLoading && selectedAction) {
+      const filters: SearchFilters = {
+        actionName: selectedAction,
+        searchTerm,
+        propertyTypes: selectedPropertyTypes,
+        rooms: selectedRooms,
+        locations: selectedLocations,
+        priceRange: selectedPriceRange,
+        areaRange: selectedAreaRange,
+        features: selectedFeatures,
+        bathrooms: selectedBathrooms,
+        floor: selectedFloor,
+        heating: selectedHeating,
+        parking: selectedParking,
+        newBuilding: selectedNewBuilding
+      };
+      
+      onSearch(filters);
+    }
+  }, [selectedAction]);
+
+  const setMaunualValueRanges = (newAction?: string, newPriceRange?: number[], newAreaRange?: number[]) => {
+    const action = newAction || selectedAction;
+
+    setPriceRange(newPriceRange || [
+      getMinMaxValue(action, 'price', true),
+      getMinMaxValue(action, 'price', false),
+    ]);
+    setAreaRange(newAreaRange || [
+      getMinMaxValue(action, 'area', true),
+      getMinMaxValue(action, 'area', false)
+    ]);
+  }
+
+  const formatPrice = (value: number | undefined) => {
+    if (value === undefined || isNaN(value)) return '0 €';
+    return new Intl.NumberFormat('sr-RS', {
+      maximumFractionDigits: 0
+    }).format(value) + ' €';
+  };
+
+  const formatArea = (value: number | undefined) => {
+    if (value === undefined || isNaN(value)) return '0 m²';
+    return new Intl.NumberFormat('sr-RS', {
+      maximumFractionDigits: 0
+    }).format(value) + ' m²';
+  };
+  
+  const getMinMaxValue = (actionShortName: string, fieldName: string, isMinValue: boolean) => {
+    const filtered = valueRanges.find(
+      (item) => item.actionShortName.toLowerCase() == actionShortName.toLowerCase() && item.fieldName.toLowerCase() === fieldName.toLowerCase()
+    );
+    return filtered ? (isMinValue ? filtered.minValue : filtered.maxValue) : 0;
+  };
+
+const getSteps = (actionName: string, fieldName: string): number => {
+  const rangeSteps = t("range-steps", "object") as RangeStep[];
+  // Add null/undefined check for CMS data
+  if (!rangeSteps) {
+    console.debug('CMS data not yet loaded');
+    return 1; // Default step while loading
   }
   
-  const formatArea = (value: number) => `${value} m²`
+  if (!Array.isArray(rangeSteps)) {
+    console.debug('range-steps is not in expected format:', rangeSteps);
+    return 1; // Default step if data structure is invalid
+  }
   
-  
+  const step = rangeSteps.find(
+    item => item.category.toLowerCase() === actionName.toLowerCase() && 
+           item.name.toLowerCase() === fieldName.toLowerCase()
+  );
+
+  return step?.steps || 1;
+};
+
 //#region "API CALLS"
 const fetchActionName = async () => {
   try{
@@ -199,8 +213,8 @@ const fetchActionName = async () => {
     if (result) 
       {
         setActionNames(result);
+        
       } else {
-        //blokada * error nema podataka
         setError("Failed to fetch property action name data");
       }
     } catch (err) {
@@ -215,9 +229,7 @@ const fetchTypesName = async () => {
     if (result) 
       {
         setPropertyType(result);
-        console.log("789",result);
       } else {
-        //blokada * error nema podataka
         setError("Failed to fetch property type data");
       }
   } catch (err) {
@@ -226,51 +238,45 @@ const fetchTypesName = async () => {
 }
 const fetchLocation = async () => {
   try {
-    const result = await realEstate.getLocation(currentLanguage);
+    const result = await realEstate.ApiLocationAreaCountyCity(currentLanguage);
     if (result) 
       {
         setLocation(result);
       } else {
-        //blokada * error nema podataka
         setError("Failed to fetch location data");
       }
   } catch (err) {
     setError("Failed to fetch location data");
   }
 }
-  
+const fetchRoomsNo = async () => {
+  try {
+    const result = await realEstate.getRoomsNo(currentLanguage);
+    if (result) 
+      {
+        setRoomsNo(result);
+      } else {
+        setError("Failed to fetch RoomsNo data");
+      }
+  } catch (err) {
+    setError("Failed to fetch RoomsNo data");
+  }
+}
+const fetchValueRanges = async () => {
+  try {
+    const result = await realEstate.getValueRanges();
+    console.log("valueRanges",result)
+    if (result) 
+      {
+        setValueRanges(result);
+      } else {
+        setError("Failed to fetch ValueRanges data");
+      }
+  } catch (err) {
+    setError("Failed to fetch ValueRanges data");
+  }
+}
 
-
-
-//#endregion
-
-
-  // Define more accurate options based on the API data
-
-  
-  const roomOptions = [
-    { label: 'Garsonjera', value: '0' },
-    { label: '1 soba', value: '1' },
-    { label: '1.5 soba', value: '1.5' },
-    { label: '2 sobe', value: '2' },
-    { label: '2.5 sobe', value: '2.5' },
-    { label: '3 sobe', value: '3' },
-    { label: '3.5 sobe', value: '3.5' },
-    { label: '4 sobe', value: '4' },
-    { label: '4+ sobe', value: '5' }
-  ];
-  
-  const featureOptions = [
-    'Terasa', 'Lift', 'Ostava', 'Namešten', 'Obezbeđenje', 
-    'Parking', 'Garaža', 'Klima', 'Internet', 'Interfon', 'Uknjiženo'
-  ];
-
-  // Add bathroom options
-  const bathroomOptions = [
-    '1 kupatilo', '2 kupatila', '3 kupatila', '4+ kupatila'
-  ];
-
-  // Update handleCheckboxChange function
   const handleCheckboxChange = (
     value: string,
     selected: string[],
@@ -285,89 +291,81 @@ const fetchLocation = async () => {
       newSelected = [...selected, value];
     }
     
-    console.log(`Toggling value: ${value} in category ${selected === selectedRooms ? 'rooms' : 
-                                                        selected === selectedLocations ? 'locations' : 
-                                                        selected === selectedPropertyTypes ? 'propertyTypes' : 'other'}`);
-    console.log('Previous selection:', selected);
-    console.log('New selection:', newSelected);
+    // console.log(`Toggling value: ${value} in category ${selected === selectedRooms ? 'rooms' : 
+    //                                                     selected === selectedLocations ? 'locations' : 
+    //                                                     selected === selectedPropertyTypes ? 'propertyTypes' : 'other'}`);
+    // console.log('Previous selection:', selected);
+    // console.log('New selection:', newSelected);
     
     // Update state with new selection
     setSelected(newSelected);
     
     // Immediately trigger a search with the updated filters
-    setTimeout(() => {
-      // First, create a copy of what the state will be
-      const updatedPropertyTypes = selected === selectedPropertyTypes ? newSelected : selectedPropertyTypes;
-      const updatedRooms = selected === selectedRooms ? newSelected : selectedRooms;
-      const updatedLocations = selected === selectedLocations ? newSelected : selectedLocations;
-      const updatedFeatures = selected === selectedFeatures ? newSelected : selectedFeatures;
+    // setTimeout(() => {
+    //   // First, create a copy of what the state will be
+    //   const updatedPropertyTypes = selected === selectedPropertyTypes ? newSelected : selectedPropertyTypes;
+    //   const updatedRooms = selected === selectedRooms ? newSelected : selectedRooms;
+    //   const updatedLocations = selected === selectedLocations ? newSelected : selectedLocations;
+    //   const updatedFeatures = selected === selectedFeatures ? newSelected : selectedFeatures;
       
-      console.log('Creating filters with updated values:', {
-        propertyTypes: updatedPropertyTypes,
-        rooms: updatedRooms,
-        locations: updatedLocations,
-        features: updatedFeatures
-      });
+    //   console.log('Creating filters with updated values:', {
+    //     propertyTypes: updatedPropertyTypes,
+    //     rooms: updatedRooms,
+    //     locations: updatedLocations,
+    //     features: updatedFeatures
+    //   });
       
-      const filters: SearchFilters = {
-        transactionType,
-        searchTerm,
-        propertyTypes: updatedPropertyTypes,
-        rooms: updatedRooms,
-        locations: updatedLocations,
-        priceRange,
-        areaRange,
-        features: updatedFeatures,
-        bathrooms: selectedBathrooms,
-        floor: selectedFloor,
-        heating: selectedHeating,
-        parking: selectedParking
-      };
+    //   const filters: SearchFilters = {
+    //     actionName,
+    //     searchTerm,
+    //     propertyTypes: updatedPropertyTypes,
+    //     rooms: updatedRooms,
+    //     locations: updatedLocations,
+    //     features: updatedFeatures,
+    //     bathrooms: selectedBathrooms,
+    //     floor: selectedFloor,
+    //     heating: selectedHeating,
+    //     parking: selectedParking
+    //   };
       
-      console.log('Sending search filters:', filters);
+    //   console.log('Sending search filters:', filters);
       
-      // Call onSearch with the updated filters
-      //onSearch(filters);
-    }, 100); // Small delay to ensure state is updated
+    //   // Call onSearch with the updated filters
+    //   //onSearch(filters);
+    // }, 100); // Small delay to ensure state is updated
   }
 
-  // Handle transaction type change
-  const handleTransactionTypeChange = (type: 'buy' | 'rent') => {
-    setTransactionType(type);
+  // Update handleActionChange to only update ranges
+  const handleActionChange = (newAction: string) => {
+    setAction(newAction);
     
-    // Update price range based on transaction type
-    const newPriceRange = [
-      PRICE_RANGES[type].min,
-      PRICE_RANGES[type].max
-    ];
-    setPriceRange(newPriceRange);
-    
-    // Create filters object with the new transaction type
-    const filters: SearchFilters = {
-      transactionType: type,
-      searchTerm,
-      propertyTypes: selectedPropertyTypes,
-      rooms: selectedRooms,
-      locations: selectedLocations,
-      priceRange: newPriceRange,
-      areaRange: areaRange,
-      features: selectedFeatures,
-      bathrooms: selectedBathrooms,
-      floor: selectedFloor,
-      heating: selectedHeating,
-      parking: selectedParking
-    };
-    
-    // Immediately trigger search with the new filters
-    //onSearch(filters);
+    // Update ranges for the new action
+    if (valueRanges.length > 0) {
+      setPriceRange([
+        getMinMaxValue(newAction, 'price', true),
+        getMinMaxValue(newAction, 'price', false),
+      ]);
+      
+      setAreaRange([
+        getMinMaxValue(newAction, 'area', true),
+        getMinMaxValue(newAction, 'area', false)
+      ]);
+    }
   };
 
   // Update the clear filters function
   const clearFilters = () => {
     // Reset all filter states
+    console.log("302 - SearcBar - clearFilters")
     setSearchTerm('');
-    setPriceRange([PRICE_RANGES[transactionType].min, PRICE_RANGES[transactionType].max]);
-    setAreaRange([AREA_RANGE.min, AREA_RANGE.max]);
+    setPriceRange([
+      getMinMaxValue(selectedAction, 'price', true),
+      getMinMaxValue(selectedAction, 'price', false),
+    ]);
+    setAreaRange([
+      getMinMaxValue(selectedAction, 'area', true),
+      getMinMaxValue(selectedAction, 'area', false)
+    ])
     setSelectedPropertyTypes([]);
     setSelectedRooms([]);
     setSelectedLocations([]);
@@ -376,57 +374,47 @@ const fetchLocation = async () => {
     setSelectedFloor([]);
     setSelectedHeating([]);
     setSelectedParking([]);
-    
-    // Trigger a search with cleared filters
-    // onSearch({
-    //   transactionType,
-    //   searchTerm: '',
-    //   propertyTypes: [],
-    //   rooms: [],
-    //   locations: [],
-    //   priceRange: [PRICE_RANGES[transactionType].min, PRICE_RANGES[transactionType].max],
-    //   areaRange: [AREA_RANGE.min, AREA_RANGE.max],
-    //   features: [],
-    //   bathrooms: [],
-    //   floor: [],
-    //   heating: [],
-    //   parking: []
-    // });
+    setSelectedNewBuilding(-1);
   }
+
+  
 
   const toggleDropdown = (name: string) => {
     setOpenDropdown(openDropdown === name ? null : name);
   };
 
+  // Add early return for loading state with a proper loading UI
+  if (isLoading || !actionNames.length || !valueRanges.length) {
+    return (
+      <div className="w-full max-w-7xl mx-auto px-4">
+        <div className="flex justify-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-7xl mx-auto px-4">
       {/* Transaction Type Toggle - Larger buttons */}
-
       <div className="flex justify-center gap-3 mb-6">
-        <button
-          onClick={() => handleTransactionTypeChange('buy')}
-          className={`px-10 py-3 rounded-full text-lg font-semibold transition-all duration-200 shadow ${
-            transactionType === 'buy'
-              ? 'bg-primary-blue text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          Kupi
-        </button>
-        <button
-          onClick={() => handleTransactionTypeChange('rent')}
-          className={`px-10 py-3 rounded-full text-lg font-semibold transition-all duration-200 shadow ${
-            transactionType === 'rent'
-              ? 'bg-primary-blue text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-        >
-          Iznajmi
-        </button>
+        {actionNames.map((action) => (
+          <button
+            key={action.value}
+            onClick={() => handleActionChange(action.value)}
+            className={`px-10 py-3 rounded-full text-lg font-semibold transition-all duration-200 shadow ${
+              selectedAction === action.value
+                ? 'bg-primary-blue text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            {action.caption}
+          </button>
+        ))}
       </div>
 
       {/* Search Input */}
-      <div className="relative mb-8">
+      {/* <div className="relative mb-8">
         <input
           type="text"
           placeholder="Pretraži po adresi, gradu ili kraju"
@@ -435,59 +423,48 @@ const fetchLocation = async () => {
           className="w-full px-6 py-4 text-lg border border-gray-200 rounded-lg focus:outline-none focus:border-primary-blue"
         />
         <Search className="absolute right-6 top-1/2 transform -translate-y-5 text-gray-400 w-6 h-6" />
-      </div>
+      </div> */}
 
       {/* Primary Filters Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Dropdown
           title={t("property-type")}
-          options={propertyType.map(option => option.name)}
-          selected={selectedPropertyTypes.map(value => 
-            propertyType.find(opt => opt.short === value)?.name || value
-          )}
-          onChange={(label) => {
-            const option = propertyType.find(opt => opt.name === label);
-            if (option) {
-              handleCheckboxChange(option.short, selectedPropertyTypes, setSelectedPropertyTypes);
-            }
-          }}
+          options={propertyType}
+          selected={selectedPropertyTypes}
+          onChange={(value) => handleCheckboxChange(value, selectedPropertyTypes, setSelectedPropertyTypes)}
           isOpen={openDropdown === 'propertyType'}
           onToggle={() => toggleDropdown('propertyType')}
+          hasSearch
         />
-
-        {/* <Dropdown
-          title="Broj soba"
-          options={roomOptions.map(option => option.label)}
-          selected={selectedRooms.map(value => {
-            const roomOption = roomOptions.find(opt => opt.value === value);
-            return roomOption ? roomOption.label : value;
-          })}
-          onChange={(label) => {
-            console.log('Room dropdown selection:', label);
-            const option = roomOptions.find(opt => opt.label === label);
-            if (option) {
-              console.log('Found option for room:', option);
-              handleCheckboxChange(option.value, selectedRooms, setSelectedRooms);
-            } else {
-              console.log('No matching room option found for label:', label);
-              handleCheckboxChange(label, selectedRooms, setSelectedRooms);
-            }
-          }}
-          isOpen={openDropdown === 'rooms'}
-          onToggle={() => toggleDropdown('rooms')}
-        /> */}
 
         <Dropdown
           title={t("property-location")}
-          options={location.map(option => option.name)}
-          selected={selectedLocations.map(value => 
-            location.find(opt => opt.short === value)?.name || value
-          )}
-          
+          options={location}
+          selected={selectedLocations}
           onChange={(value) => handleCheckboxChange(value, selectedLocations, setSelectedLocations)}
           isOpen={openDropdown === 'location'}
           onToggle={() => toggleDropdown('location')}
+          hasSearch
         />
+      <div className="flex justify-between">
+        <Dropdown
+          title={t("property-rooms")}
+          options={roomsNo}
+          selected={selectedRooms}
+          onChange={(value) => handleCheckboxChange(value, selectedRooms, setSelectedRooms)}
+          isOpen={openDropdown === 'roomsNo'}
+          onToggle={() => toggleDropdown('roomsNo')}
+          hasSearch 
+          className="min-w-[200px]"
+        />
+        <Switch
+          title={t("property-new-building")}
+          selected={selectedNewBuilding}
+          onChange={(value: number) => setSelectedNewBuilding(value)}
+          isChecked={selectedNewBuilding === 1}
+          onToggle={() => setSelectedNewBuilding(selectedNewBuilding === 1 ? 0 : 1)}
+        />
+        </div>
       </div>
 
       {/* Range Sliders */}
@@ -495,38 +472,38 @@ const fetchLocation = async () => {
         {/* Price Range Slider */}
         <div>
           <div className="flex justify-between mb-2">
-            <span className="font-medium text-gray-700">CENA</span>
+            <span className="font-medium text-gray-700">{t("property-price")}</span>
             <span className="text-gray-600">
-              {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
+              {formatPrice(selectedPriceRange[0])} - {formatPrice(selectedPriceRange[1])}
             </span>
           </div>
           <CustomSlider
-            value={priceRange}
+            value={selectedPriceRange}
             onChange={(_, newValue) => setPriceRange(newValue as number[])}
             valueLabelDisplay="auto"
-            valueLabelFormat={formatPrice}
-            min={PRICE_RANGES[transactionType].min}
-            max={PRICE_RANGES[transactionType].max}
-            step={transactionType === 'buy' ? 1000 : 50}
+            valueLabelFormat={(value) => `${value} €`}
+            min={getMinMaxValue(selectedAction, 'price', true)}
+            max={getMinMaxValue(selectedAction, 'price', false)}
+            step={getSteps(selectedAction, 'price')}
           />
         </div>
 
         {/* Area Range Slider */}
         <div>
           <div className="flex justify-between mb-2">
-            <span className="font-medium text-gray-700">POVRŠINA</span>
+            <span className="font-medium text-gray-700">{t("property-area")}</span>
             <span className="text-gray-600">
-              {formatArea(areaRange[0])} - {formatArea(areaRange[1])}
+              {formatArea(selectedAreaRange[0])} - {formatArea(selectedAreaRange[1])}
             </span>
           </div>
           <CustomSlider
-            value={areaRange}
+            value={selectedAreaRange}
             onChange={(_, newValue) => setAreaRange(newValue as number[])}
             valueLabelDisplay="auto"
             valueLabelFormat={formatArea}
-            min={AREA_RANGE.min}
-            max={AREA_RANGE.max}
-            step={5}
+            min={getMinMaxValue(selectedAction, 'area', true)}
+            max={getMinMaxValue(selectedAction, 'area', false)}
+            step={getSteps(selectedAction, 'area')}
           />
         </div>
       </div>
@@ -577,28 +554,29 @@ const fetchLocation = async () => {
         selectedLocations.length > 0 || selectedFeatures.length > 0) && (
         <div className="flex flex-wrap gap-2 mt-3 mb-6">
           {selectedPropertyTypes.map(value => {
-            const option = propertyType.find(opt => opt.short === value);
+            const option = propertyType.find(opt => opt.value === value);
             return (
-              <div key={`type-${value}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
-                {option?.name || value}
+              <div key={`type-${value}`} className="bg-slate-100 text-primary-blue pl-3 rounded-full text-sm flex items-center">
+                {option?.caption || value}
                 <button 
                   onClick={() => handleCheckboxChange(value, selectedPropertyTypes, setSelectedPropertyTypes)}
-                  className="ml-1 text-blue-500 hover:text-blue-700"
+                  className="text-gray-500 bg-slate-200 hover:text-gray-700 hover:bg-slate-300 rounded-full p-1 m-1 ml-2"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             );
           })}
-          
+
+      
           {selectedRooms.map(value => {
-            const option = roomOptions.find(opt => opt.value === value);
+            const option = roomsNo.find(opt => opt.value === value);
             return (
-              <div key={`room-${value}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
-                {option?.label || value}
+              <div key={`room-${value}`} className="bg-slate-100 text-primary-blue pl-3 rounded-full text-sm flex items-center">
+                {option?.caption || value}
                 <button 
                   onClick={() => handleCheckboxChange(value, selectedRooms, setSelectedRooms)}
-                  className="ml-1 text-blue-500 hover:text-blue-700"
+                 className="text-gray-500 bg-slate-200 hover:text-gray-700 hover:bg-slate-300 rounded-full p-1 m-1 ml-2"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -607,11 +585,11 @@ const fetchLocation = async () => {
           })}
           
           {selectedLocations.map(location => (
-            <div key={`location-${location}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
+            <div key={`location-${location}`} className="bg-slate-100 text-primary-blue pl-3 rounded-full text-sm flex items-center">
               {location}
               <button 
                 onClick={() => handleCheckboxChange(location, selectedLocations, setSelectedLocations)}
-                className="ml-1 text-blue-500 hover:text-blue-700"
+                className="text-gray-500 bg-slate-200 hover:text-gray-700 hover:bg-slate-300 rounded-full p-1 m-1 ml-2"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -619,11 +597,11 @@ const fetchLocation = async () => {
           ))}
           
           {selectedFeatures.map(feature => (
-            <div key={`feature-${feature}`} className="bg-blue-100 text-primary-blue px-3 py-1 rounded-full text-sm flex items-center">
+            <div key={`feature-${feature}`} className="bg-slate-100 text-primary-blue pl-3 rounded-full text-sm flex items-center">
               {feature}
               <button 
                 onClick={() => handleCheckboxChange(feature, selectedFeatures, setSelectedFeatures)}
-                className="ml-1 text-blue-500 hover:text-blue-700"
+                className="text-gray-500 bg-slate-200 hover:text-gray-700 hover:bg-slate-300 rounded-full p-1 m-1 ml-2"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -639,18 +617,19 @@ const fetchLocation = async () => {
             onClick={() => setShowMoreFilters(!showMoreFilters)}
             className="text-primary-blue hover:text-secondary-blue text-lg flex items-center"
           >
-            {showMoreFilters ? 'Manje' : 'Više'} filtera
-            <ChevronDown className={`ml-1 w-5 h-5 transform transition-transform ${showMoreFilters ? 'rotate-180' : ''}`} />
+            
+            <ChevronDown className={`ml-0 mr-1 w-5 h-5 transform transition-transform ${showMoreFilters ? 'rotate-180' : ''}`} />
+            {showMoreFilters ? t("property-search-less") : t("property-search-more") } 
           </button>
           {(selectedPropertyTypes.length > 0 || selectedRooms.length > 0 || selectedLocations.length > 0 || 
             selectedFeatures.length > 0 || selectedBathrooms.length > 0 || selectedFloor.length > 0 || 
             selectedHeating.length > 0 || searchTerm !== '') && (
             <button 
               onClick={clearFilters}
-              className="text-gray-500 hover:text-red-500 text-sm flex items-center ml-4"
+              className="text-gray-500 hover:text-red-500 text-lg flex items-center ml-4"
             >
-              <X className="w-4 h-4 mr-1" />
-              Očisti filtere
+              <X className="w-4 h-4 mr-1 " />
+             { t("property-search-clear")}
             </button>
           )}
         </div>
@@ -662,24 +641,23 @@ const fetchLocation = async () => {
             
             // Prepare filters object
             const filters: SearchFilters = {
-              transactionType,
+              actionName: selectedAction,
               searchTerm,
               propertyTypes: selectedPropertyTypes,
               rooms: selectedRooms,
               locations: selectedLocations,
-              priceRange: [priceRange[0], priceRange[1]],
-              areaRange: [areaRange[0], areaRange[1]],
+              priceRange: selectedPriceRange,
+              areaRange: selectedAreaRange,
               features: selectedFeatures,
               bathrooms: selectedBathrooms,
               floor: selectedFloor,
               heating: selectedHeating,
-              parking: selectedParking
+              parking: selectedParking,
+              newBuilding: selectedNewBuilding
             };
-            
-            console.log("Applying search filters:", filters);
-            
-            // Call onSearch with all filters
-          //  onSearch(filters);
+          
+            // Call onSearch with filters
+            onSearch(filters);
             
             // Reset button after a short delay
             setTimeout(() => {
@@ -688,7 +666,7 @@ const fetchLocation = async () => {
           }}
           className="cta-button rounded-full"
         >
-          <span>Pretraži</span>
+          <span>{t("property-search")}</span>
         </button>
       </div>
     </div>

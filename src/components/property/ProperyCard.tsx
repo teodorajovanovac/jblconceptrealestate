@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Bath, Bed, Heart, MapPin, Square } from "lucide-react";
 import { Link } from "react-router-dom";
-import { RealEstateDto } from "../../data/models/realEstate";
+import { RealEstateDto } from "../../data/models/RealEstate";
 import { useFavorites } from "../../hooks/FavoritesContext";
 import { useEffect } from "react";
 
@@ -53,11 +53,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
     };
   
     const getLuxuryBadge = () => {
-      if (property.lux === 1) {
+      if (property.lux === 0) {
         return (
-          <div className="absolute top-4 left-4 z-10">
-            <span className="bg-primary-blue text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
-              Premium
+          <div className="absolute bottom-0 left-0 z-20">
+            <span className="bg-secondary-blue text-white px-3 py-1 text-sm font-medium shadow-lg opacity-90">
+              lux
             </span>
           </div>
         );
@@ -68,9 +68,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
     const getPropertyTypeBadge = () => {
       if (property.typeName) {
         return (
-          <div className="absolute bottom-4 left-4 z-10">
+          <div className="absolute bottom-4 left-4 z-20">
             <span className="bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-medium shadow-lg">
-              {property.typeName}
+              {property.typeName} 
             </span>
           </div>
         );
@@ -133,13 +133,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
               {/* Action Badge - Top Left */}
               <div className="absolute top-4 left-4 z-20">
                 <span className={`${isRental ? 'bg-primary-gold' : 'bg-primary-blue'} text-white px-4 py-2 rounded-full text-base font-semibold shadow-lg`}>
-                  {property.actionName || (language === 'sr' ? "Prodaja" : "For Sale")}
+                  {property.actionName || (language === 'sr' ? "Prodaja" : "For Sale")} 
                 </span>
               </div>
               
               {/* Property Type Badge - Bottom Left */}
               {getPropertyTypeBadge()}
-              
+              {getLuxuryBadge()}
               {/* Price - Bottom Right */}
               <div className="absolute bottom-4 right-4">
                 <span className="text-white text-[1.8rem] font-bold shadow-lg px-3 py-1 bg-custom-black/50 rounded-lg">
@@ -191,10 +191,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
                   </div>
                 ) : null}
                 
-                {property.bathroomNO ? (
+                {property.bathroomNo ? (
                   <div className="flex items-center">
                     <Bath className="w-4 h-4 mr-1" />
-                    <span className="text-sm">{property.bathroomNO}</span>
+                    <span className="text-sm">{property.bathroomNo}</span>
                   </div>
                 ) : null}
               </div>
