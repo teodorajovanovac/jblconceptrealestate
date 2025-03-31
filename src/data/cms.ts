@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AgentsResponse } from "./models/agents";
+import { AgentsResponse } from "./models/Agents";
 import { TestimonialResponse } from "./models/Testimonial";
 
 const getCmsData = () => ({
