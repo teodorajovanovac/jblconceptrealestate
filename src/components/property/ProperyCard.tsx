@@ -19,33 +19,29 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
     };
   
     const getFeatures = () => {
-      // Use spaces for features as this seems to be a string listing features
-      const features = (property.spaces || '').split(',').map(item => item.trim()).filter(Boolean);
-      // Use floorNoString which is string | null instead of floorNo which is a number
-      const floor = property.floorNoString || '';
+      // Provera da li spaces postoji i da li je string
+      const features = property.spaces?.split(',').map(item => item.trim()).filter(Boolean) || [];
       
-      // Split floor string by commas
-      const floors = floor.split(',').map((item: string) => item.trim()).filter(Boolean);
+      // Provera da li description postoji i da li je string
+      const tags = property.description?.split(',').map(item => item.trim()).filter(Boolean) || [];
+      
+      const displayFeatures: string[] = [...tags, ...features ].slice(0, 10);
+
+      // Provera da vidimo šta je dostupno u podacima
+      console.log("Spaces:", property.spaces);
+      console.log("Description:", property.description);
+      console.log("Parsed features:", features);
+      console.log("Parsed tags:", tags);
       
       return (
         <div className="flex flex-wrap gap-1 mt-2">
-          {/* Display floor items as separate badges only if floor info exists */}
-          {floors.length > 0 && floors.map((floorItem: string, index: number) => (
-            <span 
-              key={`floor-${index}`} 
-              className="bg-gray-100 px-3 py-1.5 rounded-full text-sm text-gray-600"
-            >
-              {floorItem}
-            </span>
-          ))}
-  
-          {/* Display other features only if they exist */}
-          {features.length > 0 && features.slice(0, 2).map((feature: string, index: number) => (
+          {/* Prikazujemo sve features */}
+          {displayFeatures.length > 0 && displayFeatures.map((feature: string, index: number) => (
             <span 
               key={`feature-${index}`} 
               className="bg-gray-100 px-3 py-1.5 rounded-full text-sm text-gray-600"
             >
-              {feature}
+              {feature} 
             </span>
           ))}
         </div>
@@ -78,9 +74,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
       return null;
     };
   
-
-    
-
     const isRental = property.actionShortName?.toLowerCase().includes('i') || 
                      property.actionShortName?.toLowerCase().includes('k');
   
@@ -140,7 +133,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
               {/* Property Type Badge - Bottom Left */}
               {getPropertyTypeBadge()}
               {getLuxuryBadge()}
-              {/* Price - Bottom Right */}
+              
+              {/* Price - Bosttom Right */}
               <div className="absolute bottom-4 right-4">
                 <span className="text-white text-[1.8rem] font-bold shadow-lg px-3 py-1 bg-custom-black/50 rounded-lg">
                   {formatPrice(property.price)} €

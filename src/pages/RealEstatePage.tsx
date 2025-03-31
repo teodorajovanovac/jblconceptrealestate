@@ -56,10 +56,10 @@ const RealEstatePage: React.FC = () => {
   }, [currentPage, currentLanguage, isSearchBarReady]);
 
   const fetchProperties = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      
+      try {
+        setIsLoading(true);
+        setError(null);
+        
       const searchParams: ApiRequest<SearchFilters> = {
         data: searchFilters, 
         pageNumber: currentPage,
@@ -68,24 +68,24 @@ const RealEstatePage: React.FC = () => {
 
       console.log("Fetching page:", currentPage);
       const response = await realEstate.getSearchData(searchParams);
-      
-      if (response.isSuccess && response.data && response.data.length > 0) {
+        
+        if (response.isSuccess && response.data && response.data.length > 0) {
         setTotalPages(response.totalPages!);
         setProperties(prevProperties => 
           currentPage === 1 
             ? response.data || [] 
             : [...prevProperties, ...(response.data || [])]
         );
-      } else {
+        } else {
         setError(currentLanguage === 'sr' ? 'Nema pronađenih nekretnina' : 'No properties found');
-      }
-    } catch (err) {
-      console.error('Error loading properties:', err);
+        }
+      } catch (err) {
+        console.error('Error loading properties:', err);
       setError(currentLanguage === 'sr' ? 'Greška prilikom učitavanja nekretnina' : 'Error loading properties');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
   // Intersection Observer za infinite scroll
   useEffect(() => {
@@ -125,7 +125,7 @@ const RealEstatePage: React.FC = () => {
     if (currentObserverRef) {
       observer.observe(currentObserverRef);
     }
-
+    
     return () => {
       if (currentObserverRef) {
         observer.unobserve(currentObserverRef);
@@ -154,7 +154,7 @@ const RealEstatePage: React.FC = () => {
       if (response.isSuccess && response.data && response.data.length > 0) {
         setTotalPages(response.totalPages!);
         setProperties(response.data);
-      } else {
+            } else {
         setProperties([]);
         setError(currentLanguage === 'sr' 
           ? 'Nema pronađenih nekretnina koje odgovaraju vašim kriterijumima' 
@@ -227,24 +227,24 @@ const RealEstatePage: React.FC = () => {
           
           <div className="fixed left-4 top-28 z-30">
             {favoritesCount > 0 ? (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 0.2 }}
-              >
-                <button
-                  onClick={() => setIsFavoritesDrawerOpen(true)}
+          <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+            >
+              <button
+                onClick={() => setIsFavoritesDrawerOpen(true)}
                   className="flex items-center space-x-2 bg-white rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-shadow hidden md:flex"
-                >
+              >
                   <Heart className={`h-5 w-5 ${favoritesCount > 0 ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
-                  <span className="font-medium text-gray-800">
+                <span className="font-medium text-gray-800">
                     {favoritesCount} {t("favorites-title")}
-                  </span>
-                </button>
-              </motion.div>
+                </span>
+              </button>
+          </motion.div>
             ) : (
               <div></div>
-            )}
+          )}
           </div>
 
           {/* Search Bar Component */}
@@ -261,7 +261,7 @@ const RealEstatePage: React.FC = () => {
               <Spinner size="sm" />
             </div>
           )}
-
+          
           {/* Results Section */}
           <div className="mt-8">
             {/* Prikazujemo error ako postoji */}
@@ -280,21 +280,21 @@ const RealEstatePage: React.FC = () => {
             
             {/* Grid sa nekretninama */}
             {properties.length > 0 && (
-              <motion.div
+          <motion.div
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-0"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-              >
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+                >
                 {properties.map((property, index) => (
-                  <PropertyCard 
-                    key={`${property.id}-${index}`} 
-                    property={property} 
-                    index={index} 
+                    <PropertyCard 
+                      key={`${property.id}-${index}`} 
+                      property={property} 
+                      index={index} 
                     language={currentLanguage} 
-                  />
-                ))}
-              </motion.div>
+                    />
+            ))}
+          </motion.div>
             )}
             
             {/* Loader za infinite scroll */}
