@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Facebook, Twitter, Mail, Copy, Share2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useParams } from "react-router-dom";
 import { useCmsData } from "../../services/CmsProvider";
 
 interface ShareModalProps {
@@ -54,7 +53,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title
   };
 
   const makeEmailBody = () => {
-    return `<p>Pogledajte ovu nekretninu na linku:</p><a href=${url}> ${title}</a><p> ${description} </p>`;
+    return `Pogledajte ovu nekretninu na linku%0D%0A${url}%0D%0A%0D%0A${title}%0D%0A%0D%0A${description}%0D%0A%0D%0A`;
   };  
 
   return (

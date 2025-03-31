@@ -5,8 +5,8 @@ import Header from "../components/header/Header"
 import FooterTW from "../components/footer/Footer"
 import Seo from '../services/meta/Seo'
 import { useCmsData } from "../services/CmsProvider"
-import getCmsData from "../data/cms"
-import { Agent } from "../data/models/agents"
+import getCmsData from "../data/Cms"
+import { Agent } from "../data/models/Agents"
 
 
 const AboutUsPage: React.FC = () => {
