@@ -17,7 +17,6 @@ import ContactForm from '../components/contact/ContactForm'
 import Testimonials from '../components/testimonials/Testimonials'
 import JBLGoldLogo from '../assets/jblgold.svg';  
 import Spinner from '../components/ui/Spinner';
-import useFavorites from '../hooks/useFavorites';
 import { useCmsData } from "../services/CmsProvider"
 import realEstate from '../data/RealEstateData';
 import { RealEstateDto } from '../data/models/RealEstate';
@@ -375,8 +374,8 @@ const LandingPage: React.FC = () => {
                     {/* Second image - hidden on mobile */}
                     <div className="hidden md:block md:col-span-5 aspect-[3/4] overflow-hidden rounded-xl shadow-xl">
                       <img 
-                        src="/images/dedinje_2_uvecana.jpg" 
-                        alt="Dedinje" 
+                        src="/images/zen_place.jpg" 
+                        alt="Zen" 
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500 opacity-85"
                       />
                     </div>

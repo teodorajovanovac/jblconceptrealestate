@@ -7,8 +7,8 @@ interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
   sendUrl?: string;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }
 
 const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title, description }) => {

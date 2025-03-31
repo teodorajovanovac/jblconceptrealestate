@@ -83,7 +83,7 @@ const ActionButtons: React.FC = () => {
   // Dodatna funkcija za praćenje promene favoritesCount
   useEffect(() => {
     let previousCount = 0;
-    
+    console.log("action favoritesCount:", favoritesCount);
     // Funkcija koja će se pozvati kada se ažurira favoritesCount
     const handleFavoritesUpdate = () => {
       // Ako je novi broj favorita veći od prethodnog, korisnik je upravo lajkovao novu nekretninu

@@ -11,7 +11,7 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails"
 import Zoom from "yet-another-react-lightbox/plugins/zoom"
 import "yet-another-react-lightbox/plugins/thumbnails.css"
 import ShareModal from "./ShareModal"
-import useFavorites from "../../hooks/useFavorites"
+import { useFavorites } from "../../hooks/FavoritesContext";
 
 interface PropertyGalleryProps {
   images: string[];
@@ -20,13 +20,14 @@ interface PropertyGalleryProps {
 }
 
 export default function PropertyGallery({ images, propertyId = 0, propertyTitle = "Nekretnina" }: PropertyGalleryProps) {
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [index, setIndex] = useState(-1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   //const location = useLocation();
-  const { isFavorite, toggleFavorite } = useFavorites();
+  
   
   // Make sure images is an array and has at least one item
   const safeImages = Array.isArray(images) && images.length > 0 ? images : ['/placeholder-image.jpg'];
@@ -81,13 +82,21 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
   };
 
   // Toggle favorite
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleToggleFavorite = (e: React.MouseEvent, propertyId: number) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (propertyId) {
-      toggleFavorite(propertyId);
-      // Refresh the page after toggling favorite status
-      //window.location.reload();
+    
+    // Dodajemo klasu za animaciju na srce
+    const heartIcon = e.currentTarget.querySelector('svg');
+    if (heartIcon) {
+      heartIcon.classList.add('favorite-animation');
+      // Uklanjamo klasu nakon što se animacija završi
+      setTimeout(() => {
+        heartIcon.classList.remove('favorite-animation');
+      }, 600);
     }
+    
+    toggleFavorite(propertyId);
   };
 
   // Handle image loading errors
@@ -114,7 +123,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
           </button>
           <button 
             className="p-2 bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-300" 
-            onClick={handleFavoriteClick}
+            onClick={(e) => handleToggleFavorite(e, propertyId)}
             aria-label={isFavorite(propertyId) ? "Remove from favorites" : "Add to favorites"}
           >
             <Heart 
@@ -279,7 +288,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
           </button>
           <button 
             className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors group"
-            onClick={handleFavoriteClick}
+            onClick={(e) => handleToggleFavorite(e, propertyId)}
             aria-label={isFavorite(propertyId) ? "Remove from favorites" : "Add to favorites"}
           >
             <Heart 
@@ -315,7 +324,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
       <ShareModal 
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
-        url={currentUrl}
+        sendUrl={currentUrl}
         title={propertyTitle}
       />
     </>

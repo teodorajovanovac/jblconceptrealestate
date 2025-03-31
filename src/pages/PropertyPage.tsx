@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Calendar, Bed, Bath, Square, Home, Euro, Tag } from "lucide-react"
+import { Bed, Bath, Square, Home, Euro, Tag } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import PropertyGallery from "../components/property/PropertyGallery"
 import ContactAgentCard from "../components/property/ContactAgentCard"
-import PropertyFeatures from "../components/property/PropertyFeatures"
+import PropertyFeatures from "../components/property/PropertyFeatures" //STA JE OVO
 import PropertyMap from "../components/property/PropertyMap"
 import Header from "../components/header/Header"
 import FooterTW from "../components/footer/Footer"
@@ -13,21 +13,13 @@ import Seo from "../services/meta/Seo"
 import { useParams, Link } from "react-router-dom"
 import realEstate from "../data/RealEstateData"
 import { RealEstateDto, AgentDto } from "../data/models/RealEstate"
-import Spinner from '../components/ui/Spinner'
+import Spinner from '../components/ui/Spinner' //ZASTO NE OVO
 import { useCmsData } from "../services/CmsProvider"
 
-const defaultAgent: AgentDto = {
-  name: "Agent",
-  surname: "Agent",
-  company: "JBL Real Estate Concept",
-  licence: "1234567890",
-  email: "contact@jblconcept.rs",
-  phone: "+381 00 0000000",
-  mobile: "+381 00 0000000",
-  image: "/placeholder-agent.jpg"
-};
+
 
 export default function PropertyPage() {
+  const { t, currentLanguage } = useCmsData();
   const { id } = useParams<{ id: string }>();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
@@ -35,7 +27,7 @@ export default function PropertyPage() {
   const [property, setProperty] = useState<RealEstateDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { t } = useCmsData();
+  
   
   const agentCardRef = useRef<HTMLDivElement>(null);
   const agentCardWrapperRef = useRef<HTMLDivElement>(null);

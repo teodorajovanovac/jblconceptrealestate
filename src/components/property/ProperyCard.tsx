@@ -3,7 +3,6 @@ import { Bath, Bed, Heart, MapPin, Square } from "lucide-react";
 import { Link } from "react-router-dom";
 import { RealEstateDto } from "../../data/models/RealEstate";
 import { useFavorites } from "../../hooks/FavoritesContext";
-import { useEffect } from "react";
 
 interface PropertyCardProps {
     property: RealEstateDto;

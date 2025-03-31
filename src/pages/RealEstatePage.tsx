@@ -39,7 +39,7 @@ const RealEstatePage: React.FC = () => {
 
   
   
-  const { favoritesCount, favorites, isFavorite } = useFavorites();
+  const { favoritesCount } = useFavorites();
   
   const [error, setError] = useState<string | null>(null);
   
@@ -186,13 +186,13 @@ const RealEstatePage: React.FC = () => {
   //   hasHook: !!useFavorites
   // });
 
-  useEffect(() => {
-    console.log('Favorites array changed:', favorites?.length);
-  }, [favorites]);
+  // useEffect(() => {
+  //   console.log('Favorites array changed:', favorites?.length);
+  // }, [favorites]);
 
-  useEffect(() => {
-    console.log('FavoritesCount changed:', favoritesCount);
-  }, [favoritesCount]);
+  // useEffect(() => {
+  //   console.log('FavoritesCount changed:', favoritesCount);
+  // }, [favoritesCount]);
 
   // Додајемо лог при сваком рендеровању
   //PROVERI KASNIJE

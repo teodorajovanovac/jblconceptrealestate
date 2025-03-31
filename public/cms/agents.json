@@ -4,11 +4,11 @@
       "id": 1,
       "name": "Jasna Bajić-Ljubičić",
       "title": {
-        "sr": "DIREKTOR",
-        "en": "DIRECTOR"
+        "sr": "DIREKTOR I OSNIVAČ",
+        "en": "DIRECTOR & FOUNDER"
       },
-      "licence":"01499736",
-      "images": ["/images/jasna_closeup_smile.jpg","/images/jasna.jpg" ],
+      "licence":"333",
+      "images": ["/images/jasna_closeup_out.jpg","/images/jasna.jpg" ],
       "shortbio":{
         "sr": "Stručnost u analizi i rešavanju imovinsko-pravnih pitanja.",
         "en": "Expertise in analyzing and resolving property legal issues."
@@ -19,7 +19,7 @@
       },
       "contact": {
         "phone": "+381 63 123 4567",
-        "email": "jasnabajiclg@gmail.com"
+        "email": "office@jblconcept.rs"
       }
     },
     {
@@ -29,7 +29,7 @@
         "sr": "ADMINISTRATOR",
         "en": "ADMINISTRATOR"
       },
-      "license": "01499737",
+      "license": "",
       "images": ["/images/maja_closeup.jpg","/images/maja.jpg"],
       "shortbio":{
         "sr": "Harizma, efikasnost i odlučnost u komunikaciji sa klijentima.",
@@ -41,7 +41,7 @@
       },
       "contact": {
         "phone": "+381 11 123 4568",
-        "email": "office@concept.rs"
+        "email": "office@jblconcept.rs"
       }
     }
   ]
