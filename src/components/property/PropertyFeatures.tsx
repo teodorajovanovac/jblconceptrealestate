@@ -1,9 +1,14 @@
+import { useCmsData } from "../../services/CmsProvider"
+
+
 interface PropertyFeaturesProps {
   title: string
   features: Record<string, string | number | boolean>
 }
 
 export default function PropertyFeatures({ title, features }: PropertyFeaturesProps) {
+  const { t } = useCmsData();
+
   // Helper funkcija za razdvajanje stringa u niz i uklanjanje praznih prostora
   const splitFeatures = (value: string) => {
     return value.split(',').map(item => item.trim()).filter(item => item);
@@ -11,7 +16,7 @@ export default function PropertyFeatures({ title, features }: PropertyFeaturesPr
 
   // Helper funkcija za formatiranje prikaza vrednosti
   const formatFeatureValue = (key: string, value: string | number | boolean) => {
-    if (key === "Tip nekretnine") {
+    if (key === t("property-type")) {
       const typeParts = value.toString().split(' + ');
       return (
         <div className="flex flex-wrap gap-2">
@@ -22,7 +27,7 @@ export default function PropertyFeatures({ title, features }: PropertyFeaturesPr
           ))}
         </div>
       );
-    } else if (key === "Dodatne prostorije" || key === "Karakteristike" || key === "Sprat") {
+    } else if (key === t("property-additional-rooms") || key === t("property-characteristics") || key === t("property-floor")) {
       const items = splitFeatures(value.toString());
       return (
         <div className="flex flex-wrap gap-2">

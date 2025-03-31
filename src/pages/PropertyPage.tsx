@@ -139,27 +139,48 @@ export default function PropertyPage() {
     if (!property) return {};
     
     // Create initial features object with all properties
-    const allFeatures: Record<string, any> = {
+    const generalFeatures: Record<string, any> = {
       [t("property-type")]: property.subTypeName 
         ? `${property.typeName} + ${property.subTypeName}`
         : property.typeName || 'N/A',
       [t("property-area")]: property.area ? `${property.area} m²` : 'N/A',
       [t("property-rooms")]: property.roomsNo || 'N/A',
       [t("property-bathrooms")]: property.bathroomNo || 'N/A',
+      [t("property-bedroom-no")]: property.bedroomNo || 'N/A',
       [t("property-floor")]: property.floorNoString || 'N/A',
       [t("property-additional-rooms")]: property.spaces || 'N/A',
       [t("property-characteristics")]: property.description || 'N/A',
+      [t("property-ceiling-height")]: property.ceilingHeight ? `${property.ceilingHeight} m²` : 'N/A',
+      [t("property-energy-efficiency-class")]: property.energyEfficiencyClass || 'N/A',
+      [t("property-condition-name")]: property.propertyConditionName || 'N/A',
+      [t("property-moving-in")]: property.yearAdapted || 'N/A',
+      [t("property-actual-age")]: property.actualAge || 'N/A',
+      [t("property-price-supplement")]: property.priceSupplement || 'N/A',
+      [t("property-luxury-class")]: property.lux || 'N/A',
+      [t("property-adress")]: property.locationArea || 'N/A',
+      [t("property-transportation")]: property.transportation || 'N/A',
+      [t("property-position")]: property.positionName || 'N/A',
+      [t("property-joinery")]: property.joinery || 'N/A',
+      [t("property-heating")]: property.heating || 'N/A',
+      [t("property-equipment")]: property.equipment || 'N/A',
+      [t("property-orientation")]: property.orientation || 'N/A',
+      [t("property-infrastructure")]: property.infrastructure || 'N/A',
+      [t("property-speciality")]: property.speciality || 'N/A',
+      [t("property-access")]: property.access || 'N/A',
+      [t("property-center")]: property.center || 'N/A',
+      [t("property-adress")]: property.adress || 'N/A',
+      [t("property-type")]: property.typeName || 'N/A',
     };
     
     // Filter out any properties with 'N/A' values
-    const features: Record<string, any> = {};
-    Object.entries(allFeatures).forEach(([key, value]) => {
+    const features1: Record<string, any> = {};
+    Object.entries(generalFeatures).forEach(([key, value]) => {
       if (value !== 'N/A') {
-        features[key] = value;
+        features1[key] = value;
       }
     });
 
-    return features;
+    return features1;
   };
 
   // Loading state
@@ -288,7 +309,14 @@ export default function PropertyPage() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="features" className="px-4">
+              <TabsContent value="features1" className="px-4">
+                <PropertyFeatures 
+                  title={t("property-features")} 
+                  features={processFeatures()} 
+                />
+              </TabsContent>
+
+              <TabsContent value="features2" className="px-4">
                 <PropertyFeatures 
                   title={t("property-features")} 
                   features={processFeatures()} 
