@@ -132,47 +132,47 @@ export default function PropertyPage() {
     
     // Create initial features object with all properties
     const generalFeatures: Record<string, any> = {
-      [t("property-type")]: property.subTypeName 
+      [t("property-type")]: [property.subTypeName 
         ? `${property.typeName} + ${property.subTypeName}`
-        : property.typeName || 'N/A',
-      [t("property-area")]: property.area ? `${property.area} m²` : 'N/A',
-      [t("property-rooms")]: property.roomsNo || 'N/A',
-      [t("property-bathrooms")]: property.bathroomNo || 'N/A',
-      [t("property-bedroom-no")]: property.bedroomNo || 'N/A',
-      [t("property-floor")]: property.floorNoString || 'N/A',
-      [t("property-additional-rooms")]: property.spaces || 'N/A',
-      [t("property-characteristics")]: property.description || 'N/A',
-      [t("property-ceiling-height")]: property.ceilingHeight ? `${property.ceilingHeight} m²` : 'N/A',
-      [t("property-energy-efficiency-class")]: property.energyEfficiencyClass || 'N/A',
-      [t("property-condition-name")]: property.propertyConditionName || 'N/A',
-      [t("property-moving-in")]: property.yearAdapted || 'N/A',
-      [t("property-actual-age")]: property.actualAge || 'N/A',
-      [t("property-price-supplement")]: property.priceSupplement || 'N/A',
-      [t("property-luxury-class")]: property.lux || 'N/A',
-      [t("property-adress")]: property.locationArea || 'N/A',
-      [t("property-transportation")]: property.transportation || 'N/A',
-      [t("property-position")]: property.positionName || 'N/A',
-      [t("property-joinery")]: property.joinery || 'N/A',
-      [t("property-heating")]: property.heating || 'N/A',
-      [t("property-equipment")]: property.equipment || 'N/A',
-      [t("property-orientation")]: property.orientation || 'N/A',
-      [t("property-infrastructure")]: property.infrastructure || 'N/A',
-      [t("property-speciality")]: property.speciality || 'N/A',
-      [t("property-access")]: property.access || 'N/A',
-      [t("property-center")]: property.center || 'N/A',
-      [t("property-adress")]: property.adress || 'N/A',
-      [t("property-type")]: property.typeName || 'N/A',
+        : property.typeName || 'N/A', " + "],
+      [t("property-area")]: [property.area ? `${property.area} m²` : 'N/A',""],
+      [t("property-rooms")]: [property.roomsNo || 'N/A',""],
+      [t("property-bathrooms")]: [property.bathroomNo || 'N/A',""],
+      [t("property-bedroom-no")]: [property.bedroomNo || 'N/A',""],
+      [t("property-floor")]: [property.floorNoString || 'N/A',","],
+      [t("property-additional-rooms")]: [property.spaces || 'N/A',","],
+      [t("property-characteristics")]: [property.description || 'N/A',","],
+      [t("property-ceiling-height")]: [property.ceilingHeight ? `${property.ceilingHeight} m²` : 'N/A',""],
+      [t("property-energy-efficiency-class")]: [property.energyEfficiencyClass || 'N/A',""],
+      [t("property-condition-name")]: [property.propertyConditionName || 'N/A',","],
+      [t("property-moving-in")]: [property.yearAdapted || 'N/A',""],
+      [t("property-actual-age")]: [property.actualAge || 'N/A',""],
+      [t("property-price-supplement")]: [property.priceSupplement || 'N/A',""],
+      [t("property-luxury-class")]: [property.lux || 'N/A',""],
+      [t("property-adress")]: [property.locationArea || 'N/A',""],
+      [t("property-transportation")]: [property.transportation || 'N/A',","],
+      [t("property-position")]: [property.positionName || 'N/A',""],
+      [t("property-joinery")]: [property.joinery || 'N/A',""],
+      [t("property-heating")]: [property.heating || 'N/A',""],
+      [t("property-equipment")]: [property.equipment || 'N/A',","],
+      [t("property-orientation")]: [property.orientation || 'N/A',""],
+      [t("property-infrastructure")]: [property.infrastructure || 'N/A',""],
+      [t("property-speciality")]: [property.speciality || 'N/A',""],
+      [t("property-access")]: [property.access || 'N/A',","],
+      [t("property-center")]: [property.center || 'N/A',""],
+      [t("property-adress")]: [property.adress || 'N/A',""],
+      [t("property-type")]: [property.typeName || 'N/A',""],
     };
     
     // Filter out any properties with 'N/A' values
-    const features1: Record<string, any> = {};
+    const features: Record<string, any> = {};
     Object.entries(generalFeatures).forEach(([key, value]) => {
-      if (value !== 'N/A') {
-        features1[key] = value;
+      if (value[0] !== 'N/A') {
+        features[key] = value;
       }
     });
 
-    return features1;
+    return features;
   };
 
   // Loading state
@@ -226,7 +226,7 @@ export default function PropertyPage() {
             <Tabs defaultValue="description" className="w-full">
               <TabsList className="w-full px-2 h-12 grid grid-cols-3 gap-1">
                 <TabsTrigger value="description">{t("property-description")}</TabsTrigger>
-                <TabsTrigger value="features">{t("property-features")}</TabsTrigger>
+                <TabsTrigger value="features2">{t("property-features")}</TabsTrigger>
                 <TabsTrigger value="location">{t("property-location")}</TabsTrigger>
               </TabsList>
 

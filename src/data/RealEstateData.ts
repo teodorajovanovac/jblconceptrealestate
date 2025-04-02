@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ApiActionName, ApiLocation, ApiLocationArea, ApiLocationAreaCountyCity, ApiPropertyType, ApiRealEstate, ApiRealEstateFeatured, ApiRealEstateFromList, ApiRoomsNo, ApiValueRanges } from "./Api";
+import { ApiActionName, ApiLocation, ApiLocationArea, ApiLocationAreaCity, ApiLocationAreaCountyCity, ApiPropertyType, ApiRealEstate, ApiRealEstateFeatured, ApiRealEstateFromList, ApiRoomsNo, ApiValueRanges } from "./Api";
 import { LocationDto, RealEstateDto } from "./models/RealEstate";
 import { ApiRequest, ApiResponse } from "./models/ApiResponse";
 import { SearchFilters } from "./models/SearchFilters"
@@ -110,13 +110,24 @@ const realEstate = {
       throw err;
     }
   },
-  async ApiLocationAreaCountyCity(langCode?: string): Promise<ComboBoxDto[]> {
+  async getLocationAreaCountyCity(langCode?: string): Promise<ComboBoxDto[]> {
     try {
       const url = langCode ? `${ApiLocationAreaCountyCity}?langCode=${langCode}` : `${ApiLocationAreaCountyCity}`;
       const response = await axios.get(url);
       return response.data;
     } catch (err) {
       console.error("Error fetching locations:", err);
+      throw err;
+    }
+  },
+
+  async getLocationAreaCity(langCode?: string): Promise<ComboBoxDto[]> {
+    try {
+      const url = langCode ? `${ApiLocationAreaCity}?langCode=${langCode}` : `${ApiLocationAreaCity}`;
+      const response = await axios.get(url);
+      return response.data;
+    } catch (err) {
+      console.error("Error fetching locations area city:", err);
       throw err;
     }
   },

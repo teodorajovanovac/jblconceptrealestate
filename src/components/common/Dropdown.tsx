@@ -55,7 +55,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   }, [isOpen]);
 
   return (
-    <div className={`relative ${containerClassName}`}>
+    <div className={`relative ${containerClassName}`} ref={dropdownRef}>
       <button
         onClick={onToggle}
         className={`w-full px-4 py-2.5 text-left bg-white border rounded-lg 

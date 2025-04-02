@@ -9,6 +9,7 @@ export interface SearchFilters {
     propertyTypes: string[];
     rooms: string[];
     locations: string[];
+    locationsAreaCity: string[];
     priceRange: number[];
     areaRange: number[];
     features: string[];
@@ -25,6 +26,7 @@ export interface SearchFilters {
     propertyTypes: [],
     rooms: [],
     locations: [],
+    locationsAreaCity: [],
     priceRange: [],
     areaRange: [],
     features: [],
@@ -41,6 +43,7 @@ export interface SearchFilters {
     propertyTypes: ComboBoxDto[];
     rooms: ComboBoxDto[];
     locations: ComboBoxDto[];
+    locationsAreaCity: ComboBoxDto[];
     priceRange: ValueRangesDto[];
     areaRange: ValueRangesDto[];
     features: ComboBoxDto[];
@@ -57,6 +60,7 @@ export interface SearchFilters {
     propertyTypes: [],
     rooms: [],
     locations: [],
+    locationsAreaCity: [],
     priceRange: [],
     areaRange: [],
     features: [],

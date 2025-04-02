@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Search, ChevronDown, X } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import Slider from '@mui/material/Slider'
 import { styled } from '@mui/material/styles'
 import realEstate from "../../data/RealEstateData"
@@ -9,6 +9,7 @@ import Dropdown from '../common/Dropdown'
 import { ValueRangesDto } from '../../data/models/ValueRangesDto'
 import { SearchFilters } from '../../data/models/SearchFilters';
 import Switch from '../common/switch/Switch'
+import Dropdowntree from '../common/dropdowntree/Dropdowntree'
 
 // Custom styled slider
 const CustomSlider = styled(Slider)(({ theme }) => ({
@@ -53,6 +54,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, defaultFilters, onReady
   const [actionNames, setActionNames] = useState<ComboBoxDto[]>([])
   const [propertyType, setPropertyType] = useState<ComboBoxDto[]>([])
   const [location, setLocation] = useState<ComboBoxDto[]>([])
+  const [locationAreaCity, setLocationAreaCity] = useState<ComboBoxDto[]>([])
   const [roomsNo, setRoomsNo] = useState<ComboBoxDto[]>([])
   const [valueRanges, setValueRanges] = useState<ValueRangesDto[]>([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -61,6 +63,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, defaultFilters, onReady
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([])
   const [selectedRooms, setSelectedRooms] = useState<string[]>([])
   const [selectedLocations, setSelectedLocations] = useState<string[]>([])
+  const [selectedLocationsAreaCity, setSelectedLocationsAreaCity] = useState<string[]>([])
+  
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
   const [selectedBathrooms, setSelectedBathrooms] = useState<string[]>([])
   const [selectedFloor, setSelectedFloor] = useState<string[]>([])
@@ -104,6 +108,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, defaultFilters, onReady
         await Promise.all([
           fetchTypesName(),
           fetchLocation(),
+          fetchLocationAreaCity(),
           fetchRoomsNo(),
           fetchValueRanges()
         ]);
@@ -137,6 +142,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, defaultFilters, onReady
         propertyTypes: selectedPropertyTypes,
         rooms: selectedRooms,
         locations: selectedLocations,
+        locationsAreaCity: selectedLocationsAreaCity,
         priceRange: selectedPriceRange,
         areaRange: selectedAreaRange,
         features: selectedFeatures,
@@ -238,7 +244,7 @@ const fetchTypesName = async () => {
 }
 const fetchLocation = async () => {
   try {
-    const result = await realEstate.ApiLocationAreaCountyCity(currentLanguage);
+    const result = await realEstate.getLocationAreaCountyCity(currentLanguage);
     if (result) 
       {
         setLocation(result);
@@ -249,6 +255,23 @@ const fetchLocation = async () => {
     setError("Failed to fetch location data");
   }
 }
+
+const fetchLocationAreaCity = async () => {
+  try {
+    const result = await realEstate.getLocationAreaCity(currentLanguage);
+    if (result) 
+      {
+
+
+        setLocationAreaCity(result);
+      } else {
+        setError("Failed to fetch location data");
+      }
+  } catch (err) {
+    setError("Failed to fetch location data");
+  }
+}
+
 const fetchRoomsNo = async () => {
   try {
     const result = await realEstate.getRoomsNo(currentLanguage);
@@ -277,27 +300,41 @@ const fetchValueRanges = async () => {
   }
 }
 
+  // Modify handleCheckboxChange for tree structure
   const handleCheckboxChange = (
     value: string,
     selected: string[],
     setSelected: (value: string[]) => void
   ) => {
     // Create new array based on current selection
-    let newSelected: string[];
+    let newSelected = [...selected];
     
     if (selected.includes(value)) {
-      newSelected = selected.filter(item => item !== value);
+      // Remove the value
+      newSelected = newSelected.filter(item => item !== value);
+      
+      // If this is a parent, also remove all its children
+      const parentOption = locationAreaCity.find(opt => opt.value === value);
+      if (parentOption?.children) {
+        newSelected = newSelected.filter(item => 
+          !parentOption.children!.some(child => child.value === item)
+        );
+      }
     } else {
-      newSelected = [...selected, value];
+      // Add the value
+      newSelected.push(value);
+      
+      // If this is a parent and all its children are selected, add them too
+      const parentOption = locationAreaCity.find(opt => opt.value === value);
+      if (parentOption?.children) {
+        parentOption.children.forEach(child => {
+          if (!newSelected.includes(child.value)) {
+            newSelected.push(child.value);
+          }
+        });
+      }
     }
     
-    // console.log(`Toggling value: ${value} in category ${selected === selectedRooms ? 'rooms' : 
-    //                                                     selected === selectedLocations ? 'locations' : 
-    //                                                     selected === selectedPropertyTypes ? 'propertyTypes' : 'other'}`);
-    // console.log('Previous selection:', selected);
-    // console.log('New selection:', newSelected);
-    
-    // Update state with new selection
     setSelected(newSelected);
     
     // Immediately trigger a search with the updated filters
@@ -434,9 +471,9 @@ const fetchValueRanges = async () => {
           onChange={(value) => handleCheckboxChange(value, selectedPropertyTypes, setSelectedPropertyTypes)}
           isOpen={openDropdown === 'propertyType'}
           onToggle={() => toggleDropdown('propertyType')}
-          hasSearch
+          hasSearch={false}
         />
-
+{/* 
         <Dropdown
           title={t("property-location")}
           options={location}
@@ -445,6 +482,16 @@ const fetchValueRanges = async () => {
           isOpen={openDropdown === 'location'}
           onToggle={() => toggleDropdown('location')}
           hasSearch
+        /> */}
+        <Dropdowntree
+          title={t("property-location")}
+          options={locationAreaCity}
+          selected={selectedLocationsAreaCity}
+          onChange={(value) => handleCheckboxChange(value, selectedLocationsAreaCity, setSelectedLocationsAreaCity)}
+          isOpen={openDropdown === 'locationAreaCity'}
+          onToggle={() => toggleDropdown('locationAreaCity')}
+          hasSearch
+          expandAll={true}
         />
       <div className="flex justify-between">
         <Dropdown
@@ -454,8 +501,8 @@ const fetchValueRanges = async () => {
           onChange={(value) => handleCheckboxChange(value, selectedRooms, setSelectedRooms)}
           isOpen={openDropdown === 'roomsNo'}
           onToggle={() => toggleDropdown('roomsNo')}
-          hasSearch 
           className="min-w-[200px]"
+          hasSearch={false}
         />
         <Switch
           title={t("property-new-building")}
@@ -551,7 +598,7 @@ const fetchValueRanges = async () => {
 
       {/* Active Filter Pills */}
       {(selectedPropertyTypes.length > 0 || selectedRooms.length > 0 || 
-        selectedLocations.length > 0 || selectedFeatures.length > 0) && (
+        selectedLocations.length > 0 || selectedFeatures.length > 0 || selectedLocationsAreaCity.length > 0) && (
         <div className="flex flex-wrap gap-2 mt-3 mb-6">
           {selectedPropertyTypes.map(value => {
             const option = propertyType.find(opt => opt.value === value);
@@ -584,17 +631,26 @@ const fetchValueRanges = async () => {
             );
           })}
           
-          {selectedLocations.map(location => (
-            <div key={`location-${location}`} className="bg-slate-100 text-primary-blue pl-3 rounded-full text-sm flex items-center">
-              {location}
+          {selectedLocationsAreaCity.map(value => {
+            const option = locationAreaCity.find(opt => 
+              opt.value === value || opt.children?.some(child => child.value === value)
+            );
+            const isChild = option?.children?.some(child => child.value === value);
+            const parent = isChild ? option : null;
+            const childOption = isChild ? option?.children?.find(child => child.value === value) : null;
+            
+            return (
+              <div key={`location-${value}`} className="bg-slate-100 text-primary-blue pl-3 rounded-full text-sm flex items-center">
+                {isChild ? `${parent?.caption} > ${childOption?.caption}` : option?.caption}
               <button 
-                onClick={() => handleCheckboxChange(location, selectedLocations, setSelectedLocations)}
+                  onClick={() => handleCheckboxChange(value, selectedLocationsAreaCity, setSelectedLocationsAreaCity)}
                 className="text-gray-500 bg-slate-200 hover:text-gray-700 hover:bg-slate-300 rounded-full p-1 m-1 ml-2"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
-          ))}
+            );
+          })}
           
           {selectedFeatures.map(feature => (
             <div key={`feature-${feature}`} className="bg-slate-100 text-primary-blue pl-3 rounded-full text-sm flex items-center">
@@ -646,6 +702,7 @@ const fetchValueRanges = async () => {
               propertyTypes: selectedPropertyTypes,
               rooms: selectedRooms,
               locations: selectedLocations,
+              locationsAreaCity: selectedLocationsAreaCity,
               priceRange: selectedPriceRange,
               areaRange: selectedAreaRange,
               features: selectedFeatures,
