@@ -59,49 +59,53 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
     const isSelecting = !selected.includes(option.value);
     
     if (option.children && option.children.length > 0) {
-      // If selecting parent, select all children
+      // This is a parent node with children
       if (isSelecting) {
-        // First select the parent
+        // First select the parent - this will automatically select all children
+        // due to the logic in handleCheckboxChange
         onChange(option.value);
-        // Then select all children
-        // option.children.forEach(child => {
-        //   onChange(child.value);
-        // });
       } else {
-        // If unselecting parent, unselect all children
+        // When unselecting a parent, unselect all children too
         // First unselect the parent
         onChange(option.value);
-        // Then unselect all children
-        // option.children.forEach(child => {
-        //   onChange(child.value);
-        // });
+        
+        // We don't need to explicitly unselect children as the handleCheckboxChange
+        // function in SearchBar.tsx already takes care of this
       }
     } else {
-      // Handle leaf node selection
-      onChange(option.value);
+      // This is a leaf node (no children)
+      onChange(option.value); // Toggle this node's selection
       
-      // Find and update parent state
-      const parent = options.find(opt => 
-        opt.children?.some(child => child.value === option.value)
-      );
+      // If this is a child, we need to handle parent state
+      const findParent = (items: ComboBoxDto[]): ComboBoxDto | null => {
+        for (const item of items) {
+          if (item.children?.some(child => child.value === option.value)) {
+            return item;
+          }
+          if (item.children?.length) {
+            const found = findParent(item.children);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+      
+      const parent = findParent(options);
       
       if (parent) {
-        const allSiblingsSelected = parent.children!.every(child => 
-          selected.includes(child.value) || child.value === option.value
-        );
-        
-        console.log("allSiblingsSelected", allSiblingsSelected);
-        console.log("parent is selected", selected.includes(parent.value));
-        console.log("selected value before", selected);
-
-        if (allSiblingsSelected && selected.includes(parent.value) ) {
-          console.log("selecting parent", parent.value);
-          onChange(parent.value); // Select parent if all children are selected
+        // When selecting a child, check if all siblings are selected
+        if (isSelecting) {
+          const allSiblingsSelected = parent.children!.every(child => 
+            child.value === option.value || selected.includes(child.value)
+          );
+          
+          // If selecting this child would make all siblings selected, also select the parent
+          if (allSiblingsSelected && !selected.includes(parent.value)) {
+            onChange(parent.value);
+          }
         }
-        // if (allSiblingsSelected && !selected.includes(parent.value)) {
-        //   onChange(parent.value); // Select parent if all children are selected
-        // } 
-        
+        // When unselecting a child, we do not modify the parent's state
+        // This is the key fix to maintain parent checked state when children are unchecked
       }
     }
   };
@@ -124,12 +128,14 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
     const hasChildren = option.children && option.children.length > 0;
     const isExpanded = expandedItems.has(option.value);
     const isSelected = selected.includes(option.value);
-    const allChildrenSelected = hasChildren && option.children!.every(child => 
+    
+    // Calculate child selection status - ensure they're boolean values by using !! or Boolean()
+    const allChildrenSelected = Boolean(hasChildren && option.children!.every(child => 
       selected.includes(child.value)
-    );
-    const someChildrenSelected = hasChildren && option.children!.some(child => 
+    ));
+    const someChildrenSelected = Boolean(hasChildren && option.children!.some(child => 
       selected.includes(child.value)
-    );
+    ));
 
     return (
       <div key={option.value}>
@@ -141,11 +147,12 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
             <input
               type="checkbox"
               className="checkbox__input"
-              checked={isSelected || allChildrenSelected}
+              checked={isSelected}
               onChange={() => handleParentSelect(option)}
               ref={input => {
-                if (input && hasChildren && someChildrenSelected !== undefined && allChildrenSelected !== undefined) {
-                  input.indeterminate = someChildrenSelected && !allChildrenSelected;
+                if (input && hasChildren) {
+                  // Set indeterminate state when some (but not all) children are selected
+                  input.indeterminate = someChildrenSelected && !allChildrenSelected && !isSelected;
                 }
               }}
             />
