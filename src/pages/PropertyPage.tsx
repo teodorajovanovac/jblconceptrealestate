@@ -124,6 +124,9 @@ export default function PropertyPage() {
     if (!property?.photos || property.photos.length === 0) {
       return ['/images/placeholder.svg'];
     }
+
+    
+
     return property.photos.map(photo => `https://jblconcept.rs/photos/${photo.name}`);
   };
 

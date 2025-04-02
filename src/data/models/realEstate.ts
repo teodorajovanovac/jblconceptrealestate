@@ -16,6 +16,12 @@ export interface AgentDto {
     image: string | 0;
 }
 
+export interface VideoDto {
+    name: string;
+    link: string;
+}
+
+
 export interface RealEstateDto {
     id: number;
     price: number | 0;
@@ -93,6 +99,7 @@ export interface RealEstateDto {
     photos: PhotoDto[];
     agents?: AgentDto[];
     thumbnail: string | null;
+    videos?: VideoDto[];
 }
 
 export interface LocationDto {
