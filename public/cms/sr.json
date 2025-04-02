@@ -21,6 +21,12 @@
   "form-request-placeholder": "Opišite vaš zahtev...",
   "contact-form-text": "Naš stručni tim je tu da vam pomogne u svim aspektima vezanim za nekretnine - od kupovine i prodaje, preko menadžmenta nekretnina do konsaltinga i istraživanja tržišta. Kontaktirajte nas i odgovorićemo vam u roku od 2 sata.",
 
+  "realestate-title": "Pronađite svoju idealnu nekretninu",
+  "realestate-description": "Istražite našu ekskluzivnu kolekciju premium nekretnina i pronađite savršen dom ili investiciju.",
+  "realestate-error-not-found": "Nema pronađenih nekretnina",
+  "realestate-error-not-found-criteria": "Nema pronađenih nekretnina koje odgovaraju vašim kriterijumima",
+  "realestate-error-loading": "Greška prilikom učitavanja nekretnina",
+
   "property-not-found": "Nekretnina nije pronađena",
   "property-error": "Došlo je do greške prilikom učitavanja podataka",
   "property-removed": "Tražena nekretnina ne postoji ili je uklonjena.",
@@ -171,7 +177,8 @@
 
   "share-modal-title": "Podelite nekretninu",
   "share-modal-description": "Pogledajte ovu nekretninu na linku:",
-  
+  "share-email-check-out": "Proverite ovu nekretninu",
+
   "favorites-title": "Omiljene nekretnine",
   "favorites-empty": "Još uvek nemate omiljene nekretnine",
   "favorites-empty-description": "Kada pronađete nekretninu koja vam se sviđa, kliknite na ikonicu srca",

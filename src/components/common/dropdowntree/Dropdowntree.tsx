@@ -95,7 +95,7 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
       if (parent) {
         // When selecting a child, check if all siblings are selected
         if (isSelecting) {
-          const allSiblingsSelected = parent.children!.every(child => 
+        const allSiblingsSelected = parent.children!.every(child => 
             child.value === option.value || selected.includes(child.value)
           );
           
