@@ -170,7 +170,7 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
             {contactInfo.email && contactInfo.email !== "0" && (
               <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
                 <Mail className="h-5 w-5 text-gray-600" />
-                <div>
+          <div>
                   <div className="text-sm text-gray-500">{emailText}</div>
                   <a href={`mailto:${contactInfo.email}`} className="text-base font-semibold hover:text-primary-blue transition-colors">
                     {contactInfo.email}
@@ -219,39 +219,39 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
               <div className="flex items-center justify-center mb-2">
                 <div className="rounded-full bg-green-100 p-2">
                   <CheckCircle2 className="h-6 w-6 text-green-600" />
-                </div>
-              </div>
+        </div>
+      </div>
               <p className="text-green-800 font-medium">{messageSentText}</p>
               <p className="text-green-600 text-sm mt-1">{messageConfirmationText}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
-              <input
-                type="text"
+          <input
+            type="text"
                 placeholder={yourNameText}
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
-                required
-              />
+            required
+          />
               
-              <input
-                type="email"
+          <input
+            type="email"
                 placeholder={yourEmailText}
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+            value={formData.email}
+            onChange={(e) => setFormData({...formData, email: e.target.value})}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
-                required
-              />
+            required
+          />
               
-              <input
-                type="tel"
+          <input
+            type="tel"
                 placeholder={yourPhoneText}
-                value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+            value={formData.phone}
+            onChange={(e) => setFormData({...formData, phone: e.target.value})}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
-                required
-              />
+            required
+          />
               
               <textarea
                 placeholder={yourMessageText}
@@ -262,8 +262,8 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
                 required
               />
 
-              <button 
-                type="submit" 
+          <button 
+            type="submit" 
                 className="w-full send-button"
               >
                 <div className="svg-wrapper-1">
@@ -283,7 +283,7 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
                   </div>
                 </div>
                 <span>{sendText}</span>
-              </button>
+          </button>
             </form>
           )}
 

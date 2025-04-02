@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, Facebook, Twitter, Mail, Copy, Share2 } from "lucide-react";
+import { Facebook, Mail, Copy, Share2, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCmsData } from "../../services/CmsProvider";
 
@@ -13,6 +13,7 @@ interface ShareModalProps {
 
 const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title, description }) => {
   const [copied, setCopied] = useState(false);
+  const [copiedApp, setCopiedApp] = useState("");
   const [url, setUrl] = useState('');
   const { t } = useCmsData();
 
@@ -26,41 +27,86 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const copyToClipboard = (text: string, app: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedApp(app);
+    
+    // Show toast
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+      setCopiedApp("");
+    }, 2000);
+  };
+
   const handleShare = (platform: string) => {
     let shareUrl = '';
+    const propertyTitle = title || t('share-property-title') || "Property listing";
+    const propertyDesc = description || '';
+    const shareMessage = `${propertyTitle}${propertyDesc ? ': ' + propertyDesc : ''}\n${url}`;
+    
+    // Always copy the message to clipboard first for convenience
+    copyToClipboard(shareMessage, platform);
     
     switch (platform) {
       case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        // Facebook sharing URL - properly encoded
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(shareMessage)}`;
+        window.open(shareUrl, '_blank');
         break;
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${title}`;
+        
+      case 'viber':
+        // Try to open Viber app using deep link
+        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          // Mobile - use deep link
+          window.location.href = `viber://forward?text=${encodeURIComponent(shareMessage)}`;
+        } else {
+          // Desktop - try to use direct chat URL
+          window.open(`viber://chat?text=${encodeURIComponent(shareMessage)}`, '_blank');
+          // Also open Viber web as fallback
+          setTimeout(() => {
+            window.open('https://account.viber.com/en/', '_blank');
+          }, 500);
+        }
         break;
-      case 'email':
-        shareUrl = `mailto:?subject=${title}&body=${makeEmailBody()} `;  
-        break;
+        
       case 'instagram':
-        // Instagram nema direktan URL za deljenje, pa ćemo kopirati link
-        navigator.clipboard.writeText(url);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-        return;
+        // Instagram doesn't support direct link sharing, 
+        // so we can only open the app and rely on clipboard
+        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          window.location.href = 'instagram://camera';
+        } else {
+          window.open('https://www.instagram.com/direct/inbox/', '_blank');
+        }
+        break;
+        
+      case 'email':
+        shareUrl = `mailto:?subject=${encodeURIComponent(propertyTitle)}&body=${encodeURIComponent(makeEmailBody())}`;
+        window.open(shareUrl, '_blank');
+        break;
+        
       default:
         break;
     }
-
-    window.open(shareUrl, '_blank');
   };
 
   const makeEmailBody = () => {
-    return `Pogledajte ovu nekretninu na linku%0D%0A${url}%0D%0A%0D%0A${title}%0D%0A%0D%0A${description}%0D%0A%0D%0A`;
+    const propertyTitle = title || t('share-property-title') || "Property listing";
+    const propertyDesc = description || '';
+    
+    // Use a default message if translation is missing
+    const emailIntro = t('share-email-check-out') !== "share-email-check-out" 
+      ? t('share-email-check-out') 
+      : "Proverite ovu nekretninu:";
+    
+    return `${emailIntro}\n${url}\n\n${propertyTitle}${propertyDesc ? '\n\n' + propertyDesc : ''}`;
   };  
 
   return (
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-[9999]">
-          {/* Overlay - blokira klik na pozadini */}
+          {/* Overlay */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -82,7 +128,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title
                 onClick={onClose}
                 className="p-1 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <X className="h-5 w-5 text-gray-500" />
+                <span className="h-5 w-5 text-gray-500 font-bold">✕</span>
               </button>
             </div>
             
@@ -99,12 +145,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title
                   onClick={handleCopyLink}
                   className="bg-primary-blue text-white py-2 px-4 rounded-r-md hover:bg-primary-dark-blue transition-colors flex items-center"
                 >
-                  {copied ? (
-                    <span className="text-sm">{t('share-copied')}</span>
+                  {copied && !copiedApp ? (
+                    <span className="text-sm">{t('share-copied') || "Copied!"}</span>
                   ) : (
                     <>
                       <Copy className="h-4 w-4 mr-1" />
-                      <span className="text-sm">{t('share-copy-link')}</span>
+                      <span className="text-sm">{t('share-copy-link') || "Copy link"}</span>
                     </>
                   )}
                 </button>
@@ -117,23 +163,23 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title
                 <button
                   onClick={() => handleShare('facebook')}
                   className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 text-white hover:bg-blue-700 transition-transform hover:-translate-y-1"
-                  aria-label={t('share-facebook')}
+                  aria-label={t('share-facebook') || "Share on Facebook"}
                 >
                   <Facebook className="h-5 w-5" />
                 </button>
                 
                 <button
-                  onClick={() => handleShare('twitter')}
-                  className="w-12 h-12 rounded-full flex items-center justify-center bg-sky-500 text-white hover:bg-sky-600 transition-transform hover:-translate-y-1"
-                  aria-label={t('share-twitter')}
+                  onClick={() => handleShare('viber')}
+                  className="w-12 h-12 rounded-full flex items-center justify-center bg-purple-600 text-white hover:bg-purple-700 transition-transform hover:-translate-y-1"
+                  aria-label={t('share-viber') || "Share on Viber"}
                 >
-                  <Twitter className="h-5 w-5" />
+                  <MessageCircle className="h-5 w-5" />
                 </button>
                 
                 <button
                   onClick={() => handleShare('email')}
                   className="w-12 h-12 rounded-full flex items-center justify-center bg-red-500 text-white hover:bg-red-600 transition-transform hover:-translate-y-1"
-                  aria-label={t('share-email')}
+                  aria-label={t('share-email') || "Share via Email"}
                 >
                   <Mail className="h-5 w-5" />
                 </button>
@@ -141,7 +187,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title
                 <button
                   onClick={() => handleShare('instagram')}
                   className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-tr from-yellow-500 via-pink-600 to-purple-600 text-white hover:opacity-90 transition-transform hover:-translate-y-1"
-                  aria-label={t('share-instagram')}
+                  aria-label={t('share-instagram') || "Share on Instagram"}
                 >
                   <svg 
                     className="h-5 w-5" 
@@ -152,6 +198,22 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title
                   </svg>
                 </button>
               </div>
+              
+              {/* Copy notification toast */}
+              {copied && copiedApp && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="mt-6 p-2 bg-green-100 text-green-800 rounded-md text-center"
+                >
+                  {copiedApp === 'instagram' 
+                    ? (t('share-instagram-copy') || "Content copied! Paste in Instagram to share") 
+                    : copiedApp === 'viber'
+                    ? (t('share-viber-copy') || "Content copied! Paste in Viber to share")
+                    : (t('share-copied') || "Content copied to clipboard!")}
+                </motion.div>
+              )}
             </div>
           </motion.div>
         </div>

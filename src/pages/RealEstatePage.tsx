@@ -77,12 +77,12 @@ const RealEstatePage: React.FC = () => {
             : [...prevProperties, ...(response.data || [])]
         );
         } else {
-        setError(currentLanguage === 'sr' ? 'Nema pronađenih nekretnina' : 'No properties found');
+        setError(t('realestate-error-not-found'));
         }
       } catch (err) {
         console.error('Error loading properties:', err);
-      setError(currentLanguage === 'sr' ? 'Greška prilikom učitavanja nekretnina' : 'Error loading properties');
-      } finally {
+        setError(t('realestate-error-loading'));
+        } finally {
         setIsLoading(false);
       }
     };
@@ -156,15 +156,11 @@ const RealEstatePage: React.FC = () => {
         setProperties(response.data);
             } else {
         setProperties([]);
-        setError(currentLanguage === 'sr' 
-          ? 'Nema pronađenih nekretnina koje odgovaraju vašim kriterijumima' 
-          : 'No properties found matching your criteria');
+        setError( t('realestate-error-not-found-criteria'));
       }
     } catch (err) {
       console.error('Error during search:', err);
-      setError(currentLanguage === 'sr' 
-        ? 'Došlo je do greške prilikom pretrage'
-        : 'An error occurred during search');
+      setError(t('action-search-property-error'));
     } finally {
       setIsLoading(false);
     }
@@ -215,12 +211,10 @@ const RealEstatePage: React.FC = () => {
             className="text-center mb-8"
           >
             <h1 className="text-3xl md:text-4xl font-bold text-primary-blue mb-2">
-              {currentLanguage === 'sr' ? "Pronađite svoju idealnu nekretninu" : "Find your ideal property"}
+              {t('realestate-title')}
             </h1>
             <p className="text-gray-600 max-w-3xl mx-auto">
-              {currentLanguage === 'sr' 
-                ? "Istražite našu ekskluzivnu kolekciju premium nekretnina i pronađite savršen dom ili investiciju." 
-                : "Explore our exclusive collection of premium properties and find the perfect home or investment."}
+              {t('realestate-description')}
             </p>
           </motion.div>
 
