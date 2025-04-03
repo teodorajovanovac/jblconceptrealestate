@@ -103,7 +103,7 @@ export default function PropertyMap({ address }: PropertyMapProps) {
       <h2 className="text-2xl font-bold text-primary-blue mb-4">Lokacija</h2>
       <div 
         ref={mapContainerRef} 
-        className="w-full h-[400px] rounded-lg overflow-hidden"
+        className="w-full h-[400px] rounded-lg z-0 overflow-hidden"
       />
     </div>
   );
