@@ -3,7 +3,7 @@ import { Phone, Mail, X, User } from "lucide-react"
 import { useCmsData } from "../../services/CmsProvider"
 import { RealEstateDto } from "../../data/models/RealEstate"
 import agentService from "../../data/Agents"
-import { Agent } from "../../data/models/agents"
+import { Agent } from "../../data/models/Agents"
 
 interface ContactAgentCardProps {
   property?: RealEstateDto

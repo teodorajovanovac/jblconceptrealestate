@@ -23,7 +23,7 @@ export default function PropertyPage() {
   const { id } = useParams<{ id: string }>();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr');
+  
   const [property, setProperty] = useState<RealEstateDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
