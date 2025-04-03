@@ -14,10 +14,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        //target: 'https://test.jblconcept.rs',
+        target: 'https://test.jblconcept.rs',
         //target: 'https://sandbox.jblconcept.rs',
         //target: 'https://core.ajsasoft.rs',
-        target: 'https://localhost:7112',
+        //target: 'https://localhost:7112',
         changeOrigin: true,
         secure: false,
         

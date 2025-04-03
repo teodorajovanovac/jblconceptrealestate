@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Heart, Share2, ChevronLeft, ChevronRight } from "lucide-react"
+import { Heart, Share2, ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { Link } from "react-router-dom"
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css" 
@@ -12,14 +12,16 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom"
 import "yet-another-react-lightbox/plugins/thumbnails.css"
 import ShareModal from "./ShareModal"
 import { useFavorites } from "../../hooks/FavoritesContext";
+import { VideoDto } from "../../data/models/RealEstate"
 
 interface PropertyGalleryProps {
   images: string[];
   propertyId?: number;
   propertyTitle?: string;
+  video?: VideoDto;
 }
 
-export default function PropertyGallery({ images, propertyId = 0, propertyTitle = "Nekretnina" }: PropertyGalleryProps) {
+export default function PropertyGallery({ images, propertyId = 0, propertyTitle = "Nekretnina", video }: PropertyGalleryProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const [index, setIndex] = useState(-1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -36,6 +38,15 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
   // Format images for Lightbox
   const slides = safeImages.map((src) => ({ src }));
 
+  // Get YouTube video ID if video exists
+  const getYoutubeVideoId = (url: string): string | null => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  const videoId = video?.name ? getYoutubeVideoId(video.link) : null;
+  
   // Get current URL for sharing
   const currentUrl = window.location.href;
 
@@ -135,50 +146,62 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
 
       {/* Mobile Gallery - Single image with swipe */}
       <div className="md:hidden w-full h-[300px] md:h-[350px] relative overflow-hidden">
-        <div 
-          className="h-full w-full"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <img
-            src={safeImages[currentImageIndex]}
-            alt={`Property view ${currentImageIndex + 1}`}
-            className="w-full h-full object-cover"
-            onClick={() => setIndex(currentImageIndex)}
-            onError={handleImageError}
-          />
-          
-          {safeImages.length > 1 && (
-            <>
-              {/* Navigation Controls */}
-              <button 
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  prevImage();
-                }}
-              >
-                <ChevronLeft className="h-5 w-5 text-primary-dark-blue" />
-              </button>
-              
-              <button 
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  nextImage();
-                }}
-              >
-                <ChevronRight className="h-5 w-5 text-primary-dark-blue" />
-              </button>
-              
-              {/* Image indicator */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-custom-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                {currentImageIndex + 1} / {safeImages.length}
-              </div>
-            </>
-          )}
-        </div>
+        {videoId && currentImageIndex === 0 ? (
+          <div className="h-full w-full bg-black flex items-center justify-center">
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`}
+              className="w-full h-full"
+              allowFullScreen
+              title={propertyTitle}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            ></iframe>
+          </div>
+        ) : (
+          <div 
+            className="h-full w-full"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <img
+              src={safeImages[videoId ? currentImageIndex - 1 : currentImageIndex]}
+              alt={`Property view ${currentImageIndex + 1}`}
+              className="w-full h-full object-cover"
+              onClick={() => setIndex(videoId ? currentImageIndex - 1 : currentImageIndex)}
+              onError={handleImageError}
+            />
+            
+            {(videoId ? safeImages.length + 1 : safeImages.length) > 1 && (
+              <>
+                {/* Navigation Controls */}
+                <button 
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevImage();
+                  }}
+                >
+                  <ChevronLeft className="h-5 w-5 text-primary-dark-blue" />
+                </button>
+                
+                <button 
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextImage();
+                  }}
+                >
+                  <ChevronRight className="h-5 w-5 text-primary-dark-blue" />
+                </button>
+                
+                {/* Image indicator */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-custom-black/70 text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                  {currentImageIndex + 1} / {videoId ? safeImages.length + 1 : safeImages.length}
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Desktop Gallery - Conditional rendering based on number of images */}
@@ -186,26 +209,41 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
         {hasEnoughImages ? (
           // Original grid layout for 5+ images
           <div className="grid grid-cols-4 gap-2 h-full p-2">
-            {/* Main large image */}
+            {/* Main large image - Video or Image */}
             <div 
               className="col-span-2 row-span-2 relative cursor-pointer overflow-hidden group"
-              onClick={() => setIndex(0)}
+              //onClick={() => videoId ? window.open(video?.link, '_blank') : setIndex(0)}
             >
-              <img
-                src={safeImages[0]}
-                alt="Main property view"
-                className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
-                onError={handleImageError}
-              />
-              <div className="absolute inset-0 bg-custom-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              {videoId ? (
+                <div className="w-full h-full relative">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`}
+                    className="w-full h-full rounded-lg"
+                    allowFullScreen
+                    title={propertyTitle}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  ></iframe>
+                  {/* <div className="absolute inset-0 bg-custom-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" /> */}
+                </div>
+              ) : (
+                <>
+                  <img
+                    src={safeImages[0]}
+                    alt="Main property view"
+                    className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                    onError={handleImageError}
+                  />
+                  <div className="absolute inset-0 bg-custom-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                </>
+              )}
             </div>
 
             {/* Right side thumbnails */}
-            {safeImages.slice(1, 5).map((image, idx) => (
+            {safeImages.slice(videoId ? 0 : 1, videoId ? 4 : 5).map((image, idx) => (
               <div 
                 key={idx}
                 className="relative cursor-pointer overflow-hidden group"
-                onClick={() => setIndex(idx + 1)}
+                onClick={() => setIndex(videoId ? idx : idx + 1)}
               >
                 <img
                   src={image}
@@ -227,15 +265,27 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
         ) : (
           // Single image slider for fewer than 5 images
           <div className="h-full w-full relative">
-            <img
-              src={safeImages[currentImageIndex]}
-              alt={`Property view ${currentImageIndex + 1}`}
-              className="w-full h-full object-cover"
-              onClick={() => setIndex(currentImageIndex)}
-              onError={handleImageError}
-            />
+            {videoId && currentImageIndex === 0 ? (
+              <div className="w-full h-full bg-black flex items-center justify-center">
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`}
+                  className="w-full h-full"
+                  allowFullScreen
+                  title={propertyTitle}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+              </div>
+            ) : (
+              <img
+                src={safeImages[videoId ? currentImageIndex - 1 : currentImageIndex]}
+                alt={`Property view ${currentImageIndex + 1}`}
+                className="w-full h-full object-cover"
+                onClick={() => setIndex(videoId ? currentImageIndex - 1 : currentImageIndex)}
+                onError={handleImageError}
+              />
+            )}
             
-            {safeImages.length > 1 && (
+            {(videoId ? safeImages.length + 1 : safeImages.length) > 1 && (
               <>
                 {/* Navigation Controls */}
                 <button 
@@ -260,7 +310,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
                 
                 {/* Image indicator */}
                 <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-custom-black/50 text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                  {currentImageIndex + 1} / {safeImages.length}
+                  {currentImageIndex + 1} / {videoId ? safeImages.length + 1 : safeImages.length}
                 </div>
               </>
             )}

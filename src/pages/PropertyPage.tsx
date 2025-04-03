@@ -219,6 +219,7 @@ export default function PropertyPage() {
             images={formatGalleryImages()} 
             propertyId={property.id}
             propertyTitle={property.portalName || "Nekretnina"}
+            video={property.videos && property.videos.length > 0 ? property.videos[0] : undefined}
           />
         </div>
 
@@ -319,7 +320,7 @@ export default function PropertyPage() {
               </TabsContent>
 
               <TabsContent value="location" className="px-4">
-                <PropertyMap
+                <PropertyMap 
                   address={[
                     property.locationArea,
                     property.locationCityName,
