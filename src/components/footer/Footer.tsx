@@ -2,7 +2,7 @@ import ReactLogo from "../../assets/jblgold.svg"
 import menuData from "../../assets/data/menu.json"
 import { Link } from "react-router-dom"
 import { FaTiktok } from "react-icons/fa"
-import { Instagram, Facebook, Twitter, Linkedin, Phone, Search } from "lucide-react"
+import { Instagram, Facebook, Twitter, Linkedin, Phone, Search, Youtube } from "lucide-react"
 import { 
   FileText, 
   Briefcase, 
@@ -188,6 +188,17 @@ const Footer = () => {
                         <Twitter size={22} />
                       </a>
                       )}
+                    {socialLinksData.youtube && (
+                      <a 
+                        href={socialLinksData.youtube} 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-gold hover:scale-110 transition-all"
+                        aria-label="YouTube Channel"
+                      >
+                        <Youtube size={22} />
+                      </a>
+                    )}
                   </div>
                 
                 

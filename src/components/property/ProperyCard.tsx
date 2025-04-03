@@ -3,6 +3,7 @@ import { Bath, Bed, Heart, MapPin, Square } from "lucide-react";
 import { Link } from "react-router-dom";
 import { RealEstateDto } from "../../data/models/RealEstate";
 import { useFavorites } from "../../hooks/FavoritesContext";
+import { TbPremiumRights } from "react-icons/tb";
 
 interface PropertyCardProps {
     property: RealEstateDto;
@@ -50,10 +51,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
     const getLuxuryBadge = () => {
       if (property.lux === 0) {
         return (
-          <div className="absolute bottom-0 left-0 z-20">
-            <span className="bg-secondary-blue text-white px-3 py-1 text-sm font-medium shadow-lg opacity-90">
-              lux
-            </span>
+          <div className="absolute bottom-4 left-4 z-20 flex flex-col items-center bg-black/20 backdrop-blur-[2px] px-1.5 py-1 rounded-md">
+            <TbPremiumRights className="text-primary-gold w-8 h-8 drop-shadow-md" />
+            <span className="text-primary-gold text-xs font-medium tracking-wider drop-shadow-sm">LUX</span>
           </div>
         );
       }
