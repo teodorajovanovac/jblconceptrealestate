@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { FileText, Scale, Users, Shield, Briefcase, ClipboardCheck } from 'lucide-react';
-import Header from '../components/header/Header';
-import FooterTW from '../components/footer/Footer';
 import Seo from '../services/meta/Seo';
 import { Link } from 'react-router-dom';
 import { useCmsData } from "../services/CmsProvider";
@@ -14,9 +12,8 @@ const TermsPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gray-50">
+    <>
       <Seo title={currentLanguage === 'sr' ? 'Opšti uslovi poslovanja' : 'Terms & Conditions'} />
-      <Header />
       <main id="top" className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="max-w-[1400px] mx-auto">
           <div className="space-y-6">
@@ -220,8 +217,7 @@ const TermsPage = () => {
           </div>
           </div>
       </main>
-      <FooterTW />
-    </div>
+    </>
   );
 };
 

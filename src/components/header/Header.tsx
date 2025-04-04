@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react"
 import menuData from "../../assets/data/menu.json"
 import { useCmsData } from "../../services/CmsProvider"
+import { Link, NavLink, useLocation } from "react-router-dom"
 
 const Header: React.FC = () => {
+  const { changeLanguage, currentLanguage } = useCmsData();
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isHomePage, setIsHomePage] = useState(false)
-  const { changeLanguage, currentLanguage } = useCmsData();
+  const location = useLocation()
+  
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const toggleLanguage = () => {
@@ -21,8 +24,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     // Detektuj da li je trenutna stranica početna
-    const path = window.location.pathname;
-    setIsHomePage(path === "/" || path === "/landing");
+    setIsHomePage(location.pathname === "/" || location.pathname === "/landing");
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
@@ -30,7 +32,7 @@ const Header: React.FC = () => {
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [location.pathname])
 
   // Odredi boju teksta na osnovu stranice i skrola
   const getTextColorClass = () => {
@@ -71,44 +73,45 @@ const Header: React.FC = () => {
     if (isHomePage && !isScrolled) {
       return null;
     }
-    
     // Када је навбар плав (скроловано), користимо златни лого
     if (isScrolled) {
       return <img src="/assets/jbl_log_gold_hr.svg" alt="JBL Logo" className="h-8 md:h-10" />;
     }
-    
     // На осталим страницама са транспарентним навбаром, користимо тамни лого
     return <img src="/assets/jbl_log_dark_hr.svg" alt="JBL Logo" className="h-8 md:h-10" />;
   }
 
   return (
     <header
-      className={`${getTextColorClass()} fixed top-0 left-0 w-full z-10 transition-colors duration-300`}
+      className={`fixed top-0 left-0 w-full z-20 transition-all duration-300 ${
+        getTextColorClass()
+      }`}
     >
       <div className="w-full flex items-center justify-between py-3 md:py-4">
         {/* Лого уз леву ивицу */}
         <div className="ml-4 md:ml-8">
-          <a href="/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             {renderLogo()}
-          </a>
+          </Link>
         </div>
 
         {/* Десктоп навигација скроз десно */}
         <div className="hidden md:block mr-4 md:mr-8">
           <div className="flex items-center">
+            <nav>
             {menuItems.map((item) => (
-              <a
+              <NavLink 
                 key={item.link}
-                href={item.link}
+                to={item.link}
                 className={`relative mx-3 group transition-colors text-[1.1em] ${getHoverColorClass()}`}
               >
                 <span className="relative">
                   {item.caption}
                   <span className={`absolute bottom-[-2px] left-0 w-0 h-[1px] ${getUnderlineColorClass()} origin-left transition-all duration-300 group-hover:w-full group-hover:left-0 group-hover:origin-left group-hover:transition-all`}></span>
                 </span>
-              </a>
+              </NavLink >
             ))}
-            
+            </nav>
             <button 
               onClick={toggleLanguage} 
               className={`relative transition-colors mx-3 group text-[1.1em] ${getHoverColorClass()}`}
@@ -166,13 +169,13 @@ const Header: React.FC = () => {
           <ul className="flex flex-col space-y-6 text-2xl">
             {menuItems.map((item) => (
               <li key={item.link}>
-                <a
-                  href={item.link}
+                <Link
+                  to={item.link}
                   className="hover:text-gold transition-colors text-[1.1em] md:text-[2.2em]"
                   onClick={toggleMenu}
                 >
                   {item.caption}
-                </a>
+                </Link>
               </li>
             ))}
             <li>

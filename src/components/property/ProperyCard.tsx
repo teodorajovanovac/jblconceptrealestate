@@ -28,10 +28,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
       const displayFeatures: string[] = [...tags, ...features ].slice(0, 10);
 
       // Provera da vidimo šta je dostupno u podacima
-      console.log("Spaces:", property.spaces);
-      console.log("Description:", property.description);
-      console.log("Parsed features:", features);
-      console.log("Parsed tags:", tags);
+      // console.log("Spaces:", property.spaces);
+      // console.log("Description:", property.description);
+      // console.log("Parsed features:", features);
+      // console.log("Parsed tags:", tags);
       
       return (
         <div className="flex flex-wrap gap-1 mt-2">
@@ -114,7 +114,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
                 src={property.thumbnail != null  
                   ? `https://jblconcept.rs/photos${property.thumbnail}` 
                   : "/images/placeholder.svg"}
-                alt={property.typeName || "Property"}
+                alt={property.typeName || "*Property"}
                 className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-110"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/images/placeholder.svg";
@@ -125,7 +125,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
               {/* Action Badge - Top Left */}
               <div className="absolute top-4 left-4 z-20">
                 <span className={`${isRental ? 'bg-primary-gold' : 'bg-primary-blue'} text-white px-4 py-2 rounded-full text-base font-semibold shadow-lg`}>
-                  {property.actionName || (language === 'sr' ? "Prodaja" : "For Sale")} 
+                  {property.actionName || (language === 'sr' ? "*Prodaja" : "*For Sale")} 
                 </span>
               </div>
               
@@ -155,7 +155,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
               {/* Portal Name instead of Property Title */}
               <div className="mb-4">
                 <h3 className="text-xl font-bold text-primary-blue line-clamp-1">
-                  {property.portalName || "Portal Name"}
+                  {property.portalName || "*Portal Name"}
                 </h3>
                 {/* Property location display */}
                 <div className="flex items-center text-gray-600">

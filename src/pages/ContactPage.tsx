@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react"
-import { Building2, User, Mail, Phone, Home, FileText, Settings, HelpCircle, X, Key, Calculator, Shield, Search, ClipboardCheck, Users, CheckCircle, AlertCircle } from "lucide-react"
+import { Building2,  Mail, Phone, Home, FileText, HelpCircle,  
+  Key, Calculator, Shield, Search, ClipboardCheck, Users, CheckCircle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import Header from '../components/header/Header'
-import FooterTW from '../components/footer/Footer'
 import Seo from '../services/meta/Seo'
 import { useCmsData } from "../services/CmsProvider"
+import { EmailData } from "../data/models/MailData"
+import realEstate from "../data/RealEstateData"
 
 type ServiceType = 
   | 'buying' 
@@ -27,10 +28,11 @@ type FormData = {
 }
 
 const ContactPage: React.FC =() => {
+  const { t, currentLanguage, loadingCmsData, geoInfo } = useCmsData();
   const [formType, setFormType] = useState<ServiceType>('buying')
   const [showServiceModal, setShowServiceModal] = useState(false)
   const serviceButtonRef = useRef<HTMLButtonElement>(null)
-  const { t, currentLanguage } = useCmsData();
+  
 
   // Form state
   const [formData, setFormData] = useState<FormData>({
@@ -247,44 +249,70 @@ const ContactPage: React.FC =() => {
     return isValid;
   }
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const  handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
       return;
     }
     
-    setIsSubmitting(true);
     
-
     
+    const emailData: EmailData = {
+      subject: `Web-Contact-Form: ${formType}`,
+      body: `
+        <p>First Name: ${formData.firstName}</p> 
+        <p>Last Name: ${formData.lastName}</p> 
+        <p>Email: ${formData.email}</p> 
+        <p>Phone: ${formData.phone}</p> 
+        <p>SERVICE: ${services[formType].title[currentLanguage as 'sr' | 'en']}</p> 
+        <p>Message: ${formData.message}</p> 
+        <p>Language: ${formData.message}</p> 
+        <p>Info data: ${JSON.stringify(geoInfo)}</p>  
+      `
+    }
+    
+    //console.log(emailData);
 
-    // Simulate API call
-    setTimeout(() => {
+    const response = await realEstate.sendEmail(emailData);
+    
+    if (response !== 200) {
+      setErrors({
+        ...errors,
+        message: t("validate-form-sending-error")
+      });
       setIsSubmitting(false);
-      setIsSubmitted(true);
+      return;
+    }
+
+
+    setIsSubmitted(true);
+    // Simulate API call
+    
+    setIsSubmitting(false);
+      
       
       // Reset form after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          message: ''
-        });
-        setFormType('buying');
-      }, 5000);
-    }, 1000);
+  
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
+  }
+
+
+  if (loadingCmsData) {
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="min-h-screen w-full bg-gray-50">
-      {/* <Seo title={t("contactform-title")f} /> */}
+    
       
-      <Header />
       <main className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
+        <Seo title="Contact | JBL Concept Real Estate" />
         <div className="max-w-[1400px] mx-auto">
           <motion.div 
             initial="hidden"
@@ -548,8 +576,7 @@ const ContactPage: React.FC =() => {
           </motion.div>
         </div>
       </main>
-      <FooterTW />
-    </div>
+    
   )
 } 
 

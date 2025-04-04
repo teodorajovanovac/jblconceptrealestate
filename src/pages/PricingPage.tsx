@@ -1,6 +1,4 @@
 import { Calculator, Clipboard, Home, LineChart, ShoppingBag, Users } from 'lucide-react';
-import Header from '../components/header/Header';
-import FooterTW from '../components/footer/Footer';
 import Seo from '../services/meta/Seo';
 import { Link } from 'react-router-dom';
 import { useCmsData } from "../services/CmsProvider"
@@ -13,9 +11,8 @@ const PricingPage = () => {
   },[])
 
   return (
-    <div className="min-h-screen w-full bg-gray-50">
+    <>
       <Seo title={currentLanguage === 'sr' ? 'Cenovnik' : 'Price List'} />
-      <Header />
       <main id="top" className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="max-w-[1400px] mx-auto">
           <div className="space-y-6">
@@ -24,11 +21,11 @@ const PricingPage = () => {
               <h1 className="text-4xl font-bold tracking-tight mb-4">
                 {currentLanguage === 'sr' ? 'Cenovnik' : 'Price List'}
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              <h2 className="text-xl text-muted-foreground max-w-3xl mx-auto">
                 {currentLanguage === 'sr'
                   ? 'Vrste usluga koje agencija "Concept Real Estate doo Beograd" obavlja po nalogu klijenata (u daljem tekstu NALOGODAVCA):'
                   : 'Types of services provided by Agency CONCEPT Real Estate doo Beograd on the client\'s order (hereinafter the PRINCIPAL)'}
-              </p>
+              </h2>
             </div>
 
             {/* Services Overview */}
@@ -400,8 +397,7 @@ const PricingPage = () => {
           </div>
         </div>
       </main>
-      <FooterTW />
-    </div>
+      </>
   );
 };
 

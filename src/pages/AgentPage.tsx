@@ -2,18 +2,17 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 import { motion } from "framer-motion"
-import Header from "../components/header/Header"
-import FooterTW from "../components/footer/Footer"
 import Seo from '../services/meta/Seo'
 import { useCmsData } from "../services/CmsProvider"
-import getCmsData from "../data/cms"
-import { Agent } from "../data/models/agents"
+import getCmsData from "../data/Cms"
+import { Agent } from "../data/models/Agents"
 
 const AgentPage: React.FC = () => {
+  const { t, currentLanguage } = useCmsData()
   const [agents, setAgents] = useState<Agent[]>([]);
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { t, currentLanguage } = useCmsData()
+  
 
   useEffect(() => {
     // Scroll to top when component mounts
@@ -33,7 +32,7 @@ const AgentPage: React.FC = () => {
       }
     };
     fetchAgents();
-  }, []);
+  }, [currentLanguage]);
   
   // Find agent by id
   const agent = agents.find(a => a.id === Number(id))
@@ -50,7 +49,7 @@ const AgentPage: React.FC = () => {
         title={`${agent.name} - ${agent.title[currentLanguage]}`} 
         />
 
-      <Header />
+      
       <main className="pt-24 pb-16">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           {/* Agent Name as Title */}
@@ -84,7 +83,7 @@ const AgentPage: React.FC = () => {
               </motion.div>
 
               {/* Social Links */}
-              <motion.div 
+              {/* <motion.div 
                 className="flex gap-4 justify-center"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -102,7 +101,7 @@ const AgentPage: React.FC = () => {
                     {social === 'linkedin' && <Linkedin className="h-5 w-5" />}
                   </motion.a>
                 ))}
-              </motion.div>
+              </motion.div> */}
 
               {/* Contact Info */}
               <motion.div 
@@ -145,7 +144,6 @@ const AgentPage: React.FC = () => {
           </motion.div>
         </div>
       </main>
-      <FooterTW />
     </>
   )
 } 

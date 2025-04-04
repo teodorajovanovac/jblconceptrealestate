@@ -54,7 +54,6 @@
     "property-price-supplement": "Price supplement",
     "property-luxury-class": "Luxury class",
 
-    "property-adress": "Adress",
     "property-transportation": "Transportation",
     "property-position": "Position",
     "property-orientation": "Orientation",
@@ -414,5 +413,69 @@
     "agent-property-generic": "Property",
     "agent-message-sent": "Message successfully sent!",
     "agent-message-confirmation": "Our agent will contact you as soon as possible.",
-    "agent-privacy-notice": "Your personal data will be used only for the purpose of responding to your inquiry and will not be shared with third parties."
+    "agent-privacy-notice": "Your personal data will be used only for the purpose of responding to your inquiry and will not be shared with third parties.",
+
+"services": [
+    {
+      "key": "buying",
+      "icon": "home",
+      "title": "Buying a property",
+      "description": "I want to purchase a property"
+    },
+    {
+      "key": "selling",
+      "icon": "building2",
+      "title": "Selling a property",
+      "description": "I want to list my property for sale"
+    },
+    {
+      "key": "rental",
+      "icon": "key",
+      "title": "Rental Brokerage",
+      "description": "I want to rent or lease a property"
+    },
+    {
+      "key": "property-management",
+      "icon": "shield",
+      "title": "Property management",
+      "description": "I need property management services"
+    },
+    {
+      "key": "valuation",
+      "icon": "calculator",
+      "title": "Property Valuation",
+      "description": "I need a property value assessment"
+    },
+    {
+      "key": "consulting",
+      "icon": "users",
+      "title": "Consulting services",
+      "description": "I need real estate consulting"
+    },
+    {
+      "key": "legal",
+      "icon": "filetext",
+      "title": "Legal Services",
+      "description": "I need legal assistance with real estate"
+    },
+    {
+      "key": "handover",
+      "icon": "clipboardcheck",
+      "title": "Property handover",
+      "description": "I need assistance with property handover"
+    },
+    {
+      "key": "market-research",
+      "icon": "search",
+      "title": "Market research",
+      "description": "I need real estate market analysis"
+    },
+    {
+      "key": "other",
+      "icon": "helpcircle",
+      "title": "Other inquiry",
+      "description": "I have a specific request not listed above"
+    }
+  ]
+
 }

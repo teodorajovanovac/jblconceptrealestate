@@ -1,10 +1,20 @@
 import axios from "axios";
-import { ApiActionName, ApiLocation, ApiLocationArea, ApiLocationAreaCity, ApiLocationAreaCountyCity, ApiPropertyType, ApiRealEstate, ApiRealEstateFeatured, ApiRealEstateFromList, ApiRoomsNo, ApiValueRanges } from "./Api";
+import { 
+  ApiActionName, 
+  ApiEmailToMe, 
+  ApiLocation, 
+  ApiLocationArea, 
+  ApiLocationAreaCity, 
+  ApiLocationAreaCountyCity, 
+  ApiPropertyType, 
+  ApiRealEstate, 
+  ApiRealEstateFeatured, ApiRealEstateFromList, ApiRoomsNo, ApiValueRanges } from "./Api";
 import { LocationDto, RealEstateDto } from "./models/RealEstate";
 import { ApiRequest, ApiResponse } from "./models/ApiResponse";
 import { SearchFilters } from "./models/SearchFilters"
 import { ComboBoxDto } from "./models/ComboBoxDto";
 import { ValueRangesDto } from "./models/ValueRangesDto";
+import { EmailData } from "./models/MailData";
 
 
 const realEstate = {
@@ -40,7 +50,6 @@ const realEstate = {
       throw err;
     }
   },
-
 
 
   async getRealEstateFeatured(langCode?: string): Promise<RealEstateDto[]> {
@@ -163,6 +172,18 @@ const realEstate = {
       throw err;
     }
   },
+
+  async sendEmail(data: EmailData): Promise<number> {
+    try {
+      const url = `${ApiEmailToMe}`;
+      const response = await axios.post(url, data);
+      //console.log(`Email sent successfully: ${response.data.data}`);
+      return response.status;
+    } catch (err) {
+        console.error("Error sending email:", err);
+        throw err;
+    }
+  }
   /**
    * Searches for properties based on query parameters
   //  */

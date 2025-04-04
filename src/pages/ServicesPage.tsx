@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Building2, Key, Shield, Calculator, FileText, Search, Star, Phone, CheckCircle2, ClipboardCheck, Home, Users } from "lucide-react"
-import Header from '../components/header/Header'
-import FooterTW from '../components/footer/Footer'
+import { Building2, Key, Shield, Calculator, FileText, Search, Star, Phone, ClipboardCheck, Home, Users } from "lucide-react"
 import Seo from '../services/meta/Seo'
 import { Link } from "react-router-dom"
 
@@ -190,7 +188,7 @@ const highlights = [
   }
 ]
 
-export default function ServicesPage() {
+const ServicesPage = () => {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
 
   useEffect(() => {
@@ -211,9 +209,9 @@ export default function ServicesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       <Seo title={language === 'sr' ? 'Usluge' : 'Services'} />
-      <Header />
+      
       <main id="top" className="content-wrapper">
         <div className="w-full">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -383,7 +381,8 @@ export default function ServicesPage() {
           </div>
         </div>
       </main>
-      <FooterTW />
-    </div>
+      </>
   )
 }
+
+export default ServicesPage

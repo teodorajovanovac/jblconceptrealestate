@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import Header from '../components/header/Header';
-import FooterTW from '../components/footer/Footer';
 import Seo from '../services/meta/Seo';
 import SearchBar from '../components/search/SearchBar';
 
@@ -47,7 +45,11 @@ const RealEstatePage: React.FC = () => {
 //  const loaderRef = useRef<HTMLDivElement>(null);
 
   const pageSize = 6;
-
+  // Додајемо useEffect за скроловање на врх
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   useEffect(() => {
     // Only fetch properties if SearchBar is ready
     if (isSearchBarReady) {
@@ -59,7 +61,7 @@ const RealEstatePage: React.FC = () => {
       try {
         setIsLoading(true);
         setError(null);
-        
+       
       const searchParams: ApiRequest<SearchFilters> = {
         data: searchFilters, 
         pageNumber: currentPage,
@@ -136,6 +138,7 @@ const RealEstatePage: React.FC = () => {
   // Updated handleSearch function
   const handleSearch = async (filters: SearchFilters) => {
     try {
+      console.log("handleSearch - filters:", filters);
       setSearchFilters(filters);
       setIsLoading(true);
       setError(null);
@@ -149,6 +152,7 @@ const RealEstatePage: React.FC = () => {
         pageSize: pageSize
       };
 
+      console.log("Fetching properties for page:", filters);
       const response = await realEstate.getSearchData(searchParams);
       
       if (response.isSuccess && response.data && response.data.length > 0) {
@@ -195,12 +199,12 @@ const RealEstatePage: React.FC = () => {
   //console.log('RealEstatePage rendering with favoritesCount:', favoritesCount);
 
   return (
-    <div className="min-h-screen w-full bg-gray-50">
+    <>
       <Seo 
         title={currentLanguage === 'sr' ? "Nekretnine" : "Properties"} 
         description={currentLanguage === 'sr' ? "Pronađite savršenu nekretninu" : "Find your perfect property"}
       />
-      <Header />
+      
       
       <main className="pt-24 pb-16 relative">
         <div className="container mx-auto px-4">
@@ -311,9 +315,7 @@ const RealEstatePage: React.FC = () => {
         isOpen={isFavoritesDrawerOpen}
         onClose={() => setIsFavoritesDrawerOpen(false)}
       />
-      
-      <FooterTW />
-    </div>
+    </>
   );
 } 
 

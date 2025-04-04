@@ -40,27 +40,14 @@
   "property-spaces": "Prostorije",
   "property-floor-no-string": "Sprat",
   "property-celling-height": "Visina stropa",
-  "property-orientation": "Orjentacija",
-  "property-heating": "Grejanje",
-  "property-equipment": "Oprema",
-  "property-joinery": "Vrsta vrata",
-  "property-infrastructure": "Infrastruktura",
-  "property-speciality": "Specifičnost",
-  "property-access": "Prilaz",
-  "property-center": "Centar",
   "property-energy-efficiency-class": "Klasa energetske efikasnosti",
   "property-condition-name": "Stanje",
   "property-moving-in": "Datum premestanja",
   "property-actual-age": "Starija od",
   "property-price-supplement": "Dodatna cena",
   "property-luxury-class": "Klasa luksuznosti",
-  "property-adress": "Adresa",
   "property-transportation": "Transport",
   "property-position": "Pozicija",
-
-
-
-
   "property-location": "Lokacija",
   "property-rooms": "Broj soba",
   "property-bathrooms": "Broj kupatila",
@@ -434,5 +421,68 @@
   "agent-property-generic": "Nekretnina",
   "agent-message-sent": "Poruka uspešno poslata!",
   "agent-message-confirmation": "Naš agent će vas kontaktirati u najkraćem mogućem roku.",
-  "agent-privacy-notice": "Vaši lični podaci biće korišćeni samo u svrhu odgovora na vaš upit i neće biti deljeni sa trećim licima."
+  "agent-privacy-notice": "Vaši lični podaci biće korišćeni samo u svrhu odgovora na vaš upit i neće biti deljeni sa trećim licima.",
+
+  "services": [
+    {
+      "key": "buying",
+      "icon": "home",
+      "title": "Kupovina nekretnine",
+      "description": "Želim da kupim nekretninu"
+    },
+    {
+      "key": "selling",
+      "icon": "building2",
+      "title": "Prodaja nekretnine",
+      "description": "Želim da prodam nekretninu"
+    },
+    {
+      "key": "rental",
+      "icon": "key",
+      "title": "Posredovanje pri zakupu",
+      "description": "Želim da iznajmim ili izdam nekretninu"
+    },
+    {
+      "key": "property-management",
+      "icon": "shield",
+      "title": "Menadžment nekretnina",
+      "description": "Želim uslugu vođenja nekretnine"
+    },
+    {
+      "key": "valuation",
+      "icon": "calculator",
+      "title": "Procena vrednosti nekretnina",
+      "description": "Potrebna mi je procena vrednosti nekretnine"
+    },
+    {
+      "key": "consulting",
+      "icon": "users",
+      "title": "Konsalting usluge",
+      "description": "Potreban mi je savet oko nekretnina"
+    },
+    {
+      "key": "legal",
+      "icon": "filetext",
+      "title": "Pravne usluge",
+      "description": "Potrebna mi je pravna pomoć oko nekretnine"
+    },
+    {
+      "key": "handover",
+      "icon": "clipboardcheck",
+      "title": "Primopredaja nepokretnosti",
+      "description": "Potrebna mi je pomoć oko primopredaje"
+    },
+    {
+      "key": "market-research",
+      "icon": "search",
+      "title": "Istraživanje tržišta",
+      "description": "Želim analizu tržišta nekretnina"
+    },
+    {
+      "key": "other",
+      "icon": "helpcircle",
+      "title": "Ništa od navedenog",
+      "description": "Imam specifičan zahtev koji nije naveden"
+    }
+  ]
 }

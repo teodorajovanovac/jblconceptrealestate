@@ -24,19 +24,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const helmetContext = {};
 
-  // Proveravamo da li smo na početnoj strani
+  // Check if we're on the home page
   const isHomePage = window.location.pathname === '/' || window.location.pathname === '/landing';
 
-  // Prikazujemo loading screen samo na početnoj strani
+  // Show loading screen only on home page
   useEffect(() => {
     if (!isHomePage) {
-      // Ako nismo na početnoj strani, odmah završavamo loading
       setIsLoading(false);
     } else {
-      // Povećano vreme za prikaz animacije loga
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 1000); // Povećano sa 600ms na 1000ms
+      }, 1000);
       
       return () => clearTimeout(timer);
     }
@@ -47,7 +45,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <FavoritesProvider>
-          <CmsDataProvider defaultLang = "sr">
+          <CmsDataProvider defaultLang="sr">
             <HelmetProvider context={helmetContext}>
               <Router>
                 <div className="App">

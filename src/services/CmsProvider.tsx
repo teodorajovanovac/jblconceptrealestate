@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Console } from "console";
+import { GeoInfo } from "../data/models/GeoInfo";
 
 interface CmsContextType {
   t: {
@@ -9,6 +9,8 @@ interface CmsContextType {
   };
   changeLanguage: (langCode: string) => void;
   currentLanguage: string;
+  geoInfo: GeoInfo; // Add geoInfo to the context type
+  loadingCmsData: boolean; // Loading state for async operations
 }
 
 const CmsDataContext = createContext<CmsContextType | undefined>(undefined);
@@ -25,127 +27,132 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
   const [cmsData, setCmsData] = useState<Record<string, string>>({});
   const [staticCmsData, setStaticCmsData] = useState<Record<string, string>>({});
   const [currentLanguage, setCurrentLanguage] = useState<string>(defaultLang);
-  const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
+  const [availableLanguages, setAvailableLanguages] = useState<string[]>(["rs","en"]);
   const [settings, setSettings] = useState<any>({});
-  
+  const [geoInfo, setGeoInfo] = useState<any>(null); // Initialize geoInfo state
+  const [loadingCmsData, setLoading] = useState(true); // Loading state for async operations
+  const [loadingStaticData, setLoadingStatic] = useState(true); // Loading state for async operations
+
+  const staticDataLoaded = useRef(false);
+  const initialLoad = useRef(true);
+
   useEffect(() => {
     const loadStaticData = async () => {
+      // Skip if static data is already loaded or not initial load
+      if (staticDataLoaded.current || !initialLoad.current) return;
+      
       try {
-        const response = await axios.get("/cms/cmsdata.json");
-        setStaticCmsData(response.data); // Static data loaded
-        console.log("cmsdata:", response.data)
+        console.log("Loading Static files - Initial load");
+        setLoadingStatic(true); 
+        setLoading(true); 
+        
+        const cmsResponse = await axios.get("/cms/cmsdata.json");
+        setStaticCmsData(cmsResponse.data); 
+        
+        const geoResponse = await axios.get("https://geolocation-db.com/json/");
+        setGeoInfo(geoResponse.data);
+        
+        const settingsResponse = await axios.get("/cms/settings.json");
+        setSettings(settingsResponse.data);
+        setAvailableLanguages(settingsResponse.data.availableLanguages);
+        
+        const storedLang = localStorage.getItem("language");
+        const finalLang = storedLang || defaultLang;
+        
+        // Always load CMS data for the initial language
+        const cmsDataResponse = await axios.get(`/cms/${finalLang}.json`);
+        setCmsData(cmsDataResponse.data);
+        
+        if (storedLang) {
+          handleChangeLanguage(storedLang, settingsResponse.data.availableLanguages);
+        } else {
+          const countryCode = geoResponse.data.country_code.toLowerCase();   
+          const countryToLang: { [key: string]: string } = {
+            us: "en",
+            gb: "en",
+            es: "es",
+            mx: "es",
+            fr: "fr",
+            de: "de",
+            rs: "sr"
+          };
+          const detectedLang = countryToLang[countryCode] || defaultLang;
+          if (availableLanguages.includes(detectedLang)) {
+            handleChangeLanguage(detectedLang, settingsResponse.data.availableLanguages);
+          } else {
+            handleChangeLanguage(defaultLang, settingsResponse.data.availableLanguages);
+          }
+        }
+        
+        // Mark static data as loaded and initial load as complete
+        staticDataLoaded.current = true;
+        initialLoad.current = false;
       } catch (error) {
-        console.error("Error loading static CMS data:", error);
+        console.error("Error loading static data:", error);
+      } finally {
+        setLoadingStatic(false); 
+        setLoading(false); 
       }
     };
 
     loadStaticData();
+    
   }, []); // Empty dependency array ensures this only runs once
 
-
-  useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        const response = await axios.get("/cms/settings.json");
-        setSettings(response.data);
-        setAvailableLanguages(response.data.availableLanguages);
-        //console.log("availableLanguages - ok");
-      } catch (error) {
-        console.error("Error loading settings:", error);
-        //setAvailableLanguages([defaultLang]); // Fallback to default language
+  const handleChangeLanguage = (lang: string, tempAvailableLanguages?: string[]) => {
+    console.log("Changing language from:", currentLanguage, "to:", lang);
+    if (currentLanguage !== lang) {
+      const checkAvailableLanguages: string[] = availableLanguages || tempAvailableLanguages;
+      if (checkAvailableLanguages.includes(lang)) {
+        setCurrentLanguage(lang);
+        localStorage.setItem("language", lang);
+      } else {
+        console.warn(`Language ${lang} is not available.`);
       }
-    };
-
-    
-    const fetchUserLanguage = async () => {
-      const storedLang = localStorage.getItem("language");
-
-      if (storedLang) {
-        setCurrentLanguage(storedLang);
-        return;
-      }
-
-      try {
-        const response = await axios.get("https://geolocation-db.com/json/");
-        const countryCode = response.data.country_code.toLowerCase();
-
-        // Example country-to-language mapping
-        const countryToLang: { [key: string]: string } = {
-          us: "en",
-          gb: "en",
-          es: "es",
-          mx: "es",
-          fr: "fr",
-          de: "de",
-          rs: "sr"
-        };
-
-        const detectedLang = countryToLang[countryCode] || defaultLang;
-
-        if (availableLanguages.length === 0) {
-          await loadSettings(); // Ensure availableLanguages is loaded
-        }
-
-        if (availableLanguages.includes(detectedLang)) {
-          setCurrentLanguage(detectedLang);
-          localStorage.setItem("language", detectedLang);
-        } else {
-          setCurrentLanguage(defaultLang);
-        }
-      } catch (error) {
-        console.error("Error detecting user language:", error);
-        setCurrentLanguage(defaultLang);
-      }
-    };
-
-    // Load settings and user language detection only once
-    loadSettings().then(fetchUserLanguage);
-  }, [defaultLang]);
+    }
+  }
 
   useEffect(() => {
     const loadCmsData = async () => {
       try {
-        const response = await axios.get(`/cms/${currentLanguage}.json`);
-        setCmsData(response.data);
-        //console.log("loadCmsData - ok:"+response.data.length);
+        if (!loadingStaticData && currentLanguage) {
+          setLoading(true);
+          const response = await axios.get(`/cms/${currentLanguage}.json`);
+          setCmsData(response.data);
+          setLoading(false);
+        }
       } catch (error) {
-        //console.error("Error loading cmsData file:", error);
+        console.error("Error loading cmsData file:", error);
+        setLoading(false);
       }
     };
 
-    if (currentLanguage) {
+    if (currentLanguage && !initialLoad.current) {
       loadCmsData();
     }
-  }, [currentLanguage]);
+  }, [currentLanguage, loadingStaticData]);
 
+  function t(key: string): string;
+  function t(key: string, returnType: "object"): object;
+  function t(key: string, returnType?: "object"): string | object {
+    const result = key.split(".").reduce((obj: any, i) => (obj ? obj[i] : key), {
+      ...staticCmsData, // Merge static data for easier access
+      ...cmsData, // Dynamic data
+      ...settings // Settings
+    });
 
-function t(key: string): string;
-function t(key: string, returnType: "object"): object;
-function t(key: string, returnType?: "object"): string | object {
-  const result = key.split(".").reduce((obj: any, i) => (obj ? obj[i] : key), {
-    ...staticCmsData, // Merge static data for easier access
-    ...cmsData, // Dynamic data
-    ...settings // Settings
-  });
-
-  if (returnType === "object" && typeof result === "object") {
-    return result;
-  }
-  return typeof result === "string" ? result : key;
-}
-
-  
-  const changeLanguage = (lang: string) => {
-    if (availableLanguages.includes(lang)) {
-      localStorage.setItem("language", lang); // Store language in localStorage
-      setCurrentLanguage(lang);
-    } else {
-      console.warn(`Language ${lang} is not available.`);
+    if (returnType === "object" && typeof result === "object") {
+      return result;
     }
+    return typeof result === "string" ? result : key;
+  }
+
+  const changeLanguage = (lang: string) => {
+    handleChangeLanguage(lang);
   };
 
   return (
-    <CmsDataContext.Provider value={{ t, changeLanguage, currentLanguage }}>
+    <CmsDataContext.Provider value={{ t, changeLanguage, currentLanguage, geoInfo, loadingCmsData }}>
       {children}
     </CmsDataContext.Provider>
   );

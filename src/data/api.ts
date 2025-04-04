@@ -13,5 +13,7 @@ export const ApiRoomsNo = `${ApiEndPointBase}/RoomsNo`
 export const ApiLocationAreaCountyCity = `${ApiEndPointBase}/LocationsAreaCountyCity`
 export const ApiLocationAreaCity = `${ApiEndPointBase}/LocationsAreaCity`
 
+export const ApiEmailToMe = "/api/mail/SendEmailToMe"
+
 export const ApiAgents = `${ApiEndPointBase}/Agents`
 export const ApiAgentById = (id: number) => `${ApiEndPointBase}/Agents/${id}`

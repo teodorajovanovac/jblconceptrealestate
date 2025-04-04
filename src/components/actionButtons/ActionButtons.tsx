@@ -13,8 +13,8 @@ const ActionButtons: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isHomePage, setIsHomePage] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
+ // const [isHomePage, setIsHomePage] = useState(false);
+ // const [hasScrolled, setHasScrolled] = useState(false);
   const { t } = useCmsData();
   const navigate = useNavigate();
   const { favoritesCount } = useFavorites();
@@ -36,18 +36,19 @@ const ActionButtons: React.FC = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
+  //2025-04-04 disable ajsa
   // Check if we're on the home page and if we've scrolled
-  useEffect(() => {
-    const isHome = window.location.pathname === '/' || window.location.pathname === '/landing';
-    setIsHomePage(isHome);
+  // useEffect(() => {
+  //   const isHome = window.location.pathname === '/' || window.location.pathname === '/landing';
+  //   setIsHomePage(isHome);
 
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 50);
-    };
+  //   const handleScroll = () => {
+  //     setHasScrolled(window.scrollY > 50);
+  //   };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
 
   // Close expanded menu when clicking outside
   useEffect(() => {
@@ -65,47 +66,52 @@ const ActionButtons: React.FC = () => {
     };
   }, [isExpanded]);
 
+  //2025-04-04 disable ajsa
   useEffect(() => {
     // Pratimo promene favoritesCount
     if (favoritesCount > 0) {
       // Pokreni animaciju srca
+      console.log("action favoritesCount cemu onda ovo:", favoritesCount);
       setShowFloatingHearts(true);
-      
       // Zaustavi animaciju nakon 5 sekundi
       const timer = setTimeout(() => {
         setShowFloatingHearts(false);
-      }, 5000);
+      }, 3000);
       
       return () => clearTimeout(timer);
     }
   }, [favoritesCount]);
 
+
+ //2025-04-04 disable ajsa
   // Dodatna funkcija za praćenje promene favoritesCount
-  useEffect(() => {
-    let previousCount = 0;
-    console.log("action favoritesCount:", favoritesCount);
-    // Funkcija koja će se pozvati kada se ažurira favoritesCount
-    const handleFavoritesUpdate = () => {
-      // Ako je novi broj favorita veći od prethodnog, korisnik je upravo lajkovao novu nekretninu
-      if (favoritesCount > previousCount) {
-        setShowFloatingHearts(true);
+  // useEffect(() => {
+  //   let previousCount = 0;
+  //   console.log("action favoritesCount:", favoritesCount);
+  //   // Funkcija koja će se pozvati kada se ažurira favoritesCount
+    
+  //   const handleFavoritesUpdate = () => {
+  //     console.log("handleFavoritesUpdate:", favoritesCount);
+  //     // Ako je novi broj favorita veći od prethodnog, korisnik je upravo lajkovao novu nekretninu
+  //     if (favoritesCount > previousCount) {
+  //       setShowFloatingHearts(true);
         
-        // Zaustavi animaciju nakon 5 sekundi
-        setTimeout(() => {
-          setShowFloatingHearts(false);
-        }, 5000);
-      }
+  //       // Zaustavi animaciju nakon 5 sekundi
+  //       setTimeout(() => {
+  //         setShowFloatingHearts(false);
+  //       }, 5000);
+  //     }
       
-      previousCount = favoritesCount;
-    };
+  //     previousCount = favoritesCount;
+  //   };
     
-    // Slušaj događaj za ažuriranje favorita
-    window.addEventListener('favoritesUpdated', handleFavoritesUpdate);
+  //   // Slušaj događaj za ažuriranje favorita
+  //   window.addEventListener('favoritesUpdated', handleFavoritesUpdate);
     
-    return () => {
-      window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
-    };
-  }, [favoritesCount]);
+  //   return () => {
+  //     window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
+  //   };
+  // }, [favoritesCount]);
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);

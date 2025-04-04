@@ -4,6 +4,8 @@ import { useCmsData } from "../../services/CmsProvider"
 import { RealEstateDto } from "../../data/models/RealEstate"
 import agentService from "../../data/Agents"
 import { Agent } from "../../data/models/Agents"
+import realEstate from "../../data/RealEstateData"
+import { EmailData } from "../../data/models/MailData"
 
 interface ContactAgentCardProps {
   property?: RealEstateDto
@@ -12,6 +14,7 @@ interface ContactAgentCardProps {
 }
 
 export default function ContactAgentCard({ property, agentId, fullWidth = false }: ContactAgentCardProps) {
+  const { t, currentLanguage, geoInfo } = useCmsData()
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -22,7 +25,7 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
     phone: "",
     message: "",
   })
-  const { t, currentLanguage } = useCmsData()
+  
 
   // Podrazumevane informacije za kontakt
   const defaultContactInfo = {
@@ -68,14 +71,39 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
   const hasAgentImage = agent?.images && agent.images.length > 0;
   const shouldShowAgent = hasAgentName || hasAgentImage;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Implementacija slanja forme
     // Logika za slanje poruke agentu...
+
+    const emailData: EmailData = {
+      subject: `Web-Contact-Form Property ID: ${property?.id}`,
+      body: `
+        <p>Name: ${formData.name}</p> 
+        <p>Email: ${formData.email}</p> 
+        <p>Phone: ${formData.phone}</p> 
+        <p>Property: ${property?.portalName}</p> 
+        <p>Property ID: ${property?.id}</p> 
+        <p>Message: ${formData.message}</p> 
+        <p>Info data: ${JSON.stringify(geoInfo)}</p> 
+      `
+    }
+
+    const response = await realEstate.sendEmail(emailData);
+    if (response !== 200) {
+      // setErrors({
+      //   ...errors,
+      //   message: t("validate-form-sending-error")
+      // });
+      // setIsSubmitting(false);
+      //return;
+    }
+          
     setIsSubmitted(true)
+    
     setTimeout(() => {
-      setIsSubmitted(false)
-      setIsFormOpen(false)
+      //setIsSubmitted(false)
+      //setIsFormOpen(false)
       // Reset forme
       setFormData({
         name: "",
@@ -83,7 +111,7 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
         phone: "",
         message: ""
       })
-    }, 3000)
+    }, 1000)
   }
 
   if (isLoading) {
@@ -219,8 +247,8 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
               <div className="flex items-center justify-center mb-2">
                 <div className="rounded-full bg-green-100 p-2">
                   <CheckCircle2 className="h-6 w-6 text-green-600" />
-        </div>
-      </div>
+                </div>
+              </div>
               <p className="text-green-800 font-medium">{messageSentText}</p>
               <p className="text-green-600 text-sm mt-1">{messageConfirmationText}</p>
             </div>

@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
-import Header from "../components/header/Header"
-import FooterTW from "../components/footer/Footer"
 import Seo from '../services/meta/Seo'
 import { useCmsData } from "../services/CmsProvider"
 import getCmsData from "../data/Cms"
 import { Agent } from "../data/models/Agents"
-
+import Spinner from '../components/ui/Spinner'
 
 const AboutUsPage: React.FC = () => {
+  const { t, currentLanguage, loadingCmsData } = useCmsData();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { t, currentLanguage } = useCmsData();
-
+  
+  // Додајемо useEffect за скроловање на врх
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   useEffect(() => {
     const fetchAgents = async () => {
       try {
+        setLoading(true);
         const data = await getCmsData().getAgentData();
         setAgents(data.agents); // Assuming 'agents' is a property in your AgentsResponse
       } catch (err) {
@@ -28,16 +32,24 @@ const AboutUsPage: React.FC = () => {
     };
 
     fetchAgents();
-  }, []);
+  }, [currentLanguage]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loadingCmsData || loading) {
+    return (
+      <div className="flex items-center justify-center h-screen inset-0">
+        <Spinner size="lg" className="text-primary-blue "/>
+      </div>
+    );
+  }
+  if (error) return <div className="text-center p-4">{error}</div>;
 
   return (
-    <div className="min-h-screen w-full bg-gray-50">
-      <Seo title={currentLanguage === 'sr' ? 'O nama' : 'About Us'} />
-      <Header />
+
+     <>
+    
+    <Seo title={currentLanguage === 'sr' ? 'O nama' : 'About Us'} />
       <main className="w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
+     
         <div className="max-w-6xl mx-auto">
           <div className="mx-auto px-4 py-10 sm:px-6 lg:px-8">
             <motion.h1 
@@ -78,7 +90,9 @@ const AboutUsPage: React.FC = () => {
                       <h2 className="font-serif text-xl tracking-wide text-primary-blue">{member.name}</h2>
                       <p className="text-sm uppercase tracking-widest text-gray-500">{member.title[currentLanguage]}</p>
                       <p className="text-sm uppercase tracking-widest text-gray-500">
-                        {t("about-team-license")}: {member.licence}
+                        {(member.licence && member.licence.length > 0) ? t("agent-licence") + ":" + member.licence : ""}
+                        
+                        
                       </p>
                       <p className="font-serif italic text-gray-600 text-sm">{member.shortbio[currentLanguage]}</p>
                     </div>
@@ -89,8 +103,7 @@ const AboutUsPage: React.FC = () => {
           </div>
         </div>
       </main>
-      <FooterTW />
-    </div>
+      </>
   )
 } 
 

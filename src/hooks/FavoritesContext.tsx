@@ -22,13 +22,13 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setFavorites(parsedFavorites);
         setFavoritesCount(parsedFavorites.length);
       } catch (error) {
-        console.error('Error parsing favorites:', error);
+        //console.error('Error parsing favorites:', error);
       }
     }
   }, []);
 
   useEffect(() => {
-   // console.log('Favorites changed, updating count:', favorites.length);
+    // console.log('Favorites changed, updating count:', favorites.length);
     setFavoritesCount(favorites.length);
   }, [favorites]);
 
@@ -37,13 +37,13 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
 
   const toggleFavorite = (propertyId: number): void => {
-    console.log('toggleFavorite called for property:', propertyId);
+    //console.log('toggleFavorite called for property:', propertyId);
     setFavorites(currentFavorites => {
       const newFavorites = isFavorite(propertyId)
         ? currentFavorites.filter(id => id !== propertyId)
         : [...currentFavorites, propertyId];
       
-      console.log('New favorites state:', newFavorites);
+      //console.log('New favorites state:', newFavorites);
       localStorage.setItem('favoriteProperties', JSON.stringify(newFavorites));
       return newFavorites;
     });

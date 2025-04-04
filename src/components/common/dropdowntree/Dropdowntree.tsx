@@ -32,6 +32,7 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
 }: DropdownTreeProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isAutomatedChange, setIsAutomatedChange] = useState(false);  // Convert to state
   const [expandedItems, setExpandedItems] = useState<Set<string>>(() => {
     if (expandAll) {
       const allParentValues = new Set<string>();
@@ -49,6 +50,8 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
     return new Set();
   });
 
+
+
   // Filter options based on search
   const filteredOptions = options.filter(option =>
     option.caption.toLowerCase().includes(searchTerm.toLowerCase())
@@ -56,10 +59,34 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
 
   // Handle parent selection
   const handleParentSelect = (option: ComboBoxDto) => {
+    console.log("handleParentSelect - isAutomatedChange:", isAutomatedChange);
+    if (isAutomatedChange) {
+      onChange(option.value);  
+      return;
+    }
     const isSelecting = !selected.includes(option.value);
     
+    console.log("handleParentSelect - Starting with:", {
+      option,
+      isSelecting,
+      currentSelected: selected
+    });
+
     if (option.children && option.children.length > 0) {
-      // This is a parent node with children
+      // Get all descendant values including the parent
+      const getAllDescendantValues = (item: ComboBoxDto): string[] => {
+        let values = [item.value];
+        if (item.children) {
+          item.children.forEach(child => {
+            values = values.concat(getAllDescendantValues(child));
+          });
+        }
+        return values;
+      };
+
+      const allValues = getAllDescendantValues(option);
+      console.log("Parent node handling - Values to process:", allValues);
+
       if (isSelecting) {
         // First select the parent - this will automatically select all children
         // due to the logic in handleCheckboxChange
@@ -68,45 +95,91 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
         // When unselecting a parent, unselect all children too
         // First unselect the parent
         onChange(option.value);
-        
         // We don't need to explicitly unselect children as the handleCheckboxChange
         // function in SearchBar.tsx already takes care of this
       }
     } else {
       // This is a leaf node (no children)
+      console.log("Leaf node handling:", option.value);
       onChange(option.value); // Toggle this node's selection
       
       // If this is a child, we need to handle parent state
-      const findParent = (items: ComboBoxDto[]): ComboBoxDto | null => {
+      // const findParent = (items: ComboBoxDto[]): ComboBoxDto | null => {
+      //   for (const item of items) {
+      //     if (item.children?.some(child => child.value === option.value)) {
+      //       return item;
+      //     }
+      //     if (item.children?.length) {
+      //       const found = findParent(item.children);
+      //       if (found) return found;
+      //     }
+      //   }
+      //   return null;
+      // };
+      
+      const findParentAndSiblings = (items: ComboBoxDto[], targetValue: string): { parent: ComboBoxDto, siblings: ComboBoxDto[] } | null => {
         for (const item of items) {
-          if (item.children?.some(child => child.value === option.value)) {
-            return item;
+          if (item.children?.some(child => child.value === targetValue)) {
+            return { parent: item, siblings: item.children };
           }
           if (item.children?.length) {
-            const found = findParent(item.children);
-            if (found) return found;
+            const result = findParentAndSiblings(item.children, targetValue);
+            if (result) return result;
           }
         }
         return null;
       };
-      
-      const parent = findParent(options);
-      
-      if (parent) {
-        // When selecting a child, check if all siblings are selected
+      const result = findParentAndSiblings(options, option.value);
+      if (result) {
+        const { parent, siblings } = result;
+        console.log("Found parent and siblings:", {
+          parentValue: parent.value,
+          siblingValues: siblings.map(s => s.value),
+          currentlySelected: selected
+        });
+        
         if (isSelecting) {
-        const allSiblingsSelected = parent.children!.every(child => 
-            child.value === option.value || selected.includes(child.value)
+          // Check if all siblings are now selected
+          const allSiblingsSelected = siblings.every(sibling => 
+            selected.includes(sibling.value) || sibling.value === option.value
           );
           
-          // If selecting this child would make all siblings selected, also select the parent
+          console.log("Checking siblings selection:", {
+            allSiblingsSelected,
+            parentCurrentlySelected: selected.includes(parent.value)
+          });
+          
           if (allSiblingsSelected && !selected.includes(parent.value)) {
+            console.log("Auto-selecting parent as all children are selected:", parent.value);
             onChange(parent.value);
           }
+        } else {
+          // When deselecting a child, always deselect the parent
+          if (selected.includes(parent.value)) {
+            console.log("Auto-deselecting parent as child was deselected:", parent.value);
+            setIsAutomatedChange(true);
+            onChange(parent.value);
+            setTimeout(() => setIsAutomatedChange(false), 0); 
+          }
         }
-        // When unselecting a child, we do not modify the parent's state
-        // This is the key fix to maintain parent checked state when children are unchecked
       }
+      //const parent = findParent(options);
+      
+      // if (parent) {
+      //   // When selecting a child, check if all siblings are selected
+      //   if (isSelecting) {
+      //   const allSiblingsSelected = parent.children!.every(child => 
+      //       child.value === option.value || selected.includes(child.value)
+      //     );
+          
+      //     // If selecting this child would make all siblings selected, also select the parent
+      //     if (allSiblingsSelected && !selected.includes(parent.value)) {
+      //       onChange(parent.value);
+      //     }
+      //   }
+      //   // When unselecting a child, we do not modify the parent's state
+      //   // This is the key fix to maintain parent checked state when children are unchecked
+      // }
     }
   };
 

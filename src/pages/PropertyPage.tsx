@@ -7,8 +7,6 @@ import PropertyGallery from "../components/property/PropertyGallery"
 import ContactAgentCard from "../components/property/ContactAgentCard"
 import PropertyFeatures from "../components/property/PropertyFeatures" //STA JE OVO
 import PropertyMap from "../components/property/PropertyMap"
-import Header from "../components/header/Header"
-import FooterTW from "../components/footer/Footer"
 import Seo from "../services/meta/Seo"
 import { useParams, Link } from "react-router-dom"
 import realEstate from "../data/RealEstateData"
@@ -33,6 +31,7 @@ export default function PropertyPage() {
   const agentCardWrapperRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const [showContactForm, setShowContactForm] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -47,14 +46,8 @@ export default function PropertyPage() {
       try {
         setIsLoading(true);
         const propertyId = parseInt(id);
-        console.log('Fetching property with ID:', propertyId);
-        
-        const result = await realEstate.getData(propertyId);
-        console.log('API Response:', result);
-
-        // Check if result exists and has data
+        const result = await realEstate.getData(propertyId, currentLanguage);
         if (result) {
-          // Find the specific property by ID
           setProperty(result);
           setError(null);
         } else {
@@ -62,53 +55,41 @@ export default function PropertyPage() {
           setProperty(null);
         }
       } catch (err) {
-        console.error("Error fetching property details:", err);
-        setError(t("property-error"));
-        setProperty(null);
+          console.error("Error fetching property details:", err);
+          setError(t("property-error"));
+          setProperty(null);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchPropertyDetails();
-  }, [id, t]);
+  }, [id, currentLanguage]);
 
   // Handle scroll for sticky elements
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
+      if (!agentCardRef.current || !agentCardWrapperRef.current) return;
       
-      if (!agentCardRef.current || !agentCardWrapperRef.current || !footerRef.current) return;
+      const wrapperRect = agentCardWrapperRef.current.getBoundingClientRect();
+      const cardRect = agentCardRef.current.getBoundingClientRect();
       
-      const agentCard = agentCardRef.current;
-      const wrapper = agentCardWrapperRef.current;
-      const footer = footerRef.current;
-      
-      const wrapperRect = wrapper.getBoundingClientRect();
-      const footerRect = footer.getBoundingClientRect();
-      const cardHeight = agentCard.offsetHeight;
-      
-      if (wrapperRect.top > 80) {
-        agentCard.style.position = 'static';
-        agentCard.style.top = 'auto';
-        agentCard.style.width = 'auto';
-      } 
-      else if (footerRect.top > cardHeight + 100) {
-        agentCard.style.position = 'fixed';
-        agentCard.style.top = '100px';
-        agentCard.style.width = `${wrapper.offsetWidth}px`;
-      } 
-      else {
-        agentCard.style.position = 'absolute';
-        agentCard.style.top = `${footerRect.top - cardHeight - 100}px`;
-        agentCard.style.width = `${wrapper.offsetWidth}px`;
+      // Check if the card is about to leave its wrapper
+      if (wrapperRect.top <= 100) {
+        agentCardRef.current.style.position = 'fixed';
+        agentCardRef.current.style.top = '100px';
+        agentCardRef.current.style.width = `${agentCardWrapperRef.current.offsetWidth}px`;
+      } else {
+        agentCardRef.current.style.position = 'relative';
+        agentCardRef.current.style.top = 'auto';
+        agentCardRef.current.style.width = 'auto';
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
     
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Helper functions
@@ -211,7 +192,7 @@ export default function PropertyPage() {
   return (
     <>
       <Seo title={property.portalName || "Nekretnina"} />
-      <Header />
+      
       <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-16">
         {/* Property Gallery */}
         <div className="relative">
@@ -427,10 +408,11 @@ export default function PropertyPage() {
 
               {/* Right Column - Contact Agent */}
               <div className="lg:col-span-1">
-                <div ref={agentCardWrapperRef} className="relative">
+              
+                <div className="relative">
                   <div className="mb-6">
                     <div className={`${
-                      property.actionName?.toLowerCase().includes('izdavanje') 
+                      property.actionShortName?.toLowerCase().includes('i') 
                         ? 'bg-primary-gold' 
                         : 'bg-primary-blue'
                     } rounded-lg p-6 shadow-lg relative`}>
@@ -439,12 +421,12 @@ export default function PropertyPage() {
                         {/* Transaction Type Tag */}
                         <div className="flex items-center mb-2">
                           <Tag className={`w-5 h-5 mr-2 ${
-                            property.actionName?.toLowerCase().includes('izdavanje') 
+                            property.actionShortName?.toLowerCase().includes('i') 
                               ? 'text-primary-blue' 
                               : 'text-white'
                           }`} />
                           <span className={`text-sm font-medium uppercase tracking-wider ${
-                            property.actionName?.toLowerCase().includes('izdavanje') 
+                            property.actionShortName?.toLowerCase().includes('i') 
                               ? 'text-primary-blue' 
                               : 'text-white'
                           }`}>
@@ -454,7 +436,7 @@ export default function PropertyPage() {
                         
                         {/* Price */}
                         <div className={`text-2xl md:text-4xl font-bold mt-2 ${
-                          property.actionName?.toLowerCase().includes('izdavanje') 
+                          property.actionShortName?.toLowerCase().includes('i') 
                             ? 'text-primary-blue' 
                             : 'text-white'
                         }`}>
@@ -464,7 +446,7 @@ export default function PropertyPage() {
                         {/* Price per m² */}
                         {property.priceM2 && (
                           <div className={`text-sm mt-2 flex items-center ${
-                            property.actionName?.toLowerCase().includes('izdavanje') 
+                            property.actionShortName?.toLowerCase().includes('i') 
                               ? 'text-primary-blue/80' 
                               : 'text-white/80'
                           }`}>
@@ -475,7 +457,7 @@ export default function PropertyPage() {
                         
                         {/* Additional Details */}
                         <div className={`pt-3 mt-3 border-t border-black/20 text-sm ${
-                          property.actionName?.toLowerCase().includes('izdavanje')
+                          property.actionShortName?.toLowerCase().includes('i')
                             ? 'text-primary-blue/90'
                             : 'text-white/90'
                         }`}>
@@ -491,6 +473,7 @@ export default function PropertyPage() {
                       </div>
                     </div>
                   </div>
+                  <div ref={agentCardWrapperRef}></div>
                   <div ref={agentCardRef} className="w-full z-20">
                     <ContactAgentCard 
                       property={property} 
@@ -552,10 +535,6 @@ export default function PropertyPage() {
             </div>
           </div>
         )}
-      </div>
-      
-      <div ref={footerRef}>
-        <FooterTW />
       </div>
     </>
   )

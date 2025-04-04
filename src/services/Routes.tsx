@@ -13,6 +13,8 @@ import AgentPage from "../pages/AgentPage";
 import ContactPage from '../pages/ContactPage'
 import LoginPage from '../pages/LoginPage'
 import AdminDashboardPage from '../pages/AdminDashboardPage'
+import Layout from "../layouts/Layout";
+import LayoutAdmin from "../layouts/LayoutAdmin";
 
 
 const AppRoutes = () => {
@@ -28,20 +30,23 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/service" element={<ServicesPage />} />
-      <Route path="/about-us" element={<AboutUsPage />} />
-      <Route path="/landing" element={<LandingPage />} />
-      <Route path="/pricing" element={<PricingPage />} />
-      <Route path="/terms" element={<TermsPage />} />
-      <Route path="/properties" element={<RealEstatePage />} />
-      <Route path="/property/:id" element={<PropertyPage />} />
-      <Route path="/about-us/:id" element={<AgentPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-      
+      <Route element={<Layout />}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/service" element={<ServicesPage />} />
+        <Route path="/about-us" element={<AboutUsPage />} />
+        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/properties" element={<RealEstatePage />} />
+        <Route path="/property/:id" element={<PropertyPage />} />
+        <Route path="/about-us/:id" element={<AgentPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+      </Route>
       {/* Admin routes */}
-      <Route path="/promeni" element={<LoginPage />} />
-      <Route path="/promeni/dashboard" element={<AdminDashboardPage />} />
+      <Route element={<LayoutAdmin />}>
+        <Route path="/promeni/login" element={<LoginPage />} />
+        <Route path="/promeni/dashboard" element={<AdminDashboardPage />} />
+      </Route>
       
       {/* Routes for non-authenticated users */}
       {!token && (

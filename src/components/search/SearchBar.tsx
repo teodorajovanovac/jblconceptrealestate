@@ -47,8 +47,8 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, defaultFilters, onReady }) => {
-  const [selectedAction, setAction] = useState<string>("P")
   const { t, currentLanguage } = useCmsData();
+  const [selectedAction, setAction] = useState<string>("P")
   const [error, setError] = useState<string | null>(null);
 
   const [actionNames, setActionNames] = useState<ComboBoxDto[]>([])
@@ -406,6 +406,7 @@ const fetchValueRanges = async () => {
     setSelectedPropertyTypes([]);
     setSelectedRooms([]);
     setSelectedLocations([]);
+    setSelectedLocationsAreaCity([]);
     setSelectedFeatures([]);
     setSelectedBathrooms([]);
     setSelectedFloor([]);
@@ -679,7 +680,8 @@ const fetchValueRanges = async () => {
           </button>
           {(selectedPropertyTypes.length > 0 || selectedRooms.length > 0 || selectedLocations.length > 0 || 
             selectedFeatures.length > 0 || selectedBathrooms.length > 0 || selectedFloor.length > 0 || 
-            selectedHeating.length > 0 || searchTerm !== '') && (
+            selectedLocationsAreaCity.length > 0 || selectedHeating.length > 0 || selectedNewBuilding !== -1 ||
+            selectedHeating.length > 0 || selectedParking.length > 0 || selectedNewBuilding !== -1 || searchTerm !== '') && (
             <button 
               onClick={clearFilters}
               className="text-gray-500 hover:text-red-500 text-lg flex items-center ml-4"
