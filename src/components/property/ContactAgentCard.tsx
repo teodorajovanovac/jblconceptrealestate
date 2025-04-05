@@ -85,6 +85,7 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
         <p>Property: ${property?.portalName}</p> 
         <p>Property ID: ${property?.id}</p> 
         <p>Message: ${formData.message}</p> 
+        <p>Language: ${currentLanguage}</p> 
         <p>Info data: ${JSON.stringify(geoInfo)}</p> 
       `
     }
@@ -256,7 +257,8 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
             <form onSubmit={handleSubmit} className="space-y-3">
           <input
             type="text"
-                placeholder={yourNameText}
+            name="name"
+            placeholder={yourNameText}
             value={formData.name}
             onChange={(e) => setFormData({...formData, name: e.target.value})}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
@@ -265,7 +267,8 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
               
           <input
             type="email"
-                placeholder={yourEmailText}
+            name="email"
+            placeholder={yourEmailText}
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"
@@ -274,7 +277,8 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
               
           <input
             type="tel"
-                placeholder={yourPhoneText}
+            name="Phone"
+            placeholder={yourPhoneText}
             value={formData.phone}
             onChange={(e) => setFormData({...formData, phone: e.target.value})}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-blue focus:ring-1 focus:ring-primary-blue"

@@ -17,7 +17,7 @@ import { useCmsData } from "../services/CmsProvider"
 
 
 export default function PropertyPage() {
-  const { t, currentLanguage } = useCmsData();
+  const { t, currentLanguage, loadingCmsData } = useCmsData();
   const { id } = useParams<{ id: string }>();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
@@ -33,6 +33,29 @@ export default function PropertyPage() {
   const [showContactForm, setShowContactForm] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
 
+  const fetchPropertyDetails = async () => {
+    if (!id) return;
+    
+    try {
+      setIsLoading(true);
+      const propertyId = parseInt(id);
+      const result = await realEstate.getData(propertyId, currentLanguage);
+      if (result) {
+        setProperty(result);
+        setError(null);
+      } else {
+        setError(t("property-not-found"));
+        setProperty(null);
+      }
+    } catch (err) {
+        console.error("Error fetching property details:", err);
+        setError(t("property-error"));
+        setProperty(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,32 +63,12 @@ export default function PropertyPage() {
 
   // Fetch property data
   useEffect(() => {
-    const fetchPropertyDetails = async () => {
-      if (!id) return;
-      
-      try {
-        setIsLoading(true);
-        const propertyId = parseInt(id);
-        const result = await realEstate.getData(propertyId, currentLanguage);
-        if (result) {
-          setProperty(result);
-          setError(null);
-        } else {
-          setError(t("property-not-found"));
-          setProperty(null);
-        }
-      } catch (err) {
-          console.error("Error fetching property details:", err);
-          setError(t("property-error"));
-          setProperty(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (!loadingCmsData && currentLanguage) {
+      fetchPropertyDetails();
+    }
+  }, [id, currentLanguage, loadingCmsData]);
 
-    fetchPropertyDetails();
-  }, [id, currentLanguage]);
-
+  
   // Handle scroll for sticky elements
   useEffect(() => {
     const handleScroll = () => {
@@ -126,7 +129,7 @@ export default function PropertyPage() {
       [t("property-floor")]: [property.floorNoString || 'N/A',","],
       [t("property-additional-rooms")]: [property.spaces || 'N/A',","],
       [t("property-characteristics")]: [property.description || 'N/A',","],
-      [t("property-ceiling-height")]: [property.ceilingHeight ? `${property.ceilingHeight} m²` : 'N/A',""],
+      [t("property-ceiling-height")]: [property.ceilingHeight ? `${property.ceilingHeight} cm` : 'N/A',""],
       [t("property-energy-efficiency-class")]: [property.energyEfficiencyClass || 'N/A',""],
       [t("property-condition-name")]: [property.propertyConditionName || 'N/A',","],
       [t("property-moving-in")]: [property.yearAdapted || 'N/A',""],
@@ -487,7 +490,7 @@ export default function PropertyPage() {
         </div>
 
         {/* Mobile Contact Agent Button */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t md:hidden">
+        {/* <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t md:hidden">
           <div className="w-full">
             <button className="w-full cta-button">
               <span>{t("property-contact-agent")}</span>
@@ -496,12 +499,15 @@ export default function PropertyPage() {
               </svg>
             </button>
           </div>
-        </div>
+        </div> */}
 
         {/* Fiksno dugme za kontakt agenta na mobilnom prikazu */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 p-3 shadow-lg">
+        {/* bg-transparent border-t border-gray-200 p-3 shadow-lg 
+        border-[0.5px] border-white/50 border-solid
+        */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 p-3 bg-transparent">
           <button 
-            className="w-full cta-button"
+            className="w-full cta-button rounded-full h-18 border border-transparent shadow-[0_0_6px_rgba(255,255,255,0.5)]"
             onClick={() => setShowContactForm(true)}
           >
             <span>{t("agent-contact-agent")}</span>

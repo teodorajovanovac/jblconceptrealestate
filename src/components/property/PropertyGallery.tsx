@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Heart, Share2, ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { Link } from "react-router-dom"
+
 import Lightbox from "yet-another-react-lightbox"
 import "yet-another-react-lightbox/styles.css" 
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen"
@@ -10,10 +11,11 @@ import Slideshow from "yet-another-react-lightbox/plugins/slideshow"
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails"
 import Zoom from "yet-another-react-lightbox/plugins/zoom"
 import "yet-another-react-lightbox/plugins/thumbnails.css"
+
 import ShareModal from "./ShareModal"
 import { useFavorites } from "../../hooks/FavoritesContext";
 import { VideoDto } from "../../data/models/RealEstate"
-
+import { useCmsData } from "../../services/CmsProvider"
 interface PropertyGalleryProps {
   images: string[];
   propertyId?: number;
@@ -22,6 +24,7 @@ interface PropertyGalleryProps {
 }
 
 export default function PropertyGallery({ images, propertyId = 0, propertyTitle = "Nekretnina", video }: PropertyGalleryProps) {
+  const { t, currentLanguage, loadingCmsData } = useCmsData();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [index, setIndex] = useState(-1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -29,7 +32,6 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   //const location = useLocation();
-  
   
   // Make sure images is an array and has at least one item
   const safeImages = Array.isArray(images) && images.length > 0 ? images : ['/placeholder-image.jpg'];
@@ -116,13 +118,17 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
     e.currentTarget.onerror = null; // Prevent infinite error loop
   };
 
+  useEffect(() => {
+
+  }, [loadingCmsData, currentLanguage]);
+  
   return (
     <>
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4">
         <Link to="/properties" className="flex items-center text-gray-800">
           <ChevronLeft className="h-6 w-6 mr-2" />
-          <span>Nazad</span>
+          <span>{t("button-back")}</span>
         </Link>
         <div className="flex items-center space-x-4">
           <button 
@@ -146,8 +152,15 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
 
       {/* Mobile Gallery - Single image with swipe */}
       <div className="md:hidden w-full h-[300px] md:h-[350px] relative overflow-hidden">
+        <div 
+          className="h-full w-full"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
         {videoId && currentImageIndex === 0 ? (
-          <div className="h-full w-full bg-black flex items-center justify-center">
+          //<div className="h-full w-full bg-black flex items-center justify-center">
+
             <iframe
               src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`}
               className="w-full h-full"
@@ -155,14 +168,9 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
               title={propertyTitle}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             ></iframe>
-          </div>
-        ) : (
-          <div 
-            className="h-full w-full"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
+            
+          //</div>
+        ) : (  
             <img
               src={safeImages[videoId ? currentImageIndex - 1 : currentImageIndex]}
               alt={`Property view ${currentImageIndex + 1}`}
@@ -170,8 +178,8 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
               onClick={() => setIndex(videoId ? currentImageIndex - 1 : currentImageIndex)}
               onError={handleImageError}
             />
-            
-            {(videoId ? safeImages.length + 1 : safeImages.length) > 1 && (
+        )}
+          {(videoId ? safeImages.length + 1 : safeImages.length) > 1 && (
               <>
                 {/* Navigation Controls */}
                 <button 
@@ -200,8 +208,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
                 </div>
               </>
             )}
-          </div>
-        )}
+               </div>
       </div>
 
       {/* Desktop Gallery - Conditional rendering based on number of images */}

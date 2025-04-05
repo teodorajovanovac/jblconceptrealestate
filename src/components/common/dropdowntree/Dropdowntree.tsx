@@ -15,6 +15,7 @@ interface DropdownTreeProps {
   className?: string;
   containerClassName?: string;
   expandAll?: boolean;
+  noDataLabel?: string;
 }
 
 const Dropdowntree: React.FC<DropdownTreeProps> = ({ 
@@ -28,7 +29,8 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
   hasSearch = false,
   className = '',
   containerClassName = '',
-  expandAll = false
+  expandAll = false,
+  noDataLabel = '(0): '
 }: DropdownTreeProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -50,12 +52,28 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
     return new Set();
   });
 
+  const filterOptions = (items: ComboBoxDto[], searchTerm: string): ComboBoxDto[] => {
+    return items
+      .map(option => {
+        const matches = option.caption.toLowerCase().includes(searchTerm.toLowerCase());
+        
+        const filteredChildren = option.children && option.children.length > 0
+          ? filterOptions(option.children, searchTerm)
+          : [];
 
+        if (matches || filteredChildren.length > 0) {
+          return {
+            ...option,
+            children: filteredChildren.length > 0 ? filteredChildren : undefined
+          };
+        }
 
-  // Filter options based on search
-  const filteredOptions = options.filter(option =>
-    option.caption.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+        return null;
+      })
+      .filter((item): item is NonNullable<typeof item> => item !== null);
+  };
+
+  const filteredOptions = filterOptions(options, searchTerm);
 
   // Handle parent selection
   const handleParentSelect = (option: ComboBoxDto) => {
@@ -308,7 +326,7 @@ const Dropdowntree: React.FC<DropdownTreeProps> = ({
               
               {hasSearch && filteredOptions.length === 0 && (
                 <div className="p-2 text-sm text-gray-500 text-center">
-                  Нема резултата за "{searchTerm}"
+                   {noDataLabel}{searchTerm}
                 </div>
               )}
             </div>

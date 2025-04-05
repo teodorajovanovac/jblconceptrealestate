@@ -267,7 +267,7 @@ const ContactPage: React.FC =() => {
         <p>Phone: ${formData.phone}</p> 
         <p>SERVICE: ${services[formType].title[currentLanguage as 'sr' | 'en']}</p> 
         <p>Message: ${formData.message}</p> 
-        <p>Language: ${formData.message}</p> 
+        <p>Language: ${currentLanguage}</p> 
         <p>Info data: ${JSON.stringify(geoInfo)}</p>  
       `
     }

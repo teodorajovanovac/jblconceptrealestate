@@ -39,9 +39,9 @@ const LandingPage: React.FC = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        //console.log(currentLanguage); 
+        console.log("before getRealEstateFeatured:",currentLanguage); 
         const result = await realEstate.getRealEstateFeatured(currentLanguage);
-        //console.log("after get data"+currentLanguage); 
+        console.log("after getRealEstateFeatured:",currentLanguage); 
 
         if (result.length>0) {
           // const sortedProperties = [...result.data]
@@ -67,7 +67,8 @@ const LandingPage: React.FC = () => {
       if (!loadingCmsData && currentLanguage) {
         fetchData();
       }
-    }, [currentLanguage]);
+    }, [loadingCmsData, currentLanguage]);
+//loadingCmsData
 
       // Додајемо useEffect за скроловање на врх
   useEffect(() => {
@@ -219,7 +220,9 @@ const LandingPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {isLoading ? (
                 <div className="col-span-full">
-                  <Spinner size="lg" />
+                  <div className="flex items-center justify-center">
+                    <Spinner size="lg" />
+                  </div>  
                 </div>
               ) : error ? (
                 <div className="col-span-full text-center text-red-500 py-10">

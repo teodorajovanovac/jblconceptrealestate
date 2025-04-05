@@ -36,23 +36,32 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
   const staticDataLoaded = useRef(false);
   const initialLoad = useRef(true);
 
+  
   useEffect(() => {
     const loadStaticData = async () => {
       // Skip if static data is already loaded or not initial load
       if (staticDataLoaded.current || !initialLoad.current) return;
       
       try {
+
         console.log("Loading Static files - Initial load");
         setLoadingStatic(true); 
         setLoading(true); 
+
+        const geoPromise = axios.get("https://geolocation-db.com/json/");
+
+        const [cmsResponse, settingsResponse] = await Promise.all([
+            axios.get("/cms/cmsdata.json"),
+            axios.get("/cms/settings.json"),
+        ]);      
         
-        const cmsResponse = await axios.get("/cms/cmsdata.json");
+        //const cmsResponse = await axios.get("/cms/cmsdata.json");
         setStaticCmsData(cmsResponse.data); 
         
-        const geoResponse = await axios.get("https://geolocation-db.com/json/");
-        setGeoInfo(geoResponse.data);
+        //const geoResponse = await axios.get("https://geolocation-db.com/json/");
+        //setGeoInfo(geoResponse.data);
         
-        const settingsResponse = await axios.get("/cms/settings.json");
+        //const settingsResponse = await axios.get("/cms/settings.json");
         setSettings(settingsResponse.data);
         setAvailableLanguages(settingsResponse.data.availableLanguages);
         
@@ -63,25 +72,58 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
         const cmsDataResponse = await axios.get(`/cms/${finalLang}.json`);
         setCmsData(cmsDataResponse.data);
         
+        
         if (storedLang) {
           handleChangeLanguage(storedLang, settingsResponse.data.availableLanguages);
+          geoPromise
+            .then(response => setGeoInfo(response.data))
+            .catch(error => {
+            console.warn("Geolocation failed or slow", error);
+            setGeoInfo(null); // optional fallback
+        });
+
         } else {
-          const countryCode = geoResponse.data.country_code.toLowerCase();   
-          const countryToLang: { [key: string]: string } = {
-            us: "en",
-            gb: "en",
-            es: "es",
-            mx: "es",
-            fr: "fr",
-            de: "de",
-            rs: "sr"
-          };
-          const detectedLang = countryToLang[countryCode] || defaultLang;
-          if (availableLanguages.includes(detectedLang)) {
-            handleChangeLanguage(detectedLang, settingsResponse.data.availableLanguages);
-          } else {
-            handleChangeLanguage(defaultLang, settingsResponse.data.availableLanguages);
-          }
+
+          geoPromise
+            .then(res => {
+              setGeoInfo(res.data)
+              const countryCode = res.data.country_code.toLowerCase();
+              const countryToLang: { [key: string]: string } = {
+                us: "en",
+                gb: "en",
+                es: "es",
+                mx: "es",
+                fr: "fr",
+                de: "de",
+                rs: "sr"
+              };
+              const detectedLang = countryToLang[countryCode] || defaultLang;
+              if (availableLanguages.includes(detectedLang)) {
+                handleChangeLanguage(detectedLang, settingsResponse.data.availableLanguages);
+              } else {
+                handleChangeLanguage(defaultLang, settingsResponse.data.availableLanguages);
+              }
+            })
+            .catch(error => {
+              console.warn("Geolocation failed or slow", error);
+              setGeoInfo(null); // optional fallback
+              handleChangeLanguage(defaultLang, settingsResponse.data.availableLanguages);
+            });
+          // const countryToLang: { [key: string]: string } = {
+          //   us: "en",
+          //   gb: "en",
+          //   es: "es",
+          //   mx: "es",
+          //   fr: "fr",
+          //   de: "de",
+          //   rs: "sr"
+          // };
+          // const detectedLang = countryToLang[countryCode] || defaultLang;
+          // if (availableLanguages.includes(detectedLang)) {
+          //   handleChangeLanguage(detectedLang, settingsResponse.data.availableLanguages);
+          // } else {
+          //   handleChangeLanguage(defaultLang, settingsResponse.data.availableLanguages);
+          // }
         }
         
         // Mark static data as loaded and initial load as complete

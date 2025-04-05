@@ -9,9 +9,10 @@ interface PropertyCardProps {
     property: RealEstateDto;
     index: number; 
     language: string;
+    containerProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language, containerProps }) => {
     const { isFavorite, toggleFavorite } = useFavorites();
     
     const formatPrice = (price: number) => {
@@ -94,6 +95,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
       toggleFavorite(propertyId);
     };
   
+    const handlePropertyClick = () => {
+      // Store the property ID when clicked
+      sessionStorage.setItem('lastViewedProperty', property.id.toString());
+    };
+  
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -101,6 +107,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language }
         transition={{ duration: 0.3, delay: index * 0.1 }}
         whileHover={{ y: -5, scale: 1.02 }}
         className="h-full"
+        {...containerProps}
+        onClick={handlePropertyClick}
       >
         <Link to={`/property/${property.id}`} className="block h-full">
           <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full relative">

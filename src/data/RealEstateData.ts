@@ -19,14 +19,16 @@ import { EmailData } from "./models/MailData";
 
 const realEstate = {
   // Osnovna funkcija za dobijanje jedne stranice nekretnina
-  async getSearchData(options: ApiRequest<SearchFilters> = {}): Promise<ApiResponse<RealEstateDto[]>> {
+  async getSearchData(langCode?: string, options: ApiRequest<SearchFilters> = {}): Promise<ApiResponse<RealEstateDto[]>> {
     try {
-      console.log("REAL ESTATE DATA - GET SEARCH DATA");
+      
       const pageNumber = options.pageNumber || 1;
       const pageSize = options.pageSize || 1;
-      const url = `${ApiRealEstate}?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+
+      const addLangCode = langCode ? `langCode=${langCode}&` : ``;
+      const url = `${ApiRealEstate}?${addLangCode}pageNumber=${pageNumber}&pageSize=${pageSize}`;
       
-      //console.log(`Fetching page ${pageNumber} from ${url}`);
+      console.log(`Fetching page ${pageNumber} from ${url}`);
       //console.log(options.data);
       let response;
       if (options.data) {

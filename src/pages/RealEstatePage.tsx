@@ -18,7 +18,7 @@ import { ApiRequest } from '../data/models/ApiResponse'
 
 
 const RealEstatePage: React.FC = () => {
-  const {t, currentLanguage } = useCmsData();
+  const {t, currentLanguage, loadingCmsData } = useCmsData();
   const [properties, setProperties] = useState<RealEstateDto[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -30,7 +30,18 @@ const RealEstatePage: React.FC = () => {
     return emptyFilter;
   };
   
-  const [searchFilters, setSearchFilters] = useState<SearchFilters>(defaultFilters);
+  // Initialize searchFilters from sessionStorage or default
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>(() => {
+    const savedState = sessionStorage.getItem('realEstateSearchState');
+    if (savedState) {
+      // const { filters, page } = JSON.parse(savedState);
+      // setCurrentPage(page || 1);
+
+      const { filters } = JSON.parse(savedState);
+      return filters;
+    }
+    return defaultFilters();
+  });
 
   const observerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,11 +63,13 @@ const RealEstatePage: React.FC = () => {
   
   useEffect(() => {
     // Only fetch properties if SearchBar is ready
-    if (isSearchBarReady) {
+    if (isSearchBarReady && !loadingCmsData && currentLanguage) {
+      console.log("3 - useEffect - currentPage:", currentLanguage);
       fetchProperties();
     }
-  }, [currentPage, currentLanguage, isSearchBarReady]);
+  }, [currentPage, currentLanguage, loadingCmsData, isSearchBarReady]);
 
+  
   const fetchProperties = async () => {
       try {
         setIsLoading(true);
@@ -69,7 +82,7 @@ const RealEstatePage: React.FC = () => {
       };
 
       console.log("Fetching page:", currentPage);
-      const response = await realEstate.getSearchData(searchParams);
+      const response = await realEstate.getSearchData(currentLanguage, searchParams);
         
         if (response.isSuccess && response.data && response.data.length > 0) {
         setTotalPages(response.totalPages!);
@@ -135,7 +148,7 @@ const RealEstatePage: React.FC = () => {
     };
   }, [isLoading, currentPage, totalPages]);
 
-  // Updated handleSearch function
+  // Modified handleSearch function
   const handleSearch = async (filters: SearchFilters) => {
     try {
       console.log("handleSearch - filters:", filters);
@@ -152,15 +165,34 @@ const RealEstatePage: React.FC = () => {
         pageSize: pageSize
       };
 
+      // Save search state to 
+      
+      sessionStorage.setItem('realEstateSearchState', JSON.stringify({
+        filters,
+        page: 1
+      }));
+
       console.log("Fetching properties for page:", filters);
-      const response = await realEstate.getSearchData(searchParams);
+      const response = await realEstate.getSearchData(currentLanguage, searchParams);
       
       if (response.isSuccess && response.data && response.data.length > 0) {
         setTotalPages(response.totalPages!);
         setProperties(response.data);
-            } else {
+        
+        // If there was a last viewed property, scroll to it
+        // const lastViewedProperty = sessionStorage.getItem('lastViewedProperty');
+        // if (lastViewedProperty) {
+        //   const propertyId = parseInt(lastViewedProperty);
+        //   setTimeout(() => {
+        //     const propertyElement = document.getElementById(`property-${propertyId}`);
+        //     if (propertyElement) {
+        //       propertyElement.scrollIntoView({ behavior: 'smooth' });
+        //     }
+        //   }, 100);
+        // }
+      } else {
         setProperties([]);
-        setError( t('realestate-error-not-found-criteria'));
+        setError(t('realestate-error-not-found-criteria'));
       }
     } catch (err) {
       console.error('Error during search:', err);
@@ -169,6 +201,20 @@ const RealEstatePage: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  // Add effect to update sessionStorage when page changes
+  useEffect(() => {
+    if (currentPage > 1) {
+      const savedState = sessionStorage.getItem('realEstateSearchState');
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        sessionStorage.setItem('realEstateSearchState', JSON.stringify({
+          ...state,
+          page: currentPage
+        }));
+      }
+    }
+  }, [currentPage]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -289,7 +335,8 @@ const RealEstatePage: React.FC = () => {
                       key={`${property.id}-${index}`} 
                       property={property} 
                       index={index} 
-                    language={currentLanguage} 
+                      language={currentLanguage}
+                      containerProps={{ id: `property-${property.id}` }}
                     />
             ))}
           </motion.div>
