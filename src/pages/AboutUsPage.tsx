@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import Seo from '../services/meta/Seo'
+import TagManager from 'react-gtm-module';
 import { useCmsData } from "../services/CmsProvider"
 import getCmsData from "../data/Cms"
 import { Agent } from "../data/models/Agents"
 import Spinner from '../components/ui/Spinner'
+
 
 const AboutUsPage: React.FC = () => {
   const { t, currentLanguage, loadingCmsData } = useCmsData();
@@ -18,6 +20,18 @@ const AboutUsPage: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
   
+  useEffect(() => {
+    const tagManagerArgs = {
+      dataLayer: {
+        event: 'pageview',
+        path: window.location.pathname,
+        page: 'about-us-page', 
+      },
+    };
+  
+    TagManager.dataLayer(tagManagerArgs);
+  }, []);
+
   useEffect(() => {
     const fetchAgents = async () => {
       try {
@@ -47,7 +61,11 @@ const AboutUsPage: React.FC = () => {
 
      <>
     
-    <Seo title={currentLanguage === 'sr' ? 'O nama' : 'About Us'} />
+    <Seo 
+      title={currentLanguage === 'sr' ? 'O nama' : 'About Us'} 
+      description={currentLanguage === 'sr' ? 'O nama - Concept Real Estate' : 'About Us - Concept Real Estate'}
+      url={window.location.href}
+      />
       <main className="w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
      
         <div className="max-w-6xl mx-auto">

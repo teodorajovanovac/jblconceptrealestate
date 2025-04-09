@@ -71,7 +71,7 @@
     "property-additional-rooms": "Additional Rooms",
 
     "property-characteristics": "Characteristics",
-    "property-contact-agent": "Contact Agent",
+    "property-contact-agent": "Contact consultant",
     "property-price": "Price",
     "property-search": "Search",
     "property-search-clear": "Clear search filters",
@@ -81,10 +81,10 @@
     "property-search-nomoredata": "There are no more properties matching your search",
     "property-new-building": "Only New",
 
-    "agent-contact-agent": "Contact agent",
+    "agent-contact-agent": "Contact consultant",
     "agent-phone": "Phone number",
     "agent-email": "Email",
-    "agent-contact": "Contact agent",
+    "agent-contact": "Contact consultant",
     "agent-your-name": "Your name",
     "agent-your-email": "Your email",
     "agent-your-phone": "Your phone",
@@ -409,12 +409,12 @@
         }
     },
 
-    "agent-default-name": "Agency agent",
+    "agent-default-name": "Agency consultant",
     "agent-licence": "License",
-    "agent-contact-property-info": "You are contacting our agent about the following listing:",
+    "agent-contact-property-info": "You are contacting our consultant about the following listing:",
     "agent-property-generic": "Property",
     "agent-message-sent": "Message successfully sent!",
-    "agent-message-confirmation": "Our agent will contact you as soon as possible.",
+    "agent-message-confirmation": "Our consultant will contact you as soon as possible.",
     "agent-privacy-notice": "Your personal data will be used only for the purpose of responding to your inquiry and will not be shared with third parties.",
 
 "services": [

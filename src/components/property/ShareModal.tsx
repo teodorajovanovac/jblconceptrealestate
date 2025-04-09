@@ -68,7 +68,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, sendUrl, title
     // Use a default message if translation is missing
     const emailIntro = t('share-email-check-out') !== "share-email-check-out" 
       ? t('share-email-check-out') 
-      : "Proverite ovu nekretninu:";
+      : "Pogledaj ovu nekretninu:";
     
     return `${emailIntro}\n${url}\n\n${propertyTitle}${propertyDesc ? '\n\n' + propertyDesc : ''}`;
   };

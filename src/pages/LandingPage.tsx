@@ -22,32 +22,26 @@ import { RealEstateDto } from '../data/models/RealEstate';
 import Faq from '../components/faq/Faq';
 import PropertyCard from '../components/property/ProperyCard';
 
-const tagManagerArgs = {
-  dataLayer: {page: 'home'}, dataLayerName: 'PageDataLayer'
-}
 
 // Add PropertyCard component definition before the main LandingPage component
 
 const LandingPage: React.FC = () => {
     const { t, currentLanguage, loadingCmsData } = useCmsData();
-    TagManager.dataLayer(tagManagerArgs)
     const [scrollPosition, setScrollPosition] = useState(0);
     const [featuredProperties, setFeaturedProperties] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        console.log("before getRealEstateFeatured:",currentLanguage); 
+        //console.log("before getRealEstateFeatured:",currentLanguage); 
         const result = await realEstate.getRealEstateFeatured(currentLanguage);
-        console.log("after getRealEstateFeatured:",currentLanguage); 
+        //console.log("after getRealEstateFeatured:",currentLanguage); 
 
         if (result.length>0) {
-          // const sortedProperties = [...result.data]
-          //   .sort((a, b) => (b.price || 0) - (a.price || 0))
-          //   .slice(0, 6);
-          const maxProperties = Number(t("landing-featuredProperties-max")) || 6;
+          const maxProperties = Number(t("landing-featuredProperties-max")) || 9;
           const sortedProperties = [...result].slice(0,maxProperties);
           setFeaturedProperties(sortedProperties);
         } else {
@@ -74,6 +68,19 @@ const LandingPage: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    const tagManagerArgs = {
+      dataLayer: {
+        event: 'pageview',
+        path: window.location.pathname,
+        page: 'landing-page', // you can dynamically set this
+      },
+    };
+  
+    TagManager.dataLayer(tagManagerArgs);
+  }, []);
+
     // Helper function to format property data
     const formatPropertyForDisplay = (property: RealEstateDto) => {
       return {
@@ -115,7 +122,11 @@ const LandingPage: React.FC = () => {
 
     return( 
       <div className="landing-page flex flex-col min-h-screen w-full overflow-hidden">
-        <Seo title="JBL Concept Real Estate" />
+        <Seo 
+          title="Concept Real Estate"
+          mastername=''
+          url={window.location.href}
+           />
         
         {/* Video Background i Hero Section - 100vh */}
         <div className="h-screen w-full relative flex flex-col">
@@ -351,16 +362,16 @@ const LandingPage: React.FC = () => {
                     {/* Gradient only shows on mobile */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1C]/90 via-[#0A0F1C]/50 to-transparent md:hidden"></div>
                     <img 
-                      src="/images/knez_miletina_biblioteka.jpg" 
-                      alt="Knez Miletina biblioteka" 
+                      src={t("landing-page-left-photo-image")} 
+                      //alt="Knez Miletina biblioteka" 
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   {/* Second image - hidden on mobile */}
                   <div className="hidden md:block md:col-span-5 aspect-[3/4] overflow-hidden rounded-xl shadow-xl">
                     <img 
-                      src="/images/zen_place.jpg" 
-                      alt="Zen" 
+                      src={t("landing-page-right-photo-image")} 
+                      //alt="Zen" 
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500 opacity-85"
                     />
                   </div>

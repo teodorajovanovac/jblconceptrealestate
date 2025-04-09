@@ -3,9 +3,13 @@ import { useParams, useNavigate } from "react-router-dom"
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 import { motion } from "framer-motion"
 import Seo from '../services/meta/Seo'
+import TagManager from 'react-gtm-module';
 import { useCmsData } from "../services/CmsProvider"
 import getCmsData from "../data/Cms"
 import { Agent } from "../data/models/Agents"
+
+
+
 
 const AgentPage: React.FC = () => {
   const { t, currentLanguage } = useCmsData()
@@ -19,6 +23,16 @@ const AgentPage: React.FC = () => {
     window.scrollTo(0, 0)
   }, [])
 
+  useEffect(() => {
+    TagManager.dataLayer({
+      dataLayer: {
+        event: 'pageview',
+        path: location.pathname,
+        page: 'agents-page',
+        productId: id,
+      },
+    })
+  }, [location.pathname, id])
 
   useEffect(() => {
     const fetchAgents = async () => {
@@ -47,6 +61,7 @@ const AgentPage: React.FC = () => {
     <>
       <Seo 
         title={`${agent.name} - ${agent.title[currentLanguage]}`} 
+        url={window.location.href}
         />
 
       

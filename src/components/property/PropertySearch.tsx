@@ -25,7 +25,7 @@ const PropertySearch: React.FC<PropertySearchProps> = ({ isOpen, onClose }) => {
 
   const handleChange = (value: string) => {
     setPropertyId(value);
-    console.log(propertyId);
+    //console.log(propertyId);
     if (value.length == 4) 
       {
         handleSearch(value);

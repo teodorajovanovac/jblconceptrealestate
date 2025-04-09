@@ -31,7 +31,7 @@ export default function PropertyFeatures({ title, features }: PropertyFeaturesPr
         return value[0] === "true" ? "Da" : value[0] === "false" ? "Ne" : value[0];
       }
   } else {
-      console.log("Not an array:"+key, value);
+     // console.log("Not an array:"+key, value);
   }
 
 

@@ -59,7 +59,7 @@ export interface RealEstateDto {
     currency: string | null;
     priceSupplement: string | null;
     roomsSupplement: string | null;
-    ceilingHeight: number | null;
+    ceilingHeight: string | null;
     actualAge: number | null;
     transportationId: number | null;
     newBuilding: number | null;

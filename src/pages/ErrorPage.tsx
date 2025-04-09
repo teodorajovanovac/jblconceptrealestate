@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { Home, Search, FileText, ArrowLeft } from 'lucide-react'
 import { useCmsData } from "../services/CmsProvider"
 
+
 const ErrorPage: React.FC = () => {
   const { t } = useCmsData();
   const navigate = useNavigate();

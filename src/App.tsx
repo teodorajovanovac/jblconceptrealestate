@@ -11,6 +11,8 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { CmsDataProvider } from './services/CmsProvider';
 import ActionButtons from './components/actionButtons';
 import { FavoritesProvider } from './hooks/FavoritesContext';
+import TagManager from 'react-gtm-module'
+import PageTracker from './services/PageTracker';
 
 const theme = createTheme({
   palette: {
@@ -20,7 +22,9 @@ const theme = createTheme({
   },
 })
 
+
 function App() {
+ // const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const helmetContext = {};
 
@@ -40,6 +44,25 @@ function App() {
     }
   }, [isHomePage]);
 
+  // Initial GTM setup
+  useEffect(() => {
+    TagManager.initialize({
+      gtmId: 'GTM-K6SP5HZJ'
+    });
+  }, []);
+
+  // Track page views on route change
+  // useEffect(() => {
+  //   TagManager.dataLayer({
+  //     dataLayer: {
+  //       event: 'pageview',
+  //       page_path: location.pathname,
+  //       page_location: window.location.href,
+  //       page_title: document.title // This will capture the updated title
+  //     }
+  //   });
+  // }, [location]);
+
   return (
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
@@ -50,6 +73,7 @@ function App() {
               <Router>
                 <div className="App">
                   {isHomePage && <LoadingScreen loading={isLoading} />}
+                  <PageTracker />
                   <AppRoutes />
                   <ActionButtons />
                 </div>

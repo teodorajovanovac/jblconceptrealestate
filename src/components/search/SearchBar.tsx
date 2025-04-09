@@ -234,7 +234,7 @@ const fetchTypesName = async () => {
   try {
     
     const result = await realEstate.getPropertyType(currentLanguage);
-    console.log("lang",currentLanguage)
+    //console.log("lang",currentLanguage)
     if (result) 
       {
         setPropertyType(result);
@@ -291,7 +291,7 @@ const fetchRoomsNo = async () => {
 const fetchValueRanges = async () => {
   try {
     const result = await realEstate.getValueRanges();
-    console.log("valueRanges",result)
+    //console.log("valueRanges",result)
     if (result) 
       {
         setValueRanges(result);
@@ -352,7 +352,7 @@ const handleActionChange = (newAction: string) => {
 };
 
 const clearFilters = () => {
-  console.log("302 - SearcBar - clearFilters")
+  //console.log("302 - SearcBar - clearFilters")
   setSearchTerm('');
   setPriceRange([
     getMinMaxValue(selectedAction, 'price', true),

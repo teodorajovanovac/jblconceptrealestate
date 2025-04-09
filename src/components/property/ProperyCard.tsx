@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { RealEstateDto } from "../../data/models/RealEstate";
 import { useFavorites } from "../../hooks/FavoritesContext";
 import { TbPremiumRights } from "react-icons/tb";
+import { useCmsData } from "../../services/CmsProvider";
+import { useEffect } from "react";
 
 interface PropertyCardProps {
     property: RealEstateDto;
@@ -13,12 +15,17 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language, containerProps }) => {
-    const { isFavorite, toggleFavorite } = useFavorites();
+  const { t, loadingCmsData } = useCmsData();
+  const { isFavorite, toggleFavorite } = useFavorites();
     
     const formatPrice = (price: number) => {
       return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     };
   
+    useEffect(() => {
+
+    }, [loadingCmsData]);
+    
     const getFeatures = () => {
       // Provera da li spaces postoji i da li je string
       const features = property.spaces?.split(',').map(item => item.trim()).filter(Boolean) || [];
@@ -115,13 +122,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, language, 
             {/* Property Image with Overlays */}
             <div className="relative h-[280px] overflow-hidden">
               <img 
-                // src={property.photos && property.photos.length > 0 
-                //   ? `https://jblconcept.rs/photos/${property.photos[0].name}` 
-                //   : "/placeholder.svg"}
-                
                 src={property.thumbnail != null  
-                  ? `https://jblconcept.rs/photos${property.thumbnail}` 
-                  : "/images/placeholder.svg"}
+                  ? `${t("property-image-path")}${property.thumbnail}` 
+                  : `${t("placeholder-image-path")}`}
                 alt={property.typeName || "*Property"}
                 className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-110"
                 onError={(e) => {

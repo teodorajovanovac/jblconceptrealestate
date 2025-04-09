@@ -17,6 +17,7 @@ import Layout from "../layouts/Layout";
 import LayoutAdmin from "../layouts/LayoutAdmin";
 
 
+
 const AppRoutes = () => {
     //const auth = UseAuth();
     //const auth = ..;
@@ -28,7 +29,9 @@ const AppRoutes = () => {
     const token = '';
 
   return (
+    
     <Routes>
+      
       {/* Public routes */}
       <Route element={<Layout />}>
         <Route path="/" element={<LandingPage />} />
@@ -44,6 +47,7 @@ const AppRoutes = () => {
       </Route>
       {/* Admin routes */}
       <Route element={<LayoutAdmin />}>
+        <Route path="/promeni" element={<LoginPage />} />
         <Route path="/promeni/login" element={<LoginPage />} />
         <Route path="/promeni/dashboard" element={<AdminDashboardPage />} />
       </Route>

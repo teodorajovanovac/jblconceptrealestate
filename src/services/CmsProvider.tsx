@@ -44,7 +44,7 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
       
       try {
 
-        console.log("Loading Static files - Initial load");
+        //console.log("Loading Static files - Initial load");
         setLoadingStatic(true); 
         setLoading(true); 
 
@@ -142,7 +142,7 @@ export const CmsDataProvider: React.FC<CmsDataProviderProps> = ({
   }, []); // Empty dependency array ensures this only runs once
 
   const handleChangeLanguage = (lang: string, tempAvailableLanguages?: string[]) => {
-    console.log("Changing language from:", currentLanguage, "to:", lang);
+    //console.log("Changing language from:", currentLanguage, "to:", lang);
     if (currentLanguage !== lang) {
       const checkAvailableLanguages: string[] = availableLanguages || tempAvailableLanguages;
       if (checkAvailableLanguages.includes(lang)) {

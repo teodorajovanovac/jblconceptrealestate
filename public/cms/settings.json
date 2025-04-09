@@ -1,10 +1,10 @@
 {
     "availableLanguages": ["sr", "en"],
-    "property-image-path" : "https://jblconcept.rs/photos",
-    "property-image-placeholder" : "images/placeholder.svg",
-    "property-thumb-path" : "https://jblconcept.rs/photos",
-    "property-thumb-placeholder" : "images/placeholder.svg",
+    "property-image-path" : "/files",
+    "property-image-placeholder" : "/images/placeholder.svg",
+    "property-thumb-path" : "/files",
+    "property-thumb-placeholder" : "/images/placeholder.svg",
     "video-background" : "/videos/video.mp4",
-    "landing-featuredProperties-max" : 6
+    "landing-featuredProperties-max" : 9
 }
 

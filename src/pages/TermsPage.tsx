@@ -1,19 +1,40 @@
 import { useEffect } from 'react';
 import { FileText, Scale, Users, Shield, Briefcase, ClipboardCheck } from 'lucide-react';
 import Seo from '../services/meta/Seo';
+import TagManager from 'react-gtm-module'
 import { Link } from 'react-router-dom';
 import { useCmsData } from "../services/CmsProvider";
 
+
+
+
 const TermsPage = () => {
   const { currentLanguage } = useCmsData();
-
+ 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    const tagManagerArgs = {
+      dataLayer: {
+        event: 'pageview',
+        path: window.location.pathname,
+        page: 'terms-page', // you can dynamically set this
+      },
+    };
+  
+    TagManager.dataLayer(tagManagerArgs);
+  }, []);
+
   return (
     <>
-      <Seo title={currentLanguage === 'sr' ? 'Opšti uslovi poslovanja' : 'Terms & Conditions'} />
+      <Seo 
+        title='Opšti uslovi poslovanja'
+        url={window.location.href}
+        description='Concept Real Estate nudi Vam sveobuhvatne usluge posredovanja u prometu i zakupu nepokretnosti. Naša stručnost i posvećenost klijentima čine nas pouzdanim partnerom u svim vašim nekretninskim potrebama.'
+        />
+
       <main id="top" className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="max-w-[1400px] mx-auto">
           <div className="space-y-6">

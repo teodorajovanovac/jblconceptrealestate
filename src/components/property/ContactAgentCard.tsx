@@ -126,19 +126,19 @@ export default function ContactAgentCard({ property, agentId, fullWidth = false 
   }
 
   // Direktno korišćenje stringova kao fallback za slučaj da prevod nije dostupan
-  const contactAgentText = t("agent-contact-agent") || "Kontaktirajte agenta";
+  const contactAgentText = t("agent-contact-agent") || "Kontaktirajte konsultanta";
   const phoneText = t("agent-phone") || "Broj telefona";
   const emailText = t("agent-email") || "Email";
-  const contactText = t("agent-contact") || "Kontaktiraj agenta";
+  const contactText = t("agent-contact") || "Kontaktiraj konsultanta";
   const yourNameText = t("agent-your-name") || "Vaše ime";
   const yourEmailText = t("agent-your-email") || "Vaš email";
   const yourPhoneText = t("agent-your-phone") || "Vaš broj telefona";
   const yourMessageText = t("agent-your-message") || "Vaša poruka";
   const sendText = t("agent-send") || "Pošalji";
-  const propertyInfoText = t("agent-contact-property-info") || "Kontaktirate našeg agenta u vezi sledećeg oglasa:";
+  const propertyInfoText = t("agent-contact-property-info") || "Kontaktirate našeg konsultanta u vezi sledećeg oglasa:";
   const propertyGenericText = t("agent-property-generic") || "Nekretnina";
   const messageSentText = t("agent-message-sent") || "Poruka uspešno poslata!";
-  const messageConfirmationText = t("agent-message-confirmation") || "Naš agent će vas kontaktirati u najkraćem mogućem roku.";
+  const messageConfirmationText = t("agent-message-confirmation") || "Naš konsultant će vas kontaktirati u najkraćem mogućem roku.";
   const privacyNoticeText = t("agent-privacy-notice") || "Vaši lični podaci biće korišćeni samo u svrhu odgovora na vaš upit i neće biti deljeni sa trećim licima.";
 
   return (

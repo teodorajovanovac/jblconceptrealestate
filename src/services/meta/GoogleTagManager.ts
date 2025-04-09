@@ -3,8 +3,8 @@ import { useEffect } from "react";
 
 const useGoogleTagManager = () => {
   const tagManagerArgs = {
-    gtmId: 'XXX-XXXXXXX', //format like GTM-W6DLXN3C
-    dataLayerName: 'PageDataLayer'
+    gtmId: 'GTM-K6SP5HZJ', 
+    //dataLayerName: 'PageDataLayer'
   };
 
   useEffect(() => {

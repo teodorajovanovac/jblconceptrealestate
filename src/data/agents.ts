@@ -35,17 +35,17 @@ class AgentService {
       id: 1, // Pretpostavka da ovo dobijamo sa servera
       name: typeof agentDto.name === 'string' ? `${agentDto.name} ${agentDto.surname || ''}` : '',
       title: { 
-        sr: 'Agent za nekretnine', 
-        en: 'Real Estate Agent' 
+        sr: 'Konsultant za nekretnine', 
+        en: 'Real Estate Consultant' 
       },
       images: typeof agentDto.image === 'string' ? [agentDto.image] : [],
       shortbio: {
-        sr: 'Licencirani agent za nekretnine',
-        en: 'Licensed real estate agent'
+        sr: 'Konsultant za nekretnine',
+        en: 'Real Estate Consultant'
       },
       bio: {
-        sr: 'Iskusni agent za nekretnine sa dugogodišnjim iskustvom.',
-        en: 'Experienced real estate agent with years of expertise.'
+        sr: 'Iskusni konsultant za nekretnine sa dugogodišnjim iskustvom.',
+        en: 'Experienced real estate consultant with years of expertise.'
       },
       licence: typeof agentDto.licence === 'string' ? agentDto.licence : '',
       contact: {

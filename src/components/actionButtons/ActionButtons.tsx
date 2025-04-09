@@ -71,7 +71,7 @@ const ActionButtons: React.FC = () => {
     // Pratimo promene favoritesCount
     if (favoritesCount > 0) {
       // Pokreni animaciju srca
-      console.log("action favoritesCount cemu onda ovo:", favoritesCount);
+     // console.log("action favoritesCount cemu onda ovo:", favoritesCount);
       setShowFloatingHearts(true);
       // Zaustavi animaciju nakon 5 sekundi
       const timer = setTimeout(() => {

@@ -3,9 +3,12 @@ import { Building2,  Mail, Phone, Home, FileText, HelpCircle,
   Key, Calculator, Shield, Search, ClipboardCheck, Users, CheckCircle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Seo from '../services/meta/Seo'
+import TagManager from 'react-gtm-module';
 import { useCmsData } from "../services/CmsProvider"
 import { EmailData } from "../data/models/MailData"
 import realEstate from "../data/RealEstateData"
+
+
 
 type ServiceType = 
   | 'buying' 
@@ -29,6 +32,7 @@ type FormData = {
 
 const ContactPage: React.FC =() => {
   const { t, currentLanguage, loadingCmsData, geoInfo } = useCmsData();
+ 
   const [formType, setFormType] = useState<ServiceType>('buying')
   const [showServiceModal, setShowServiceModal] = useState(false)
   const serviceButtonRef = useRef<HTMLButtonElement>(null)
@@ -49,6 +53,18 @@ const ContactPage: React.FC =() => {
   // Додајемо useEffect за скроловање на врх
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const tagManagerArgs = {
+      dataLayer: {
+        event: 'pageview',
+        path: window.location.pathname,
+        page: 'contact-page', 
+      },
+    };
+  
+    TagManager.dataLayer(tagManagerArgs);
   }, []);
 
   // Close dropdown when clicking outside
@@ -312,7 +328,11 @@ const ContactPage: React.FC =() => {
     
       
       <main className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
-        <Seo title="Contact | JBL Concept Real Estate" />
+        <Seo 
+          title="Kontakt"
+          url={window.location.href}
+          description="Kontaktirajte nas za sve informacije o nekretninama. Naš tim je ovde da vam pomogne."
+           />
         <div className="max-w-[1400px] mx-auto">
           <motion.div 
             initial="hidden"

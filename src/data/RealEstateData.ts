@@ -28,7 +28,7 @@ const realEstate = {
       const addLangCode = langCode ? `langCode=${langCode}&` : ``;
       const url = `${ApiRealEstate}?${addLangCode}pageNumber=${pageNumber}&pageSize=${pageSize}`;
       
-      console.log(`Fetching page ${pageNumber} from ${url}`);
+     // console.log(`Fetching page ${pageNumber} from ${url}`);
       //console.log(options.data);
       let response;
       if (options.data) {
@@ -43,7 +43,7 @@ const realEstate = {
       }
       
       if (response.data && response.data.data) {
-        console.log(`Received ${response.data.data.length} properties for page ${pageNumber}`);
+        //console.log(`Received ${response.data.data.length} properties for page ${pageNumber}`);
       }
       
       return response.data;

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Seo from '../services/meta/Seo';
+import TagManager from 'react-gtm-module';
 import SearchBar from '../components/search/SearchBar';
 
 import { Heart } from 'lucide-react';
@@ -15,6 +16,7 @@ import PropertyCard from '../components/property/ProperyCard';
 import { useCmsData } from '../services/CmsProvider';
 import { SearchFilters, SearchFiltersEmpty } from '../data/models/SearchFilters'
 import { ApiRequest } from '../data/models/ApiResponse'
+
 
 
 const RealEstatePage: React.FC = () => {
@@ -62,9 +64,21 @@ const RealEstatePage: React.FC = () => {
   }, []);
   
   useEffect(() => {
+    const tagManagerArgs = {
+      dataLayer: {
+        event: 'pageview',
+        path: window.location.pathname,
+        page: 'realestate-search-page', 
+      },
+    };
+  
+    TagManager.dataLayer(tagManagerArgs);
+  }, []);
+
+  useEffect(() => {
     // Only fetch properties if SearchBar is ready
     if (isSearchBarReady && !loadingCmsData && currentLanguage) {
-      console.log("3 - useEffect - currentPage:", currentLanguage);
+      //console.log("3 - useEffect - currentPage:", currentLanguage);
       fetchProperties();
     }
   }, [currentPage, currentLanguage, loadingCmsData, isSearchBarReady]);
@@ -81,7 +95,7 @@ const RealEstatePage: React.FC = () => {
         pageSize: pageSize
       };
 
-      console.log("Fetching page:", currentPage);
+      //console.log("Fetching page:", currentPage);
       const response = await realEstate.getSearchData(currentLanguage, searchParams);
         
         if (response.isSuccess && response.data && response.data.length > 0) {
@@ -126,9 +140,9 @@ const RealEstatePage: React.FC = () => {
       (entries) => {
         const firstEntry = entries[0];
         if (firstEntry.isIntersecting && !isLoading && currentPage < totalPages) {
-          console.log("Observer triggering page increment from:", currentPage); // Debug log
+          //console.log("Observer triggering page increment from:", currentPage); // Debug log
           setCurrentPage(prev => {
-            console.log("Incrementing page to:", prev + 1); // Debug log
+            //console.log("Incrementing page to:", prev + 1); // Debug log
             return prev + 1;
           });
         }
@@ -151,7 +165,7 @@ const RealEstatePage: React.FC = () => {
   // Modified handleSearch function
   const handleSearch = async (filters: SearchFilters) => {
     try {
-      console.log("handleSearch - filters:", filters);
+      //console.log("handleSearch - filters:", filters);
       setSearchFilters(filters);
       setIsLoading(true);
       setError(null);
@@ -172,7 +186,7 @@ const RealEstatePage: React.FC = () => {
         page: 1
       }));
 
-      console.log("Fetching properties for page:", filters);
+      //console.log("Fetching properties for page:", filters);
       const response = await realEstate.getSearchData(currentLanguage, searchParams);
       
       if (response.isSuccess && response.data && response.data.length > 0) {
@@ -249,6 +263,7 @@ const RealEstatePage: React.FC = () => {
       <Seo 
         title={currentLanguage === 'sr' ? "Nekretnine" : "Properties"} 
         description={currentLanguage === 'sr' ? "Pronađite savršenu nekretninu" : "Find your perfect property"}
+        url={window.location.href}
       />
       
       

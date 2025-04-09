@@ -8,11 +8,13 @@ import ContactAgentCard from "../components/property/ContactAgentCard"
 import PropertyFeatures from "../components/property/PropertyFeatures" //STA JE OVO
 import PropertyMap from "../components/property/PropertyMap"
 import Seo from "../services/meta/Seo"
+import TagManager from 'react-gtm-module';
 import { useParams, Link } from "react-router-dom"
 import realEstate from "../data/RealEstateData"
 import { RealEstateDto, AgentDto } from "../data/models/RealEstate"
 import Spinner from '../components/ui/Spinner' //ZASTO NE OVO
 import { useCmsData } from "../services/CmsProvider"
+import { stripHtml } from "string-strip-html";
 
 
 
@@ -61,6 +63,16 @@ export default function PropertyPage() {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    TagManager.dataLayer({
+      dataLayer: {
+        event: 'pageview',
+        path: location.pathname,
+        page: 'product-page',
+        productId: id,
+      },
+    })
+  }, [id]) 
   // Fetch property data
   useEffect(() => {
     if (!loadingCmsData && currentLanguage) {
@@ -106,12 +118,12 @@ export default function PropertyPage() {
 
   const formatGalleryImages = () => {
     if (!property?.photos || property.photos.length === 0) {
-      return ['/images/placeholder.svg'];
+      return [`${t("property-image-placeholder")}`];
     }
 
     
 
-    return property.photos.map(photo => `https://jblconcept.rs/photos/${photo.name}`);
+    return property.photos.map(photo => `${t("property-image-path")}/${photo.name}`);
   };
 
   const processFeatures = () => {
@@ -191,11 +203,18 @@ export default function PropertyPage() {
     );
   }
 
+  const cleanDescription = stripHtml(property.realEstateDescription || "").result;
+  const shortDescription = cleanDescription.slice(0, 200);
   // Main render
   return (
     <>
-      <Seo title={property.portalName || "Nekretnina"} />
-      
+      <Seo 
+        title={property.portalName || "Nekretnina"}
+        image={`${window.location.origin}${t("property-thumb-path")}${property.thumbnail}`} 
+        description={shortDescription}
+        url={window.location.href}
+        />
+
       <div className="bg-gray-50 min-h-screen pb-24 md:pb-0 pt-16">
         {/* Property Gallery */}
         <div className="relative">
@@ -221,6 +240,22 @@ export default function PropertyPage() {
               <TabsContent value="description" className="px-4">
                 <div className="space-y-4">
                   <h1 className="text-2xl font-bold">{property.portalName}</h1>
+                  
+
+                  <div className={`${
+                      property.actionShortName?.toLowerCase().includes('i') 
+                        ? 'bg-primary-gold' 
+                        : 'bg-primary-blue'
+                    } rounded-lg px-5 pb-4 pt-2 mb-6 shadow-lg inline-block w-full text-right`}>
+                    <div className={`text-2xl font-bold mt-1 ${
+                      property.actionShortName?.toLowerCase().includes('i') 
+                        ? 'text-primary-blue' 
+                        : 'text-white'
+                       }`}>
+                      ID:{property.id}
+                    </div>
+                  </div>
+
                   <div className={`${
                     property.actionName?.toLowerCase().includes('izdavanje') 
                       ? 'bg-primary-gold' 
@@ -229,6 +264,8 @@ export default function PropertyPage() {
                     {/* Card content */}
                     <div className="relative ">
                       {/* Transaction Type Tag */}
+
+                      
                       <div className="flex items-center mb-1">
                         <Tag className={`w-4 h-4 mr-1 ${
                           property.actionName?.toLowerCase().includes('izdavanje') 
@@ -253,6 +290,9 @@ export default function PropertyPage() {
                         {formatPrice(property.price)}
                       </div>
                       
+                     
+
+
                       {/* Price per m² */}
                       {property.priceM2 && (
                         <div className={`text-sm mt-1 flex items-center ${
@@ -411,9 +451,23 @@ export default function PropertyPage() {
 
               {/* Right Column - Contact Agent */}
               <div className="lg:col-span-1">
-              
+                
                 <div className="relative">
                   <div className="mb-6">
+                  <div className={`${
+                      property.actionShortName?.toLowerCase().includes('i') 
+                        ? 'bg-primary-gold' 
+                        : 'bg-primary-blue'
+                    } rounded-lg px-6 pb-5 pt-3 mb-6 shadow-lg relative`}>
+                    <div className={`w-full text-right text-2xl md:text-4xl font-bold mt-2 ${
+                      property.actionShortName?.toLowerCase().includes('i') 
+                        ? 'text-primary-blue' 
+                        : 'text-white'
+                       }`}>
+                      ID:{property.id}
+                    </div>
+                </div>
+
                     <div className={`${
                       property.actionShortName?.toLowerCase().includes('i') 
                         ? 'bg-primary-gold' 
@@ -436,7 +490,9 @@ export default function PropertyPage() {
                             {property.actionName || "Prodaja"}
                           </span>
                         </div>
-                        
+
+                       
+
                         {/* Price */}
                         <div className={`text-2xl md:text-4xl font-bold mt-2 ${
                           property.actionShortName?.toLowerCase().includes('i') 
@@ -445,6 +501,8 @@ export default function PropertyPage() {
                         }`}>
                           {formatPrice(property.price)}
                         </div>
+
+                      
                         
                         {/* Price per m² */}
                         {property.priceM2 && (

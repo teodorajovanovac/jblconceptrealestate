@@ -50,5 +50,7 @@
       "name": "area",
       "steps": 5
     }
-  ]
+  ],
+  "landing-page-left-photo-image": "/images/landing-page-left.jpg",
+  "landing-page-right-photo-image": "/images/landing-page-right.jpg"
 }

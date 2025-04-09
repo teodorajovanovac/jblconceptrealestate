@@ -42,8 +42,8 @@
   "property-celling-height": "Visina stropa",
   "property-energy-efficiency-class": "Klasa energetske efikasnosti",
   "property-condition-name": "Stanje",
-  "property-moving-in": "Datum premestanja",
-  "property-actual-age": "Starija od",
+  "property-moving-in": "Dostupan za useljenje",
+  "property-actual-age": "Godina izgradnje",
   "property-price-supplement": "Dodatna cena",
   "property-luxury-class": "Klasa luksuznosti",
   "property-transportation": "Transport",
@@ -59,7 +59,7 @@
   "property-orientation": "Orjentacija",
   "property-heating": "Grejanje",
   "property-equipment": "Oprema",
-  "property-joinery": "Vrsta vrata",
+  "property-joinery": "Vrsta stolarije",
   "property-infrastructure": "Infrastruktura",
   "property-speciality": "Specifičnost",
   "property-access": "Prilaz",
@@ -78,10 +78,10 @@
   "property-search-nomoredata": "Nema više nekretnina koje odgovaraju pretrazi.",
   "property-new-building": "Novogradnja",
   
-  "agent-contact-agent": "Kontaktirajte agenta",
+  "agent-contact-agent": "Kontaktirajte konsultanta",
   "agent-phone": "Broj telefona",
   "agent-email": "Email",
-  "agent-contact": "Kontaktiraj agenta",
+  "agent-contact": "Kontaktiraj konsultanta",
   "agent-your-name": "Vaše ime",
   "agent-your-email": "Vaš email",
   "agent-your-phone": "Vaš broj telefona",
@@ -417,12 +417,12 @@
     }
   },
 
-  "agent-default-name": "Agencijski agent",
+  "agent-default-name": "Agencijski konsultant",
   "agent-licence": "Licenca",
-  "agent-contact-property-info": "Kontaktirate našeg agenta u vezi sledećeg oglasa:",
+  "agent-contact-property-info": "Kontaktirate našeg konsultant u vezi sledećeg oglasa:",
   "agent-property-generic": "Nekretnina",
   "agent-message-sent": "Poruka uspešno poslata!",
-  "agent-message-confirmation": "Naš agent će vas kontaktirati u najkraćem mogućem roku.",
+  "agent-message-confirmation": "Naš konsultant će vas kontaktirati u najkraćem mogućem roku.",
   "agent-privacy-notice": "Vaši lični podaci biće korišćeni samo u svrhu odgovora na vaš upit i neće biti deljeni sa trećim licima.",
 
   "services": [

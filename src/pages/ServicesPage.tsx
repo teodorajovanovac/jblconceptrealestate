@@ -2,7 +2,11 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Building2, Key, Shield, Calculator, FileText, Search, Star, Phone, ClipboardCheck, Home, Users } from "lucide-react"
 import Seo from '../services/meta/Seo'
-import { Link } from "react-router-dom"
+import TagManager from 'react-gtm-module';
+import { Link, useLocation } from "react-router-dom"
+
+
+
 
 const services = [
   {
@@ -190,7 +194,8 @@ const highlights = [
 
 const ServicesPage = () => {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'sr')
-
+  const location = useLocation();
+  
   useEffect(() => {
     const handleLanguageChange = () => {
       setLanguage(localStorage.getItem('language') || 'sr');
@@ -208,9 +213,25 @@ const ServicesPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const tagManagerArgs = {
+      dataLayer: {
+        event: 'pageview',
+        path: location.pathname,
+        page: 'service-page', 
+      },
+    };
+  
+    TagManager.dataLayer(tagManagerArgs);
+  }, []);
+  
   return (
     <>
-      <Seo title={language === 'sr' ? 'Usluge' : 'Services'} />
+    
+      <Seo 
+        title={language === 'sr' ? 'Usluge' : 'Services'} 
+        url={location.pathname + location.search}
+        description='Concept Real Estate nudi Vam sveobuhvatne usluge posredovanja u prometu i zakupu nepokretnosti.'/>
       
       <main id="top" className="content-wrapper">
         <div className="w-full">

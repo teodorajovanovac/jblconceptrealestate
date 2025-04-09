@@ -1,18 +1,39 @@
 import { Calculator, Clipboard, Home, LineChart, ShoppingBag, Users } from 'lucide-react';
 import Seo from '../services/meta/Seo';
+import TagManager from 'react-gtm-module';
 import { Link } from 'react-router-dom';
 import { useCmsData } from "../services/CmsProvider"
 import { useEffect } from 'react';
 
+
+
 const PricingPage = () => {
   const { currentLanguage } = useCmsData();  
+  
   useEffect(() => {
     window.scrollTo(0, 0)
   },[])
 
+  
+  useEffect(() => {
+    const tagManagerArgs = {
+      dataLayer: {
+        event: 'pageview',
+        path: window.location.pathname,
+        page: 'pricing-page', 
+      },
+    };
+  
+    TagManager.dataLayer(tagManagerArgs);
+  }, []);
+
   return (
     <>
-      <Seo title={currentLanguage === 'sr' ? 'Cenovnik' : 'Price List'} />
+      <Seo 
+        title={currentLanguage === 'sr' ? 'Cenovnik' : 'Price List'} 
+        url={window.location.href}
+        description={currentLanguage === 'sr' ? 'Cenovnik usluga posredovanja u prometu i zakupu nepokretnosti.' : 'Price list of real estate brokerage services.'}
+        />
       <main id="top" className="w-full min-w-full px-4 sm:px-6 lg:px-8 py-12 pt-24">
         <div className="max-w-[1400px] mx-auto">
           <div className="space-y-6">
