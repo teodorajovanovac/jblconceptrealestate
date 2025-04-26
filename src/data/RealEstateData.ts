@@ -2,10 +2,13 @@ import axios from "axios";
 import { 
   ApiActionName, 
   ApiEmailToMe, 
+  ApiImportPreview, 
+  ApiImportUpdate,  
   ApiLocation, 
   ApiLocationArea, 
   ApiLocationAreaCity, 
   ApiLocationAreaCountyCity, 
+  ApiLogin, 
   ApiPropertyType, 
   ApiRealEstate, 
   ApiRealEstateFeatured, ApiRealEstateFromList, ApiRoomsNo, ApiValueRanges } from "./Api";
@@ -15,6 +18,7 @@ import { SearchFilters } from "./models/SearchFilters"
 import { ComboBoxDto } from "./models/ComboBoxDto";
 import { ValueRangesDto } from "./models/ValueRangesDto";
 import { EmailData } from "./models/MailData";
+import { ComparisonResult } from "./models/Import";
 
 
 const realEstate = {
@@ -185,7 +189,62 @@ const realEstate = {
         console.error("Error sending email:", err);
         throw err;
     }
-  }
+  },
+
+  async login(credentials: { username: string; password: string }): Promise<string> {
+    try {
+      const url = `${ApiLogin}`;
+      console.log(`Login API: ${url}`);
+      const response = await axios.post(url, credentials);
+      console.log(`Login response: ${response.data}`);
+
+      return response.data;
+    } catch (err) {
+        console.error("Error login:", err);
+        throw err;
+    }
+  },
+
+  async importPreview(): Promise<ComparisonResult> {
+    try {
+      const url = `${ApiImportPreview}`;
+      const response = await axios.get(url);
+      console.log(`Import preview response: ${JSON.stringify(response.data)}`);
+
+      return response.data;
+    }
+    catch (err) {
+      console.error("Error import preview:", err);
+      throw err;
+    }
+  },
+
+  async importUpdate(): Promise<ComparisonResult> {
+    try {
+      const url = `${ApiImportUpdate}`;
+      const response = await axios.get(url);
+      console.log(`Import preview response: ${JSON.stringify(response.data)}`);
+
+      return response.data;
+    }
+    catch (err) {
+      console.error("Error import preview:", err);
+      throw err;
+    }
+  },
+
+  // async loginTokenValid(jwtToken: string): Promise<boolean> {
+  //   try {
+  //     const url = `${ApiIsAuth}`;
+  //     const response = await axios.post(url, jwtToken);
+  //     console.log(`Login response: ${response.data}`);
+
+  //     return response.data;
+  //   } catch (err) {
+  //       console.error("Error login:", err);
+  //       throw err;
+  //   }
+  // }
   /**
    * Searches for properties based on query parameters
   //  */

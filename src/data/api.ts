@@ -15,5 +15,13 @@ export const ApiLocationAreaCity = `${ApiEndPointBase}/LocationsAreaCity`
 
 export const ApiEmailToMe = "/api/mail/SendEmailToMe"
 
+
 export const ApiAgents = `${ApiEndPointBase}/Agents`
+
 export const ApiAgentById = (id: number) => `${ApiEndPointBase}/Agents/${id}`
+
+//AUTH
+export const ApiLogin = "/api/auth/login"
+export const ApiIsTokenValid = "/api/auth/autorized"
+export const ApiImportPreview = "/api/ImportRE/ReadXmlFromImportPreviewChanges"
+export const ApiImportUpdate = "/api/ImportRE/ReadXmlFromImportPreviewUpdateSql"

@@ -13,6 +13,7 @@ import ActionButtons from './components/actionButtons';
 import { FavoritesProvider } from './hooks/FavoritesContext';
 import TagManager from 'react-gtm-module'
 import PageTracker from './services/PageTracker';
+import { AuthProvider } from './services/AuthProvider';
 
 const theme = createTheme({
   palette: {
@@ -67,20 +68,22 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <FavoritesProvider>
-          <CmsDataProvider defaultLang="sr">
-            <HelmetProvider context={helmetContext}>
-              <Router>
-                <div className="App">
-                  {isHomePage && <LoadingScreen loading={isLoading} />}
-                  <PageTracker />
-                  <AppRoutes />
-                  <ActionButtons />
-                </div>
-              </Router>
-            </HelmetProvider>
-          </CmsDataProvider>
-        </FavoritesProvider>
+        <AuthProvider>
+          <FavoritesProvider>
+            <CmsDataProvider defaultLang="sr">
+              <HelmetProvider context={helmetContext}>
+                <Router>
+                  <div className="App">
+                    {isHomePage && <LoadingScreen loading={isLoading} />}
+                    <PageTracker />
+                    <AppRoutes />
+                    <ActionButtons />
+                  </div>
+                </Router>
+              </HelmetProvider>
+            </CmsDataProvider>
+          </FavoritesProvider>
+        </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
   )

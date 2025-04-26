@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RefreshCw, LogOut, User, Calendar, Database } from 'lucide-react';
+import { RefreshCw, LogOut, User, Calendar, Database, Home, Trash, Pen, PlusCircle } from 'lucide-react';
+import { useAuth } from '../../services/AuthProvider';
+import realEstate from '../../data/RealEstateData';
+import { ComparisonResult } from '../../data/models/Import';
 
 interface LoginRecord {
   username: string;
   timestamp: string;
   syncCount: number;
 }
+
+
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -21,93 +26,56 @@ const formatDate = (dateString: string) => {
 
 export const AdminDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [runingPreview, setRuningPreview] = useState<boolean>(false);
+  const [runPreviewDateTime, setRunPreviewDateTime] = useState<string>('');
+  const [runDateTime, setRunDateTime] = useState<string>('');
+  const [dataPreview, setDataPreview] = useState<boolean>(false);
   const [syncComplete, setSyncComplete] = useState<boolean>(false);
   const [loginRecords, setLoginRecords] = useState<LoginRecord[]>([]);
-  const [user, setUser] = useState<{username: string, timestamp: string} | null>(null);
-  
+  const [responseData, setResponseData] = useState<ComparisonResult | null>(null);
+  const { logout } = useAuth();
+
   const navigate = useNavigate();
 
-  // Proveri autentifikaciju prilikom učitavanja
-  useEffect(() => {
-    const authData = localStorage.getItem('adminAuth') || sessionStorage.getItem('adminAuth');
-    
-    if (!authData) {
-      navigate('/promeni');
-      return;
-    }
-    
-    try {
-      const userData = JSON.parse(authData);
-      if (!userData.isLoggedIn) {
-        navigate('/promeni');
-        return;
-      }
-      
-      setUser({
-        username: userData.username,
-        timestamp: userData.timestamp
-      });
-      
-      // Učitaj evidenciju logovanja
-      const logins = JSON.parse(localStorage.getItem('adminLogins') || '[]');
-      setLoginRecords(logins.sort((a: LoginRecord, b: LoginRecord) => 
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-      ));
-    } catch (e) {
-      console.error('Error parsing auth data:', e);
-      navigate('/promeni');
-    }
-  }, [navigate]);
-
   const handleLogout = () => {
-    localStorage.removeItem('adminAuth');
-    sessionStorage.removeItem('adminAuth');
-    navigate('/promeni');
+    logout();
+    navigate('/promeni'); // Redirect to home page or login page after logout
   };
 
-  const handleSync = () => {
+  const handleSync = async() => {
+    setResponseData(null);
     setIsLoading(true);
     setSyncComplete(false);
+    const response = await realEstate.importUpdate();
+    setDataPreview(false);
+    setResponseData(response || null);
+    console.log('Response IN FORM:', JSON.stringify(response));
+    setSyncComplete(true);
+    setIsLoading(false);
     
-    // Simuliramo sinhronizaciju sa zadrškom
-    setTimeout(() => {
-      // Ažuriraj broj sinhronizacija za trenutnog korisnika
-      const logins = JSON.parse(localStorage.getItem('adminLogins') || '[]');
-      const updatedLogins = logins.map((login: LoginRecord) => {
-        if (login.username === user?.username && 
-            new Date(login.timestamp).toDateString() === new Date(user.timestamp).toDateString()) {
-          return {
-            ...login,
-            syncCount: (login.syncCount || 0) + 1
-          };
-        }
-        return login;
-      });
-      
-      localStorage.setItem('adminLogins', JSON.stringify(updatedLogins));
-      setLoginRecords(updatedLogins.sort((a: LoginRecord, b: LoginRecord) => 
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-      ));
-      
-      setIsLoading(false);
-      setSyncComplete(true);
-    }, 2000);
   };
-
-  if (!user) {
-    return <div className="flex justify-center items-center h-screen">Učitavanje...</div>;
-  }
+  
+  const handleSyncPreview = async() => {
+    setResponseData(null);
+    setIsLoading(true);
+    setSyncComplete(false);
+    setRuningPreview(true);
+    const response = await realEstate.importPreview();
+    setDataPreview(true);
+    setResponseData(response || null);
+    console.log('Response IN FORM:', JSON.stringify(response));
+    setSyncComplete(true);
+    setRuningPreview(false);
+    setIsLoading(false);
+    
+  };
+  
 
   return (
-    <div className="container mx-auto py-64 px-4">
+    <div className="mx-auto p-4">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-primary-blue">Admin kontrolna tabla</h1>
-        
         <div className="flex items-center gap-2">
-          <div className="text-right mr-4">
-            <div className="font-medium">{user.username}</div>
-            <div className="text-sm text-gray-500">Prijavljen: {formatDate(user.timestamp)}</div>
-          </div>
           <button 
             onClick={handleLogout}
             className="cta-button rounded-full flex items-center gap-2"
@@ -128,15 +96,33 @@ export const AdminDashboard: React.FC = () => {
               <div>
                 <h3 className="font-medium mb-2">Sinhronizacija podataka</h3>
                 <p className="text-gray-600 text-sm mb-4">
-                  Kliknite na dugme ispod da sinhronizujete najnovije podatke sa servera.
+                  Kliknite na dugme ispod da sinhronizujete najnovije podatke sa DIMEDIA servera.
                 </p>
+                
+                <button 
+                  onClick={handleSyncPreview}
+                  disabled={isLoading}
+                  className="w-full cta-button rounded-full flex items-center justify-center gap-2 mb-6"
+                >
+                  {isLoading && runingPreview ? (
+                    <>
+                      <RefreshCw size={16} className="animate-spin" />
+                      <span>Učitanjanje promena ...</span>
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw size={16} />
+                      <span>Pregled pre sinhronizije podatke</span>
+                    </>
+                  )}
+                </button>
                 
                 <button 
                   onClick={handleSync}
                   disabled={isLoading}
                   className="w-full cta-button rounded-full flex items-center justify-center gap-2"
                 >
-                  {isLoading ? (
+                  {isLoading && !runingPreview  ? (
                     <>
                       <RefreshCw size={16} className="animate-spin" />
                       <span>Sinhronizacija...</span>
@@ -148,7 +134,7 @@ export const AdminDashboard: React.FC = () => {
                     </>
                   )}
                 </button>
-                
+
                 {syncComplete && (
                   <div className="mt-4 p-3 bg-green-50 text-green-700 rounded-md text-center">
                     Sinhronizacija uspešno završena!
@@ -159,9 +145,137 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
         
-        {/* Desna strana - Evidencija logovanja */}
+        {/* Desna strana - ListaPromena */}
         <div className="lg:col-span-2">
           <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4 text-primary-blue">{(dataPreview? "Lista promena - preview" : "Lista izvršenih promena")}</h2>
+            
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                  <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div className="flex items-center">
+                        <RefreshCw size={14} className="mr-2" />
+                        Akcija
+                      </div>
+                    </th>
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div className="flex items-center">
+                        <Home size={14} className="mr-2" />
+                        ID
+                      </div>
+                    </th>
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div className="flex items-center">
+                        <Calendar size={14} className="mr-2" />
+                        Vreme promene 
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {responseData != null ? 
+                  <>
+                   {/* Add Items */}
+                   {responseData.addItems.length > 0 ? (
+                      responseData.addItems.map((record, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <PlusCircle size={14} className="mr-2" />
+                              Novi podatak
+                            </div>
+                          </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{record.id}</div>
+                          
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">{formatDate(record.edited)}</div>
+                        </td>
+                      </tr>
+                    ))
+                    ) : (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-4 text-center text-gray-500">
+                        Podataka za novi unos : 0;
+                      </td>
+                    </tr>
+                  )} 
+                  {/* Update Items */}
+                  {responseData.updateItems.length > 0 ? (
+                    responseData.updateItems.map((record, index) => (
+                      <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <Pen size={14} className="mr-2" />
+                            Ažuriranje
+                          </div>
+                        </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{record.id}</div>
+                        
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">{formatDate(record.edited)}</div>
+                      </td>
+                    </tr>
+                  ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-4 text-center text-gray-500">
+                        Podataka za update unos : 0;
+                      </td>
+                    </tr>
+                  )} 
+                  
+                    {/* Delete Items */}
+                    {responseData.deleteItems.length > 0 ? (
+                  responseData.deleteItems.map((record, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <Trash size={14} className="mr-2" />
+                          Brisanje
+                        </div>
+                      </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{record.id}</div>
+                      
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">{formatDate(record.edited)}</div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} className="px-6 py-4 text-center text-gray-500">
+                    Podataka za brisanje : 0;
+                  </td>
+                </tr>
+              )} </>
+                 : (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-4 text-center text-gray-500">
+                        Nema podataka sunhronizacije
+                      </td>
+                    </tr>
+                  )}
+                
+                
+                
+                
+                
+                
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        {/* Desna strana - Evidencija logovanja */}
+          {/* <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-4 text-primary-blue">Evidencija aktivnosti</h2>
             
             <div className="overflow-x-auto">
@@ -213,7 +327,8 @@ export const AdminDashboard: React.FC = () => {
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
+
         </div>
       </div>
     </div>

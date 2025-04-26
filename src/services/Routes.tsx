@@ -1,4 +1,6 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useAuth } from './AuthProvider';
+import { ReactNode } from 'react';
 
 //List all pages
 import LandingPage from "../pages/LandingPage";
@@ -16,17 +18,33 @@ import AdminDashboardPage from '../pages/AdminDashboardPage'
 import Layout from "../layouts/Layout";
 import LayoutAdmin from "../layouts/LayoutAdmin";
 
-
+// Protected route component
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+  const { isAuthenticated, isLoading } = useAuth();
+  const location = useLocation();
+  
+  if (isLoading) {
+    return <div>Loading...</div>; // Or your loading component
+  }
+  
+  if (!isAuthenticated) {
+    // Redirect to login with return path
+    return <Navigate to="/promeni" state={{ from: location }} replace />;
+  }
+  
+  return <>{children}</>;
+};
 
 const AppRoutes = () => {
-    //const auth = UseAuth();
-    //const auth = ..;
+    // const auth = UseAuth();
+    // const auth = ..;
     // if (!auth) {
     //     // Handle the case when auth is undefined (optional)
     //     return <div>UNAUTHORIZED</div>;
     // }  
-    //const { token, project } = auth;
+    // const { token } = auth;
     const token = '';
+    const { isAuthenticated } = useAuth();
 
   return (
     
@@ -45,22 +63,33 @@ const AppRoutes = () => {
         <Route path="/about-us/:id" element={<AgentPage />} />
         <Route path="/contact" element={<ContactPage />} />
       </Route>
+
       {/* Admin routes */}
       <Route element={<LayoutAdmin />}>
         <Route path="/promeni" element={<LoginPage />} />
         <Route path="/promeni/login" element={<LoginPage />} />
-        <Route path="/promeni/dashboard" element={<AdminDashboardPage />} />
+        {/* Protected route for admin dashboard */}
+        <Route 
+          path="/promeni/dashboard" 
+          element={
+            <ProtectedRoute>
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          }/>
+        
       </Route>
       
-      {/* Routes for non-authenticated users */}
-      {!token && (
-        <Route path="/login" element={<LandingPage />} />
-      )}
-      
-      {/* Routes for authenticated users */}
-      {token && (
-        <Route path="/login" element={<LandingPage />} />
-      )}
+      {/* //<Route path="/promeni/dashboard" element={<AdminDashboardPage />} /> */}
+
+      {/* Protected routes */}
+      {/* <Route 
+        path="/promeni" 
+        element={
+          <ProtectedRoute>
+            <AdminDashboardPage />
+          </ProtectedRoute>
+        } 
+      /> */}
       
       {/* Catch-all route for non-existing routes */}
       <Route path="*" element={<ErrorPage />} />

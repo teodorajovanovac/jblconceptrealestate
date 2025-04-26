@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../services/AuthProvider";
 
 interface LoginFormProps {
   className?: string;
@@ -13,22 +14,18 @@ export function LoginForm({ className }: LoginFormProps) {
   const [loading, setLoading] = useState<boolean>(false);
   
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated, isLoading } = useAuth();
+  
+  // Get the return path from location state or default to dashboard
+  const from = (location.state as any)?.from?.pathname || "/promeni/dashboard";
 
-  // Check if user is already logged in
+  // Redirect if already authenticated
   useEffect(() => {
-    const savedAuth = localStorage.getItem("adminAuth");
-    if (savedAuth) {
-      try {
-        const auth = JSON.parse(savedAuth);
-        if (auth.isLoggedIn) {
-          navigate("/promeni/dashboard");
-        }
-      } catch (e) {
-        // Invalid stored data
-        localStorage.removeItem("adminAuth");
-      }
+    if (isAuthenticated && !isLoading) {
+      navigate(from, { replace: true });
     }
-  }, [navigate]);
+  }, [isAuthenticated, isLoading, navigate, from]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,49 +39,30 @@ export function LoginForm({ className }: LoginFormProps) {
     setError(null);
 
     try {
-      // Ovde ćemo simulirati API poziv - kasnije ćemo ovo zameniti stvarnim API pozivom
-      // U produkciji, koristiti stvarni API endpoint za validaciju
+      // Use the login function from AuthProvider
+      await login({ 
+        username, 
+        password, 
+        rememberMe
+      });
       
-      // Fake authentication for demo purposes only
-      // U pravoj implementaciji, ovaj deo bi poslao podatke na backend
-      const isValidUser = username === "admin" && password === "admin123";
+      //rememberMe 
+
+      // If login is successful, AuthProvider will set isAuthenticated to true
+      // and the useEffect above will handle the navigation
       
-      if (isValidUser) {
-        const authData = {
-          isLoggedIn: true,
-          username: username,
-          timestamp: new Date().toISOString(),
-        };
-        
-        // Sačuvaj u localStorage ako je "zapamti me" uključeno
-        if (rememberMe) {
-          localStorage.setItem("adminAuth", JSON.stringify(authData));
-        } else {
-          // U sessionStorage ako nije "zapamti me"
-          sessionStorage.setItem("adminAuth", JSON.stringify(authData));
-        }
-        
-        // Dodaj evidenciju logovanja
-        const logins = JSON.parse(localStorage.getItem("adminLogins") || "[]");
-        logins.push({
-          username,
-          timestamp: new Date().toISOString(),
-          syncCount: 0
-        });
-        localStorage.setItem("adminLogins", JSON.stringify(logins));
-        
-        // Preusmeri na admin dashboard
-        navigate("/promeni/dashboard");
-      } else {
-        setError("Neispravno korisničko ime ili lozinka");
-      }
     } catch (err) {
-      setError("Došlo je do greške prilikom prijave. Molimo pokušajte ponovo.");
+      setError("Neispravno korisničko ime ili lozinka");
       console.error("Login error:", err);
     } finally {
       setLoading(false);
     }
   };
+
+  // Don't render the form if already authenticated and not loading
+  if (isAuthenticated && !isLoading) {
+    return null;
+  }
 
   return (
     <div className={`flex flex-col gap-6 ${className}`}>
@@ -147,9 +125,9 @@ export function LoginForm({ className }: LoginFormProps) {
             <button 
               type="submit" 
               className="cta-button rounded-full"
-              disabled={loading}
+              disabled={loading || isLoading}
             >
-              {loading ? 'Prijava u toku...' : 'Prijavi se'}
+              {loading || isLoading ? 'Prijava u toku...' : 'Prijavi se'}
             </button>
           </div>
         </form>
