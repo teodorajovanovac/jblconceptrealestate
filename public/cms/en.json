@@ -105,6 +105,7 @@
     "footer-contact": "Contact",
     "footer-company-name": "CONCEPT REAL ESTATE doo Beograd",
     "footer-company-address": "Majke Jevrosime 47, Belgrade, Serbia",
+    "footer-company-regnumber": "Number in register of intermediaries: 1910",
     "footer-follow-us": "Follow Us",
     "footer-copyright": "© 2025 JBL Concept. All rights reserved.",
     "footer-design-by": "Design and development by",
@@ -370,7 +371,7 @@
             "title": "Brokerage in Real Estate Purchase and Sale",
             "subtitle": "Price list for brokerage services in real estate purchase and sale",
             "min-fee": "The minimum broker's fee for brokerage activities when buying and selling real estate is EUR 750 in dinar equivalent, calculated at the middle exchange rate of the NBS on the day of payment for the brokerage service.",
-            "percentage": "In accordance with the Law on Brokerage, the percentage for the brokerage service for the real estate transaction is variable and amounts to 1 to 99% of the agreed purchase price."
+            "percentage": "In accordance with the Law on Brokerage, the percentage for the brokerage service for the real estate transaction is variable and amounts to 2 to 5% of the agreed purchase price."
         },
         "property-valuation": {
             "title": "Real Estate Market Value Assessment",

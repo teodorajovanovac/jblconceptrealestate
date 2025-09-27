@@ -141,6 +141,9 @@ const Footer = () => {
                     </li>
                   ))
                 )}
+                <li>
+                  <p className="text-base text-gray-400">{t("footer-company-regnumber")}</p>
+                </li>
               </ul>
 
               {/* Social Media Links */}

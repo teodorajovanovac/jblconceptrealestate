@@ -102,6 +102,7 @@
   "footer-contact": "Kontakt",
   "footer-company-name": "CONCEPT REAL ESTATE",
   "footer-company-address": "Majke Jevrosime 47, Beograd, Srbija",
+  "footer-company-regnumber": "Rb. u registru posrednika: 1910",
   "footer-follow-us": "Pratite nas",
   "footer-copyright": "© 2025 JBL Concept. Sva prava zadržana.",
   "footer-design-by": "Dizajn i izrada",
@@ -378,7 +379,7 @@
       "title": "Posredovanje u poslovima kupoprodaje nepokretnosti",
       "subtitle": "Cenovnik za izvršene usluge posredovanja u kupoprodaji nepokretnosti",
       "min-fee": "Minimalna posrednička nadoknada za poslove posredovanja prilikom kupoprodaje nepokretnosti iznosi 750 eura u dinarskoj protivvrednosti, obračunato po srednjem kursu NBS-a na dan plaćanja usluge posredovanja.",
-      "percentage": "U skladu sa Zakonom o posredovanju procenat za naplaćeni posrednički posao prilikom kupoprodaje nepokretnosti je varijabilan i iznosi od 1 do 99% od ugovorene kupoprodajne cene."
+      "percentage": "U skladu sa Zakonom o posredovanju procenat za naplaćeni posrednički posao prilikom kupoprodaje nepokretnosti je varijabilan i iznosi od 2 do 5% od ugovorene kupoprodajne cene."
     },
     "property-valuation": {
       "title": "Procena tržišne vrednosti nepokretnosti u zakupu",

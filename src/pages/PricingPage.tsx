@@ -228,8 +228,8 @@ const PricingPage = () => {
                   </p>
                   <p>
                     {currentLanguage === 'sr'
-                      ? 'U skladu sa Zakonom o posredovanju procenat za naplaćeni posrednički posao prilikom kupoprodaje nepokretnosti je varijabilan i iznosi od 1 do 99% od ugovorene kupoprodajne cene.'
-                      : 'In accordance with the Law on Brokerage, the percentage for the brokerage service for the real estate transaction is variable and amounts to 1 to 99% of the agreed purchase price.'}
+                      ? 'U skladu sa Zakonom o posredovanju procenat za naplaćeni posrednički posao prilikom kupoprodaje nepokretnosti je varijabilan i iznosi od 2 do 5% od ugovorene kupoprodajne cene.'
+                      : 'In accordance with the Law on Brokerage, the percentage for the brokerage service for the real estate transaction is variable and amounts to 2 to 5% of the agreed purchase price.'}
                   </p>
                   <p>
                     {currentLanguage === 'sr'

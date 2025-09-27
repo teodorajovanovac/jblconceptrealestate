@@ -34,7 +34,7 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
   //const location = useLocation();
   
   // Make sure images is an array and has at least one item
-  const safeImages = Array.isArray(images) && images.length > 0 ? images : ['/placeholder-image.jpg'];
+  const safeImages = Array.isArray(images) && images.length > 0 ? images : [`${t("placeholder-image-path")}`];
   const hasEnoughImages = safeImages.length >= 5;
 
   // Format images for Lightbox
@@ -114,7 +114,8 @@ export default function PropertyGallery({ images, propertyId = 0, propertyTitle 
 
   // Handle image loading errors
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = '/placeholder-image.jpg'; // Fallback image
+    //console.log("Image error:"+t("placeholder-image-path") );
+    e.currentTarget.src = t("placeholder-image-path"); // Fallback image
     e.currentTarget.onerror = null; // Prevent infinite error loop
   };
 

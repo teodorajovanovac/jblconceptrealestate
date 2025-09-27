@@ -2,6 +2,7 @@
     "availableLanguages": ["sr", "en"],
     "property-image-path" : "/files",
     "property-image-placeholder" : "/images/placeholder.svg",
+    "placeholder-image-path" : "/images/placeholder.svg",
     "property-thumb-path" : "/files",
     "property-thumb-placeholder" : "/images/placeholder.svg",
     "video-background" : "/videos/video.mp4",
