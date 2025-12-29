@@ -79,7 +79,7 @@ const Footer = () => {
             <div className="text-center md:text-left">
               <h3 className="text-lg font-semibold mb-4">{t("footer-documents")}</h3>
               <ul className="space-y-3">
-              <li>
+              {/* <li>
                   <Link to="/pricing" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
                     <FileText size={18} />
                     {t("footer-pricing")}
@@ -90,12 +90,17 @@ const Footer = () => {
                     <ScrollText size={18} />
                     {t("footer-terms")}
                   </Link>
+                </li> */}
+                <li>
+                  <a href="/documents/contract.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                    <FileText size={18} className="flex-shrink-0" />
+                    {t("footer-agreement")}
+                  </a>
                 </li>
                 <li>
-                  
-                  <a href="/documents/contract.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
-                    <FileText size={18} />
-                    {t("footer-agreement")}
+                  <a href="/documents/Opšti uslovi poslovanja posrednika u prometu i zakupu nepokretnosti.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-gold flex items-center gap-2 text-base justify-center md:justify-start">
+                    <FileText size={18} className="flex-shrink-0" />
+                    {t("footer-general-terms")}
                   </a>
                 </li>
               </ul>
