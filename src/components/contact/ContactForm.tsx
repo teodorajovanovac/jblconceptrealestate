@@ -123,9 +123,9 @@ export default function ContactForm() {
             <div className="bg-white rounded-3xl p-8 shadow-md hover:shadow-lg border border-gray-100 transition-all duration-300">
               <h3 className="text-xl font-bold text-gray-800 mb-3">{t("contactform-cta")}</h3>
               <p className="text-gray-600 mb-6">
-                JBL Concept Real Estate<br />
-                Majke Jevrosime 47<br />
-                11000 Beograd
+                ${t("contactform-address-name")}<br />
+                ${t("contactform-address-street")}<br />
+                ${t("contactform-address-city")}
               </p>
               
               <div className="flex items-center mt-2">
